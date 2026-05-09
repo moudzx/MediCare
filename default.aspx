@@ -461,8 +461,8 @@
                         <asp:Label ID="lblPatientMessage" runat="server" CssClass="mc-form__message" Visible="false" />
 
                         <div class="mc-form__signin-link">
-                            Already have an account? <a href="#auth-section">Sign in instead</a>
-                        </div>
+    Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
+</div>
 
                     </asp:Panel>
                 </div>
@@ -559,10 +559,9 @@
                         </div>
 
                         <asp:Label ID="lblDoctorMessage" runat="server" CssClass="mc-form__message" Visible="false" />
-
                         <div class="mc-form__signin-link">
-                            Already registered? <a href="#auth-section">Sign in instead</a>
-                        </div>
+    Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
+</div>
 
                     </asp:Panel>
                 </div>

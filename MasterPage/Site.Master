@@ -1,5 +1,4 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="MediCare.SiteMaster" %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
@@ -10,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+    
+    <!-- Fixed CSS Path using ResolveUrl -->
     <link rel="stylesheet" href="<%= ResolveUrl("~/css/default.css") %>" />
+    
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
@@ -19,7 +21,8 @@
     <header class="mc-navbar" id="mcNavbar">
         <div class="mc-container mc-navbar__inner">
 
-            <a href="Default.aspx" class="mc-navbar__logo" aria-label="MediCare Home">
+            <!-- Logo points to Root -->
+            <a href="<%= ResolveUrl("~/Default.aspx") %>" class="mc-navbar__logo" aria-label="MediCare Home">
                 <div class="mc-logo-icon">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="32" height="32" rx="10" fill="#1A9E5C"/>
@@ -30,14 +33,16 @@
             </a>
 
             <nav class="mc-navbar__nav" aria-label="Primary navigation">
-                <a href="Default.aspx" class="mc-nav-link mc-nav-link--active">Home</a>
-                <a href="#about" class="mc-nav-link">About</a>
-                <a href="#contact" class="mc-nav-link">Contact</a>
+                <a href="<%= ResolveUrl("~/Default.aspx") %>" class="mc-nav-link mc-nav-link--active">Home</a>
+                <!-- Anchor links point to Home + Section ID -->
+                <a href="<%= ResolveUrl("~/Default.aspx#about") %>" class="mc-nav-link">About</a>
+                <a href="<%= ResolveUrl("~/Default.aspx#contact") %>" class="mc-nav-link">Contact</a>
             </nav>
 
             <div class="mc-navbar__actions">
-                <a href="#auth-section" class="mc-btn mc-btn--ghost mc-btn--sm">Sign In</a>
-                <a href="#auth-section" class="mc-btn mc-btn--primary mc-btn--sm">Get Started</a>
+                <!-- Action buttons point to your new Login page location -->
+                <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--ghost mc-btn--sm">Sign In</a>
+                <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--primary mc-btn--sm">Get Started</a>
             </div>
 
             <button class="mc-hamburger" id="mcHamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -47,12 +52,12 @@
 
         <div class="mc-mobile-menu" id="mcMobileMenu" aria-hidden="true">
             <nav class="mc-mobile-nav">
-                <a href="Default.aspx" class="mc-mobile-link">Home</a>
-                <a href="#about" class="mc-mobile-link">About</a>
-                <a href="#contact" class="mc-mobile-link">Contact</a>
+                <a href="<%= ResolveUrl("~/Default.aspx") %>" class="mc-mobile-link">Home</a>
+                <a href="<%= ResolveUrl("~/Default.aspx#about") %>" class="mc-mobile-link">About</a>
+                <a href="<%= ResolveUrl("~/Default.aspx#contact") %>" class="mc-mobile-link">Contact</a>
                 <div class="mc-mobile-actions">
-                    <a href="#auth-section" class="mc-btn mc-btn--ghost mc-btn--full">Sign In</a>
-                    <a href="#auth-section" class="mc-btn mc-btn--primary mc-btn--full">Get Started</a>
+                    <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--ghost mc-btn--full">Sign In</a>
+                    <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--primary mc-btn--full">Get Started</a>
                 </div>
             </nav>
         </div>
@@ -82,14 +87,14 @@
             <div class="mc-footer__links">
                 <div class="mc-footer__col">
                     <h4>Platform</h4>
-                    <a href="#auth-section">Patient Portal</a>
-                    <a href="#auth-section">Doctor Portal</a>
+                    <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>">Patient Portal</a>
+                    <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>">Doctor Portal</a>
                     <a href="#">How It Works</a>
                 </div>
                 <div class="mc-footer__col">
                     <h4>Company</h4>
-                    <a href="#about">About Us</a>
-                    <a href="#contact">Contact</a>
+                    <a href="<%= ResolveUrl("~/Default.aspx#about") %>">About Us</a>
+                    <a href="<%= ResolveUrl("~/Default.aspx#contact") %>">Contact</a>
                     <a href="#">Privacy Policy</a>
                 </div>
                 <div class="mc-footer__col">
@@ -102,12 +107,14 @@
         </div>
         <div class="mc-footer__bottom">
             <div class="mc-container">
-                <p>&copy; 2025 MediCare Health Platform. All rights reserved.</p>
+                <p>&copy; 2026 MediCare Health Platform. All rights reserved.</p>
                 <p>Built with care for better health outcomes.</p>
             </div>
         </div>
     </footer>
-        </form>
+    </form>
+    
+    <!-- Fixed JS Path using ResolveUrl -->
     <script src="<%= ResolveUrl("~/js/default.js") %>"></script>
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
 </body>
