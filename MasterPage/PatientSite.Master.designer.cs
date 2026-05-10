@@ -7,38 +7,38 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MediCare.Pages.Account
+namespace MediCare.MasterPage
 {
 
 
-    public partial class Login
+    public partial class PatientSite
     {
 
         /// <summary>
-        /// txtEmail control.
+        /// HeadContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmail;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
 
         /// <summary>
-        /// txtPassword control.
+        /// MainContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPassword;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
 
         /// <summary>
-        /// btnLogin control.
+        /// ScriptContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLogin;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder ScriptContent;
     }
 }

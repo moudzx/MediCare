@@ -18,5 +18,10 @@ namespace MediCare.Pages.Account
         {
 
         }
+        protected void btnLogin_Click(object sender, EventArgs e)
+        {
+            // For now, this just prevents the error. 
+            // We will add the actual login logic here later.
+        }
     }
 }

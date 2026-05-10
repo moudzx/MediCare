@@ -11,7 +11,16 @@ namespace MediCare.Pages.Patient
 {
 
 
-    public partial class MealCalculator
+    public partial class Medications
     {
+
+        /// <summary>
+        /// tblApproved control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView tblApproved;
     }
 }

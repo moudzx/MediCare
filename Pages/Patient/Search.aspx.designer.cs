@@ -11,7 +11,7 @@ namespace MediCare.Pages.Patient
 {
 
 
-    public partial class MyMedications
+    public partial class Search
     {
     }
 }

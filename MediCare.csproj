@@ -67,17 +67,202 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\dashboard.css" />
+    <Content Include="css\default.css" />
+    <Content Include="css\mealCalculator.css" />
+    <Content Include="css\medications.css" />
+    <Content Include="css\nutritions.css" />
+    <Content Include="css\search.css" />
+    <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="js\dashboard.js" />
+    <Content Include="js\default.js" />
+    <Content Include="js\mealCalculator.js" />
+    <Content Include="js\Nutritions.js" />
+    <Content Include="js\search.js" />
+    <Content Include="Pages\Account\Login.aspx" />
+    <Content Include="Pages\Account\Profile.aspx" />
+    <Content Include="Pages\Account\Registration.aspx" />
+    <Content Include="Pages\Admin\Dashboard.aspx" />
+    <Content Include="Pages\Admin\FoodCatalog.aspx" />
+    <Content Include="Pages\Admin\MedicineCatalog.aspx" />
+    <Content Include="Pages\Admin\UserManagement.aspx" />
+    <Content Include="Pages\Doctor\ConsultationRequests.aspx" />
+    <Content Include="Pages\Doctor\Dashboard.aspx" />
+    <Content Include="Pages\Doctor\ManageMedication.aspx" />
+    <Content Include="Pages\Doctor\ManageNutrition.aspx" />
+    <Content Include="Pages\Doctor\PatientList.aspx" />
+    <Content Include="Pages\Patient\Dashboard.aspx" />
+    <Content Include="Pages\Patient\MealCalculator.aspx" />
+    <Content Include="Pages\Patient\Medications.aspx" />
+    <Content Include="Pages\Patient\Nutritions.aspx" />
+    <Content Include="Pages\Patient\Search.aspx" />
+    <Content Include="Pages\Shared\Chatbot.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\Models\ConsultationRequest.cs" />
+    <Content Include="App_Code\Models\FoodItem.cs" />
+    <Content Include="App_Code\Models\Medicine.cs" />
+    <Content Include="App_Code\Models\NutritionPlan.cs" />
+    <Content Include="App_Code\Models\PatientMedication.cs" />
+    <Content Include="App_Code\Models\User.cs" />
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PatientSite.Master.cs">
+      <DependentUpon>PatientSite.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PatientSite.Master.designer.cs">
+      <DependentUpon>PatientSite.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Account\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Account\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Account\Registration.aspx.cs">
+      <DependentUpon>Registration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\Registration.aspx.designer.cs">
+      <DependentUpon>Registration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\FoodCatalog.aspx.cs">
+      <DependentUpon>FoodCatalog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\FoodCatalog.aspx.designer.cs">
+      <DependentUpon>FoodCatalog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\MedicineCatalog.aspx.cs">
+      <DependentUpon>MedicineCatalog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\MedicineCatalog.aspx.designer.cs">
+      <DependentUpon>MedicineCatalog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\UserManagement.aspx.cs">
+      <DependentUpon>UserManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\UserManagement.aspx.designer.cs">
+      <DependentUpon>UserManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\ConsultationRequests.aspx.cs">
+      <DependentUpon>ConsultationRequests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\ConsultationRequests.aspx.designer.cs">
+      <DependentUpon>ConsultationRequests.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\ManageMedication.aspx.cs">
+      <DependentUpon>ManageMedication.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\ManageMedication.aspx.designer.cs">
+      <DependentUpon>ManageMedication.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\ManageNutrition.aspx.cs">
+      <DependentUpon>ManageNutrition.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\ManageNutrition.aspx.designer.cs">
+      <DependentUpon>ManageNutrition.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\PatientList.aspx.cs">
+      <DependentUpon>PatientList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\PatientList.aspx.designer.cs">
+      <DependentUpon>PatientList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\MealCalculator.aspx.cs">
+      <DependentUpon>MealCalculator.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\MealCalculator.aspx.designer.cs">
+      <DependentUpon>MealCalculator.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\Medications.aspx.cs">
+      <DependentUpon>Medications.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\Medications.aspx.designer.cs">
+      <DependentUpon>Medications.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\Nutritions.aspx.cs">
+      <DependentUpon>Nutritions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\Nutritions.aspx.designer.cs">
+      <DependentUpon>Nutritions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Shared\Chatbot.aspx.cs">
+      <DependentUpon>Chatbot.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Shared\Chatbot.aspx.designer.cs">
+      <DependentUpon>Chatbot.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MasterPage\Site.Master" />
+    <Content Include="MasterPage\PatientSite.Master" />
     <None Include="packages.config" />
+    <Content Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

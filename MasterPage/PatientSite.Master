@@ -1,0 +1,263 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"
+CodeBehind="PatientSite.Master.cs"
+Inherits="MediCare.MasterPage.PatientSite" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MediCare – Patient Health Dashboard" />
+    <title>MediCare – Patient Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/default.css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════
+         PATIENT NAVBAR
+    ═══════════════════════════════════════════ -->
+    <header class="mc-navbar" id="mcNavbar">
+        <div class="mc-container mc-navbar__inner">
+
+            <!-- Logo -->
+            <a href="/Patient/Dashboard.aspx" class="mc-navbar__logo" aria-label="MediCare Patient Portal">
+                <div class="mc-logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="10" fill="#1A9E5C"/>
+                        <path d="M16 7v18M7 16h18" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="mc-logo-text">Medi<strong>Care</strong></span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="mc-navbar__nav" aria-label="Patient navigation">
+                <a href="/Patient/Dashboard.aspx" class="mc-nav-link" id="navDashboard">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="/Patient/Medications.aspx" class="mc-nav-link" id="navMedications">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10.5 20H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H20a2 2 0 0 1 2 2v3"/>
+                        <circle cx="18" cy="18" r="3"/><path d="m22 22-1.5-1.5"/>
+                    </svg>
+                    Medications
+                </a>
+                <a href="/Patient/Nutrition.aspx" class="mc-nav-link" id="navNutrition">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                        <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+                    </svg>
+                    Nutrition
+                </a>
+                <a href="/Patient/Search.aspx" class="mc-nav-link" id="navSearch">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Search
+                </a>
+            </nav>
+
+            <!-- Right side: notification + profile -->
+            <div class="mc-navbar__actions">
+                <!-- Notification bell -->
+                <button class="pn-icon-btn" id="btnNotif" aria-label="Notifications" title="Notifications">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="pn-notif-dot" aria-hidden="true"></span>
+                </button>
+
+                <!-- Profile dropdown -->
+                <div class="pn-profile" id="profileDropdown">
+                    <button class="pn-profile__btn" id="btnProfile" aria-haspopup="true" aria-expanded="false" aria-label="Patient profile menu">
+                        <div class="pn-profile__avatar" aria-hidden="true">S</div>
+                        <span class="pn-profile__name">Sara</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                    <div class="pn-profile__menu" id="profileMenu" aria-hidden="true">
+                        <div class="pn-profile__menu-header">
+                            <strong>Sara Al-Khalil</strong>
+                            <small>sara@example.com</small>
+                        </div>
+                        <div class="pn-profile__menu-divider"></div>
+                        <a href="/Patient/Dashboard.aspx" class="pn-menu-item">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            My Profile
+                        </a>
+                        <a href="/Patient/Settings.aspx" class="pn-menu-item">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            Settings
+                        </a>
+                        <div class="pn-profile__menu-divider"></div>
+                        <a href="/Default.aspx" class="pn-menu-item pn-menu-item--danger">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hamburger -->
+            <button class="mc-hamburger" id="mcHamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mc-mobile-menu" id="mcMobileMenu" aria-hidden="true">
+            <nav class="mc-mobile-nav">
+                <a href="/Patient/Dashboard.aspx" class="mc-mobile-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Dashboard
+                </a>
+                <a href="/Patient/Medications.aspx" class="mc-mobile-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 20H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H20a2 2 0 0 1 2 2v3"/><circle cx="18" cy="18" r="3"/><path d="m22 22-1.5-1.5"/></svg>
+                    Medications
+                </a>
+                <a href="/Patient/Nutrition.aspx" class="mc-mobile-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                    Nutrition
+                </a>
+                <a href="/Patient/Search.aspx" class="mc-mobile-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    Search
+                </a>
+                <div class="pn-mobile-profile">
+                    <div class="pn-profile__avatar pn-profile__avatar--lg" aria-hidden="true">S</div>
+                    <div>
+                        <strong>Sara Al-Khalil</strong>
+                        <small>sara@example.com</small>
+                    </div>
+                </div>
+                <div class="mc-mobile-actions">
+                    <a href="/Default.aspx" class="mc-btn mc-btn--ghost mc-btn--full">Sign Out</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+         PAGE CONTENT
+    ═══════════════════════════════════════════ -->
+    <main id="mainContent">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+         PATIENT FOOTER (minimal)
+    ═══════════════════════════════════════════ -->
+    <footer class="pn-footer">
+        <div class="mc-container pn-footer__inner">
+            <div class="pn-footer__logo">
+                <div class="mc-logo-icon mc-logo-icon--sm">
+                    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="10" fill="#1A9E5C"/>
+                        <path d="M16 7v18M7 16h18" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="mc-logo-text">Medi<strong>Care</strong></span>
+            </div>
+            <p class="pn-footer__copy">&copy; 2025 MediCare Health Platform. All rights reserved.</p>
+            <div class="pn-footer__links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/default.js"></script>
+    <script>
+        (function () {
+
+            /* ── Active nav link highlight ──────────────────────── */
+            var path = window.location.pathname.toLowerCase();
+            var links = {
+                'dashboard': document.getElementById('navDashboard'),
+                'medications': document.getElementById('navMedications'),
+                'nutrition': document.getElementById('navNutrition'),
+                'search': document.getElementById('navSearch')
+            };
+            Object.keys(links).forEach(function (key) {
+                if (links[key] && path.indexOf(key) !== -1) {
+                    links[key].classList.add('mc-nav-link--active');
+                }
+            });
+
+            /* ── Profile dropdown ───────────────────────────────── */
+            var btnProfile = document.getElementById('btnProfile');
+            var profileMenu = document.getElementById('profileMenu');
+            var profileWrap = document.getElementById('profileDropdown');
+            var isOpen = false;
+
+            function openMenu() {
+                isOpen = true;
+                profileMenu.classList.add('pn-profile__menu--open');
+                btnProfile.setAttribute('aria-expanded', 'true');
+                profileMenu.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeMenu() {
+                isOpen = false;
+                profileMenu.classList.remove('pn-profile__menu--open');
+                btnProfile.setAttribute('aria-expanded', 'false');
+                profileMenu.setAttribute('aria-hidden', 'true');
+            }
+
+            if (btnProfile && profileMenu) {
+                btnProfile.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    isOpen ? closeMenu() : openMenu();
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (isOpen && !profileWrap.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && isOpen) closeMenu();
+                });
+            }
+
+            /* ── Hamburger / mobile menu ────────────────────────── */
+            var hamburger = document.getElementById('mcHamburger');
+            var mobileMenu = document.getElementById('mcMobileMenu');
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', function () {
+                    var menuOpen = mobileMenu.classList.contains('mc-mobile-menu--open');
+                    mobileMenu.classList.toggle('mc-mobile-menu--open', !menuOpen);
+                    hamburger.setAttribute('aria-expanded', String(!menuOpen));
+                    mobileMenu.setAttribute('aria-hidden', String(menuOpen));
+                    document.body.style.overflow = menuOpen ? '' : 'hidden';
+                });
+
+                document.querySelectorAll('.mc-mobile-link, .mc-mobile-actions .mc-btn').forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.remove('mc-mobile-menu--open');
+                        hamburger.setAttribute('aria-expanded', 'false');
+                        mobileMenu.setAttribute('aria-hidden', 'true');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+
+        })();
+    </script>
+
+    <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
+</body>
+</html>
