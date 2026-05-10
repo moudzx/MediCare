@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MediCare.Patient
+namespace MediCare
 {
 
 

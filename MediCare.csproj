@@ -87,8 +87,8 @@
     <Content Include="Pages\Doctor\PatientList.aspx" />
     <Content Include="Pages\Patient\Dashboard.aspx" />
     <Content Include="Pages\Patient\MealCalculator.aspx" />
-    <Content Include="Pages\Patient\MyMedications.aspx" />
-    <Content Include="Pages\Patient\MyNutritionPlan.aspx" />
+    <Content Include="Pages\Patient\Medications.aspx" />
+    <Content Include="Pages\Patient\utritions.aspx" />
     <Content Include="Pages\Patient\RequestConsultation.aspx" />
     <Content Include="Pages\Patient\TakeDose.aspx" />
     <Content Include="Pages\Shared\Chatbot.aspx" />
@@ -109,6 +109,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage\PatientSite.Master.cs">
+      <DependentUpon>PatientSite.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\PatientSite.Master.designer.cs">
+      <DependentUpon>PatientSite.Master</DependentUpon>
     </Compile>
     <Compile Include="MasterPage\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -215,19 +222,19 @@
     <Compile Include="Pages\Patient\MealCalculator.aspx.designer.cs">
       <DependentUpon>MealCalculator.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Patient\MyMedications.aspx.cs">
-      <DependentUpon>MyMedications.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Medications.aspx.cs">
+      <DependentUpon>Medications.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Patient\MyMedications.aspx.designer.cs">
-      <DependentUpon>MyMedications.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Medications.aspx.designer.cs">
+      <DependentUpon>Medications.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Patient\MyNutritionPlan.aspx.cs">
-      <DependentUpon>MyNutritionPlan.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\utritions.aspx.cs">
+      <DependentUpon>utritions.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Patient\MyNutritionPlan.aspx.designer.cs">
-      <DependentUpon>MyNutritionPlan.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\utritions.aspx.designer.cs">
+      <DependentUpon>utritions.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Patient\RequestConsultation.aspx.cs">
       <DependentUpon>RequestConsultation.aspx</DependentUpon>
@@ -254,6 +261,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage\Site.Master" />
+    <Content Include="MasterPage\PatientSite.Master" />
     <None Include="packages.config" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">

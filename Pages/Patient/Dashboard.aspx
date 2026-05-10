@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Patient Dashboard – MediCare" Language="C#" MasterPageFile="~/MasterPage/Site.Master" AutoEventWireup="true" CodeBehind="PatientDashboard.aspx.cs" Inherits="MediCare.Patient.Dashboard" %>
+﻿<%@ Page Title="Patient Dashboard – MediCare" Language="C#" MasterPageFile="~/MasterPage/PatientSite.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="MediCare.Patient.Dashboard" %>
 
 <asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
       <link rel="stylesheet" href="/css/default.css" />
