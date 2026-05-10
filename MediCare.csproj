@@ -69,11 +69,17 @@
   <ItemGroup>
     <Content Include="css\dashboard.css" />
     <Content Include="css\default.css" />
+    <Content Include="css\mealCalculator.css" />
     <Content Include="css\medications.css" />
+    <Content Include="css\nutritions.css" />
+    <Content Include="css\search.css" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="js\dashboard.js" />
     <Content Include="js\default.js" />
+    <Content Include="js\mealCalculator.js" />
+    <Content Include="js\Nutritions.js" />
+    <Content Include="js\search.js" />
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\Profile.aspx" />
     <Content Include="Pages\Account\Registration.aspx" />
@@ -89,9 +95,8 @@
     <Content Include="Pages\Patient\Dashboard.aspx" />
     <Content Include="Pages\Patient\MealCalculator.aspx" />
     <Content Include="Pages\Patient\Medications.aspx" />
-    <Content Include="Pages\Patient\RequestConsultation.aspx" />
-    <Content Include="Pages\Patient\TakeDose.aspx" />
-    <Content Include="Pages\Patient\utritions.aspx" />
+    <Content Include="Pages\Patient\Nutritions.aspx" />
+    <Content Include="Pages\Patient\Search.aspx" />
     <Content Include="Pages\Shared\Chatbot.aspx" />
   </ItemGroup>
   <ItemGroup>
@@ -230,26 +235,19 @@
     <Compile Include="Pages\Patient\Medications.aspx.designer.cs">
       <DependentUpon>Medications.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Patient\RequestConsultation.aspx.cs">
-      <DependentUpon>RequestConsultation.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Nutritions.aspx.cs">
+      <DependentUpon>Nutritions.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Patient\RequestConsultation.aspx.designer.cs">
-      <DependentUpon>RequestConsultation.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Nutritions.aspx.designer.cs">
+      <DependentUpon>Nutritions.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Patient\TakeDose.aspx.cs">
-      <DependentUpon>TakeDose.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Patient\TakeDose.aspx.designer.cs">
-      <DependentUpon>TakeDose.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\utritions.aspx.cs">
-      <DependentUpon>utritions.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\utritions.aspx.designer.cs">
-      <DependentUpon>utritions.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Shared\Chatbot.aspx.cs">
       <DependentUpon>Chatbot.aspx</DependentUpon>

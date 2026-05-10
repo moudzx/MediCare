@@ -68,73 +68,77 @@
                 <input type="text" id="txtSearchApproved" class="med-search-input" placeholder="Search medications..." oninput="filterApprovedGrid(this.value)" />
             </div>
 
+         
             <!-- GridView -->
-            <div class="med-table-wrap">
-                <table class="med-grid" id="tblApproved">
-                    <thead>
-                        <tr class="med-grid-header">
-                            <th><span><i class="fa-solid fa-pills"></i> Medication</span></th>
-                            <th>Dosage</th>
-                            <th>Frequency</th>
-                            <th>Start</th>
-                            <th>End</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="med-grid-row">
-                            <td>
-                                <div class="med-grid-pill">
-                                    <div class="med-pill-dot med-pill-dot--green"></div>
-                                    <span class="med-grid-name">Metformin</span>
-                                </div>
-                            </td>
-                            <td class="med-grid-cell">500mg</td>
-                            <td class="med-grid-cell">Twice daily</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-01-10</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-07-10</td>
-                        </tr>
-                        <tr class="med-grid-row med-grid-row--alt">
-                            <td>
-                                <div class="med-grid-pill">
-                                    <div class="med-pill-dot med-pill-dot--green"></div>
-                                    <span class="med-grid-name">Lisinopril</span>
-                                </div>
-                            </td>
-                            <td class="med-grid-cell">10mg</td>
-                            <td class="med-grid-cell">Once daily</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-02-01</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-08-01</td>
-                        </tr>
-                        <tr class="med-grid-row">
-                            <td>
-                                <div class="med-grid-pill">
-                                    <div class="med-pill-dot med-pill-dot--green"></div>
-                                    <span class="med-grid-name">Atorvastatin</span>
-                                </div>
-                            </td>
-                            <td class="med-grid-cell">20mg</td>
-                            <td class="med-grid-cell">Once daily at night</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-03-05</td>
-                            <td class="med-grid-cell med-grid-cell--muted">2025-09-05</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="med-table-wrap">
 
-                <!-- Empty state (hidden by default) -->
-                <div class="med-empty-state" id="emptyApproved" style="display:none;">
-                    <div class="med-empty-state__icon"><i class="fa-solid fa-pills"></i></div>
-                    <p class="med-empty-state__text">No medications found.</p>
-                    <p class="med-empty-state__sub">Try a different search term.</p>
+            <asp:GridView ID="tblApproved" runat="server"
+                CssClass="med-grid"
+                AutoGenerateColumns="False"
+                ShowHeader="True"
+                GridLines="None">
+
+                <Columns>
+
+                    <asp:TemplateField HeaderText="">
+                        <HeaderTemplate>
+                            <span><i class="fa-solid fa-pills"></i> Medication</span>
+                        </HeaderTemplate>
+                        <ItemTemplate>
+                            <div class="med-grid-pill">
+                                <div class="med-pill-dot med-pill-dot--green"></div>
+                                <span class="med-grid-name"><%# Eval("Medication") %></span>
+                            </div>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:BoundField DataField="Dosage" HeaderText="Dosage"
+                        ItemStyle-CssClass="med-grid-cell" />
+
+                    <asp:BoundField DataField="Frequency" HeaderText="Frequency"
+                        ItemStyle-CssClass="med-grid-cell" />
+
+                    <asp:TemplateField HeaderText="Start">
+                        <ItemTemplate>
+                            <span class="med-grid-cell med-grid-cell--muted">
+                                <%# Eval("StartDate", "{0:yyyy-MM-dd}") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                    <asp:TemplateField HeaderText="End">
+                        <ItemTemplate>
+                            <span class="med-grid-cell med-grid-cell--muted">
+                                <%# Eval("EndDate", "{0:yyyy-MM-dd}") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
+                </Columns>
+
+                <HeaderStyle CssClass="med-grid-header" />
+                <RowStyle CssClass="med-grid-row" />
+                <AlternatingRowStyle CssClass="med-grid-row med-grid-row--alt" />
+
+            </asp:GridView>
+
+            <!-- Empty state (unchanged) -->
+            <div class="med-empty-state" id="emptyApproved" style="display:none;">
+                <div class="med-empty-state__icon">
+                    <i class="fa-solid fa-pills"></i>
                 </div>
+                <p class="med-empty-state__text">No medications found.</p>
+                <p class="med-empty-state__sub">Try a different search term.</p>
             </div>
 
-            <!-- Footer Button -->
-            <div class="med-card__footer">
-                <a href="/Pages/Patient/SearchMedication.aspx" class="med-btn med-btn--primary">
-                    <i class="fa-solid fa-plus"></i>
-                    Add New Medication
-                </a>
-            </div>
+        </div>
+
+        <!-- Footer Button -->
+        <div class="med-card__footer">
+            <a href="/Pages/Patient/SearchMedication.aspx" class="med-btn med-btn--primary">
+                <i class="fa-solid fa-plus"></i>
+                Add New Medication
+            </a>
         </div>
 
         <!-- ════════════════════════════
