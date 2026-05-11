@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace MediCare.Pages.Patient
 {
-    public partial class MyMedications : System.Web.UI.Page
+    public partial class Search : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

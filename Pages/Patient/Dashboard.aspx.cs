@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿
 
 
-namespace MediCare.Pages.Patient
+using System;
+
+namespace MediCare.Patient
 {
     public partial class Dashboard : System.Web.UI.Page
     {
@@ -16,3 +13,4 @@ namespace MediCare.Pages.Patient
         }
     }
 }
+

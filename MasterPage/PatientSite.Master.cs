@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace MediCare.Pages.Patient
+namespace MediCare.MasterPage
 {
-    public partial class MyNutritionPlan : System.Web.UI.Page
+    public partial class PatientSite : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

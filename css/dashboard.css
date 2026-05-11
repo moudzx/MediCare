@@ -1,0 +1,914 @@
+﻿/* ═══════════════════════════════════════════════════════════════════
+   FILE: Dashboard.css
+   LOCATION: /Styles/Dashboard.css
+   ACTION: Create this new file inside the Styles folder
+   NOTE: This file extends Medicare.css — do NOT replace it.
+         Both files are linked: Medicare.css first, then Dashboard.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Dashboard Root Layout ───────────────────────────────────── */
+.pd-root {
+    min-height: calc(100vh - var(--mc-nav-h));
+    background: #F4F7F5;
+    padding: 32px 40px 60px;
+    max-width: 1320px;
+    margin: 0 auto;
+}
+
+/* ── 2. Top Welcome Bar ─────────────────────────────────────────── */
+.pd-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+    background: linear-gradient(135deg, var(--mc-green-700) 0%, var(--mc-green-500) 100%);
+    border-radius: var(--mc-radius-xl);
+    padding: 24px 32px;
+    color: var(--mc-white);
+    box-shadow: var(--mc-shadow-green);
+    position: relative;
+    overflow: hidden;
+}
+
+    .pd-topbar::before {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        background: rgba(255, 255, 255, .06);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .pd-topbar::after {
+        content: '';
+        position: absolute;
+        bottom: -40px;
+        left: 30%;
+        width: 160px;
+        height: 160px;
+        background: rgba(255, 255, 255, .04);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+.pd-topbar__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.pd-topbar__avatar {
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, .2);
+    border: 2px solid rgba(255, 255, 255, .3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pd-topbar__greeting {
+    font-size: 13px;
+    color: rgba(255, 255, 255, .75);
+    font-weight: 500;
+    margin-bottom: 3px;
+}
+
+.pd-topbar__name {
+    font-family: var(--mc-font-display);
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 400;
+    color: var(--mc-white);
+    line-height: 1.1;
+}
+
+.pd-topbar__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.pd-topbar__date {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, .8);
+    font-weight: 500;
+    background: rgba(255, 255, 255, .12);
+    padding: 8px 14px;
+    border-radius: var(--mc-radius-full);
+    border: 1px solid rgba(255, 255, 255, .15);
+}
+
+.pd-topbar__badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, .9);
+    background: rgba(255, 255, 255, .15);
+    border: 1px solid rgba(255, 255, 255, .2);
+    padding: 8px 14px;
+    border-radius: var(--mc-radius-full);
+}
+
+.pd-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #86EFAC;
+    border-radius: 50%;
+    animation: pd-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pd-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .6;
+        transform: scale(1.3);
+    }
+}
+
+/* ── 3. Quick Stats Row ─────────────────────────────────────────── */
+.pd-quick-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.pd-qs-card {
+    background: var(--mc-white);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-xl);
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all var(--mc-dur-normal) var(--mc-ease);
+    box-shadow: var(--mc-shadow-xs);
+}
+
+    .pd-qs-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--mc-shadow-md);
+        border-color: var(--mc-green-200);
+    }
+
+.pd-qs-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--mc-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pd-qs-icon--green {
+    background: var(--mc-green-100);
+    color: var(--mc-green-600);
+}
+
+.pd-qs-icon--blue {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.pd-qs-icon--orange {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.pd-qs-icon--purple {
+    background: #EDE9FE;
+    color: #7C3AED;
+}
+
+.pd-qs-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.pd-qs-value {
+    font-family: var(--mc-font-display);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--mc-gray-900);
+    line-height: 1;
+}
+
+.pd-qs-value--pct {
+    font-size: 24px;
+}
+
+.pd-qs-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--mc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-top: 4px;
+}
+
+/* ── 4. Main Two-Column Grid ────────────────────────────────────── */
+.pd-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.pd-col-left, .pd-col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── 5. Base Card ───────────────────────────────────────────────── */
+.pd-card {
+    background: var(--mc-white);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-xl);
+    box-shadow: var(--mc-shadow-sm);
+    overflow: hidden;
+    transition: box-shadow var(--mc-dur-normal) var(--mc-ease);
+}
+
+    .pd-card:hover {
+        box-shadow: var(--mc-shadow-md);
+    }
+
+.pd-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--mc-border);
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.pd-card__title-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pd-card__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--mc-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pd-card__icon--green {
+    background: var(--mc-green-100);
+    color: var(--mc-green-600);
+}
+
+.pd-card__icon--blue {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+.pd-card__icon--orange {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.pd-card__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--mc-gray-900);
+    margin-bottom: 2px;
+}
+
+.pd-card__subtitle {
+    font-size: 13px;
+    color: var(--mc-text-muted);
+}
+
+.pd-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Edit / Save / Cancel button overrides */
+.pd-edit-btn {
+    color: var(--mc-green-600) !important;
+    border-color: var(--mc-green-200) !important;
+}
+
+/* Inline message strip */
+.pd-inline-msg {
+    display: block;
+    margin: 0 28px 0;
+    padding: 12px 16px;
+    border-radius: var(--mc-radius-md);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pd-inline-msg--success {
+    background: var(--mc-green-50);
+    border: 1px solid var(--mc-green-200);
+    color: var(--mc-green-700);
+    margin-top: 16px;
+}
+
+.pd-inline-msg--error {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    margin-top: 16px;
+}
+
+/* ── 6. Health View Mode ────────────────────────────────────────── */
+.pd-health-view {
+    padding: 24px 28px;
+}
+
+.pd-hv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.pd-hv-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--mc-gray-50);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-lg);
+    transition: all var(--mc-dur-fast) var(--mc-ease);
+}
+
+    .pd-hv-item:hover {
+        background: var(--mc-green-50);
+        border-color: var(--mc-green-200);
+    }
+
+.pd-hv-item--wide {
+    grid-column: 1 / -1;
+}
+
+.pd-hv-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.pd-hv-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pd-hv-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--mc-text-muted);
+    margin-bottom: 3px;
+}
+
+.pd-hv-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--mc-gray-900);
+    line-height: 1.2;
+}
+
+    .pd-hv-value small {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--mc-text-muted);
+    }
+
+.pd-hv-value--sm {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* BMI bar */
+.pd-bmi-block {
+    background: var(--mc-gray-50);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-lg);
+    padding: 16px 18px;
+}
+
+.pd-bmi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pd-bmi-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--mc-gray-700);
+}
+
+.pd-bmi-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--mc-gray-700);
+}
+
+.pd-bmi-cat {
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--mc-radius-full);
+    font-size: 12px;
+}
+
+.pd-bmi-cat--low {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.pd-bmi-cat--ok {
+    background: var(--mc-green-100);
+    color: var(--mc-green-700);
+}
+
+.pd-bmi-cat--warn {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.pd-bmi-cat--danger {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.pd-bmi-track {
+    height: 8px;
+    background: var(--mc-gray-200);
+    border-radius: var(--mc-radius-full);
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.pd-bmi-fill {
+    height: 100%;
+    border-radius: var(--mc-radius-full);
+    background: linear-gradient(90deg, #60A5FA, #1A9E5C, #FBBF24, #EF4444);
+    transition: width 1s var(--mc-ease);
+}
+
+.pd-bmi-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--mc-text-muted);
+    font-weight: 600;
+}
+
+/* ── 7. Health Edit Mode ────────────────────────────────────────── */
+.pd-health-edit {
+    padding: 24px 28px;
+}
+
+.pd-edit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.pd-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pd-edit-field--full {
+    grid-column: 1 / -1;
+}
+
+.mc-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px !important;
+    cursor: pointer;
+}
+
+/* ── 8. Today's Doses Card ──────────────────────────────────────── */
+.pd-doses-progress-mini {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.pd-dpm-ring {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .pd-dpm-ring svg {
+        transform: rotate(-90deg);
+    }
+
+.pd-dpm-pct {
+    position: absolute;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mc-green-600);
+}
+
+.pd-doses-list {
+    padding: 8px 0;
+}
+
+.pd-dose-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--mc-gray-100);
+    transition: all var(--mc-dur-fast) var(--mc-ease);
+    position: relative;
+}
+
+    .pd-dose-row:last-child {
+        border-bottom: none;
+    }
+
+    .pd-dose-row:hover {
+        background: var(--mc-gray-50);
+    }
+
+.pd-dose-row--taken {
+    background: linear-gradient(90deg, rgba(16, 185, 129, .04), transparent);
+}
+
+.pd-dose-row--pending {
+    background: linear-gradient(90deg, rgba(251, 191, 36, .04), transparent);
+}
+
+.pd-dose-check {
+    flex-shrink: 0;
+}
+
+.pd-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.pd-dose-check span input[type="checkbox"] {
+    display: none;
+}
+
+.pd-dose-check span {
+    display: flex;
+    align-items: center;
+}
+
+    .pd-dose-check span label,
+    .pd-dose-check label {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--mc-border);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all var(--mc-dur-fast) var(--mc-ease);
+        background: var(--mc-white);
+        flex-shrink: 0;
+    }
+
+.pd-dose-row--taken .pd-dose-check span label {
+    background: var(--mc-green-500);
+    border-color: var(--mc-green-500);
+}
+
+    .pd-dose-row--taken .pd-dose-check span label::after {
+        content: '✓';
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+.pd-dose-pill-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--mc-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.pd-dose-pill-icon--blue {
+    background: #DBEAFE;
+}
+
+.pd-dose-pill-icon--orange {
+    background: #FEF3C7;
+}
+
+.pd-dose-pill-icon--purple {
+    background: #EDE9FE;
+}
+
+.pd-dose-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.pd-dose-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mc-gray-900);
+}
+
+.pd-dose-detail {
+    font-size: 12px;
+    color: var(--mc-text-muted);
+    margin-top: 2px;
+}
+
+.pd-dose-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mc-text-secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pd-dose-status {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: var(--mc-radius-full);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pd-dose-status--done {
+    background: var(--mc-green-100);
+    color: var(--mc-green-700);
+}
+
+.pd-dose-status--pending {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.pd-dose-status--upcoming {
+    background: #EDE9FE;
+    color: #5B21B6;
+}
+
+.pd-dose-row--taken .pd-dose-name {
+    text-decoration: line-through;
+    color: var(--mc-text-muted);
+}
+
+.pd-doses-footer {
+    padding: 16px 28px;
+    border-top: 1px solid var(--mc-border);
+    background: var(--mc-gray-50);
+}
+
+.pd-doses-bar {
+    height: 6px;
+    background: var(--mc-gray-200);
+    border-radius: var(--mc-radius-full);
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.pd-doses-bar__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mc-green-400), var(--mc-green-500));
+    border-radius: var(--mc-radius-full);
+    transition: width .8s var(--mc-ease);
+}
+
+.pd-doses-footer__text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--mc-text-secondary);
+    font-weight: 500;
+}
+
+/* ── 9. Pill Inventory Card ─────────────────────────────────────── */
+.pd-inventory-list {
+    padding: 12px 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pd-inv-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--mc-gray-50);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-lg);
+    transition: all var(--mc-dur-fast) var(--mc-ease);
+}
+
+    .pd-inv-item:hover {
+        border-color: var(--mc-green-200);
+        background: var(--mc-green-50);
+    }
+
+.pd-inv-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.pd-inv-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.pd-inv-dot--blue {
+    background: #3B82F6;
+}
+
+.pd-inv-dot--orange {
+    background: #F59E0B;
+}
+
+.pd-inv-dot--purple {
+    background: #8B5CF6;
+}
+
+.pd-inv-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--mc-gray-800);
+}
+
+.pd-inv-detail {
+    display: block;
+    font-size: 12px;
+    color: var(--mc-text-muted);
+    margin-top: 2px;
+}
+
+.pd-inv-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.pd-inv-track {
+    width: 80px;
+    height: 6px;
+    background: var(--mc-gray-200);
+    border-radius: var(--mc-radius-full);
+    overflow: hidden;
+}
+
+.pd-inv-fill {
+    height: 100%;
+    border-radius: var(--mc-radius-full);
+    transition: width .8s var(--mc-ease);
+}
+
+.pd-inv-fill--blue {
+    background: #3B82F6;
+}
+
+.pd-inv-fill--orange {
+    background: #F59E0B;
+}
+
+.pd-inv-fill--purple {
+    background: #8B5CF6;
+}
+
+.pd-inv-count {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mc-gray-800);
+    min-width: 28px;
+    text-align: right;
+}
+
+.pd-inv-count--low {
+    color: #D97706;
+}
+
+/* ── 10. Responsive ─────────────────────────────────────────────── */
+@media(max-width: 1100px) {
+    .pd-quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 960px) {
+    .pd-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pd-root {
+        padding: 20px 20px 48px;
+    }
+}
+
+@media(max-width: 640px) {
+    .pd-topbar {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pd-quick-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pd-hv-grid, .pd-edit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pd-dose-row {
+        padding: 12px 16px;
+        gap: 10px;
+    }
+
+    .pd-card__header {
+        padding: 16px 18px;
+    }
+
+    .pd-health-view, .pd-health-edit {
+        padding: 16px 18px;
+    }
+
+    .pd-doses-footer {
+        padding: 14px 18px;
+    }
+
+    .pd-inventory-list {
+        padding: 12px 18px 18px;
+    }
+
+    .pd-inv-track {
+        width: 50px;
+    }
+
+    .pd-dose-status {
+        display: none;
+    }
+}
+
+@media(max-width: 420px) {
+    .pd-quick-stats {
+        grid-template-columns: 1fr;
+    }
+}

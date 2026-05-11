@@ -1,11 +1,10 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BFD69083-51A1-4196-9508-7DDFB9BA84D0}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -15,80 +14,97 @@
     <AssemblyName>MediCare</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
     <IISExpressSSLPort>44301</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <HintPath>packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
+    <!-- CSS -->
+    <Content Include="css\dashboard.css" />
+    <Content Include="css\default.css" />
+    <Content Include="css\mealCalculator.css" />
+    <Content Include="css\medications.css" />
+    <Content Include="css\nutritions.css" />
+    <Content Include="css\search.css" />
+
+    <!-- JS -->
+    <Content Include="js\dashboard.js" />
+    <Content Include="js\default.js" />
+    <Content Include="js\mealCalculator.js" />
+    <Content Include="js\Nutritions.js" />
+    <Content Include="js\search.js" />
+
+    <!-- Pages -->
+    <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Pages\Account\Login.aspx" />
-    <Content Include="Pages\Account\Profile.aspx" />
-    <Content Include="Pages\Account\Registration.aspx" />
+    <Content Include="Web.config" />
+
+    <!-- Admin -->
     <Content Include="Pages\Admin\Dashboard.aspx" />
     <Content Include="Pages\Admin\FoodCatalog.aspx" />
     <Content Include="Pages\Admin\MedicineCatalog.aspx" />
     <Content Include="Pages\Admin\UserManagement.aspx" />
+
+    <!-- Doctor -->
     <Content Include="Pages\Doctor\ConsultationRequests.aspx" />
     <Content Include="Pages\Doctor\Dashboard.aspx" />
     <Content Include="Pages\Doctor\ManageMedication.aspx" />
     <Content Include="Pages\Doctor\ManageNutrition.aspx" />
     <Content Include="Pages\Doctor\PatientList.aspx" />
+
+    <!-- Patient (MERGED BOTH VERSIONS) -->
     <Content Include="Pages\Patient\Dashboard.aspx" />
     <Content Include="Pages\Patient\MealCalculator.aspx" />
+
     <Content Include="Pages\Patient\MyMedications.aspx" />
     <Content Include="Pages\Patient\MyNutritionPlan.aspx" />
     <Content Include="Pages\Patient\RequestConsultation.aspx" />
     <Content Include="Pages\Patient\TakeDose.aspx" />
+
+    <Content Include="Pages\Patient\Medications.aspx" />
+    <Content Include="Pages\Patient\Nutritions.aspx" />
+    <Content Include="Pages\Patient\Search.aspx" />
+
+    <!-- Shared -->
     <Content Include="Pages\Shared\Chatbot.aspx" />
-    <Content Include="Web.config" />
+
+    <!-- Database files (IMPORTANT FIX FROM mhamad-database) -->
+    <Content Include="Database\Medicine+Food.sql" />
+    <Content Include="Database\Users+Doctors+Patients.sql" />
+    <Content Include="Database\lebanese_food_database.csv" />
+    <Content Include="Database\lebanese_food_reference.pdf" />
+    <Content Include="Database\lebanon_drugs_database.csv" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="App_Code\Models\User.cs" />
     <Content Include="App_Code\Models\Medicine.cs" />
@@ -96,162 +112,12 @@
     <Content Include="App_Code\Models\FoodItem.cs" />
     <Content Include="App_Code\Models\NutritionPlan.cs" />
     <Content Include="App_Code\Models\ConsultationRequest.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="MasterPage\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MasterPage\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Profile.aspx.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Profile.aspx.designer.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.designer.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Admin\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Admin\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Admin\FoodCatalog.aspx.cs">
-      <DependentUpon>FoodCatalog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Admin\FoodCatalog.aspx.designer.cs">
-      <DependentUpon>FoodCatalog.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Admin\MedicineCatalog.aspx.cs">
-      <DependentUpon>MedicineCatalog.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Admin\MedicineCatalog.aspx.designer.cs">
-      <DependentUpon>MedicineCatalog.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Admin\UserManagement.aspx.cs">
-      <DependentUpon>UserManagement.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Admin\UserManagement.aspx.designer.cs">
-      <DependentUpon>UserManagement.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Doctor\ConsultationRequests.aspx.cs">
-      <DependentUpon>ConsultationRequests.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Doctor\ConsultationRequests.aspx.designer.cs">
-      <DependentUpon>ConsultationRequests.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Doctor\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Doctor\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Doctor\ManageMedication.aspx.cs">
-      <DependentUpon>ManageMedication.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Doctor\ManageMedication.aspx.designer.cs">
-      <DependentUpon>ManageMedication.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Doctor\ManageNutrition.aspx.cs">
-      <DependentUpon>ManageNutrition.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Doctor\ManageNutrition.aspx.designer.cs">
-      <DependentUpon>ManageNutrition.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Doctor\PatientList.aspx.cs">
-      <DependentUpon>PatientList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Doctor\PatientList.aspx.designer.cs">
-      <DependentUpon>PatientList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\Dashboard.aspx.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\Dashboard.aspx.designer.cs">
-      <DependentUpon>Dashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\MealCalculator.aspx.cs">
-      <DependentUpon>MealCalculator.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\MealCalculator.aspx.designer.cs">
-      <DependentUpon>MealCalculator.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\MyMedications.aspx.cs">
-      <DependentUpon>MyMedications.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\MyMedications.aspx.designer.cs">
-      <DependentUpon>MyMedications.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\MyNutritionPlan.aspx.cs">
-      <DependentUpon>MyNutritionPlan.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\MyNutritionPlan.aspx.designer.cs">
-      <DependentUpon>MyNutritionPlan.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\RequestConsultation.aspx.cs">
-      <DependentUpon>RequestConsultation.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\RequestConsultation.aspx.designer.cs">
-      <DependentUpon>RequestConsultation.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Patient\TakeDose.aspx.cs">
-      <DependentUpon>TakeDose.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Patient\TakeDose.aspx.designer.cs">
-      <DependentUpon>TakeDose.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Shared\Chatbot.aspx.cs">
-      <DependentUpon>Chatbot.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Shared\Chatbot.aspx.designer.cs">
-      <DependentUpon>Chatbot.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Content Include="MasterPage\Site.Master" />
-    <Content Include=".gitignore" />
-    <None Include="packages.config" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
+    <Compile Include="Global.asax.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Folder Include="App_Code\Chatbot\" />
     <Folder Include="App_Data\" />
@@ -260,42 +126,6 @@
     <Folder Include="Style\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
+
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>62009</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44301/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-  </Target>
 </Project>
