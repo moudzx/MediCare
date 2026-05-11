@@ -96,9 +96,10 @@
     <Content Include="js\mealCalculator.js" />
     <Content Include="js\Nutritions.js" />
     <Content Include="js\search.js" />
+    <Content Include="Pages\Account\ForgotPassword.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
+    <Content Include="Pages\Account\NewPassword.aspx" />
     <Content Include="Pages\Account\Profile.aspx" />
-    <Content Include="Pages\Account\Registration.aspx" />
     <Content Include="Pages\Admin\Dashboard.aspx" />
     <Content Include="Pages\Admin\FoodCatalog.aspx" />
     <Content Include="Pages\Admin\MedicineCatalog.aspx" />
@@ -146,6 +147,13 @@
     <Compile Include="MasterPage\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Account\ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Account\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -153,19 +161,19 @@
     <Compile Include="Pages\Account\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Account\NewPassword.aspx.cs">
+      <DependentUpon>NewPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Account\NewPassword.aspx.designer.cs">
+      <DependentUpon>NewPassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Account\Profile.aspx.cs">
       <DependentUpon>Profile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Account\Profile.aspx.designer.cs">
       <DependentUpon>Profile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.designer.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Admin\Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
