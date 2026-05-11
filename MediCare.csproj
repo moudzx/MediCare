@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BFD69083-51A1-4196-9508-7DDFB9BA84D0}</ProjectGuid>
+    <ProjectGuid>{62BD22C6-5B55-A166-7F93-E8B3827B49F6}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+
     <Content Include="css\dashboard.css" />
     <Content Include="css\default.css" />
     <Content Include="css\mealCalculator.css" />
@@ -74,6 +75,9 @@
     <Content Include="css\nutritions.css" />
     <Content Include="css\search.css" />
     <Content Include="default.aspx" />
+    <Content Include="Database\Medicine+Food.sql" />
+    <Content Include="Database\Users+Doctors+Patients.sql" />
+
     <Content Include="Global.asax" />
     <Content Include="js\dashboard.js" />
     <Content Include="js\default.js" />
@@ -259,8 +263,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+
     <Content Include="MasterPage\Site.Master" />
     <Content Include="MasterPage\PatientSite.Master" />
+
+    <Content Include="Database\lebanese_food_reference.pdf" />
+    <Content Include="Database\lebanese_food_database.csv" />
+    <Content Include="Database\lebanon_drugs_database.csv" />
+
     <None Include="packages.config" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
