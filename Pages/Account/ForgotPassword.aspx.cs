@@ -21,8 +21,6 @@ namespace MediCare.Pages.Account
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(!IsPostBack)
-                btnResendCode.Enabled = false;
         }
 
         protected void btnSendCode_Click(object sender, EventArgs e)
@@ -35,7 +33,7 @@ namespace MediCare.Pages.Account
                 return;
             }
 
-            string code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
+            string code = GenerateCode();
 
             using (SqlConnection conn = GetConnection())
             {
@@ -65,9 +63,6 @@ namespace MediCare.Pages.Account
 
             lblMessage.ForeColor = System.Drawing.Color.Green;
             lblMessage.Text = "Verification code sent successfully.";
-
-            btnSendCode.Enabled = false;
-            btnResendCode.Enabled = true;
         }
 
         protected void btnResendCode_Click(object sender, EventArgs e)
@@ -80,7 +75,37 @@ namespace MediCare.Pages.Account
                 return;
             }
 
-            string code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
+            using (SqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.CommandText =
+                    @"SELECT ResetLockedUntil
+                      FROM Users
+                      WHERE Email = @Email";
+
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
+
+                    object lockObj = cmd.ExecuteScalar();
+
+                    if (lockObj != DBNull.Value && lockObj != null)
+                    {
+                        DateTime lockedUntil = Convert.ToDateTime(lockObj);
+
+                        if (DateTime.Now < lockedUntil)
+                        {
+                            lblMessage.Text = "Locked until " + lockedUntil;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            string code = GenerateCode();
 
             using (SqlConnection conn = GetConnection())
             {
@@ -93,7 +118,8 @@ namespace MediCare.Pages.Account
                     cmd.CommandText =
                     @"UPDATE Users
                       SET ResetCode = @Code,
-                          ResetExpiry = @Expiry
+                          ResetExpiry = @Expiry,
+                          ResetAttempts = 0
                       WHERE Email = @Email";
 
                     cmd.Parameters.AddWithValue("@Code", code);
@@ -274,6 +300,11 @@ namespace MediCare.Pages.Account
                     return count > 0;
                 }
             }
+        }
+
+        private string GenerateCode()
+        {
+            return RandomNumberGenerator.GetInt32(100000, 999999).ToString();
         }
 
         private void SendResetEmail(string email, string code)
