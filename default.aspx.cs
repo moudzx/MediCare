@@ -5,9 +5,6 @@ using System.IO;
 using System.Web;
 using System.Web.UI;
 
-// emlt download la BCrypt endi w nzed bel .config
-// eza 3ndkn ma chta8al futu aa package manager console w ktbu hydi
-// Install-Package BCrypt.Net-Next
 
 namespace MediCare
 {
@@ -61,7 +58,6 @@ namespace MediCare
                                 VALUES 
                                 (@UserId, @Name, @Age, @Height, @Weight, @Disability, @Disease, @Family)";
 
-            // dont forget to set identity: PatientId INT IDENTITY PRIMARY KEY
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Name", txtPatientName.Text.Trim());
             cmd.Parameters.AddWithValue("@Age", int.Parse(txtPatientAge.Text));
@@ -116,7 +112,6 @@ namespace MediCare
                                 VALUES 
                                 (@UserId, @Name, @Age, @Path)";
 
-            // dont forget to set identity: DoctorId INT IDENTITY PRIMARY KEY
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Name", txtDoctorName.Text.Trim());
             cmd.Parameters.AddWithValue("@Age", int.Parse(txtDoctorAge.Text));

@@ -1,10 +1,14 @@
-﻿
-CREATE TABLE [dbo].[Users] (
+﻿CREATE TABLE [dbo].[Users] (
     [UserId] INT IDENTITY(1,1) NOT NULL,
     [Email] NVARCHAR(255) NOT NULL,
     [PasswordHash] NVARCHAR(255) NOT NULL,
     [Role] NVARCHAR(20) NOT NULL,
     [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    [ResetCode] NVARCHAR(10) NULL,
+    [ResetExpiry] DATETIME NULL,
+    [ResetAttempts] INT NOT NULL DEFAULT 0,
+    [ResetLockedUntil] DATETIME NULL,
 
     CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([UserId]),
     CONSTRAINT [UQ_Users_Email] UNIQUE ([Email]),
