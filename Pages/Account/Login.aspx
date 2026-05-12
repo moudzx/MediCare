@@ -52,5 +52,6 @@
                 </div>
             </div>
         </div>
+        <asp:Label ID="lblLoginMessage" runat="server" CssClass="mc-form__message" Visible="false" />
     </section>
 </asp:Content>
