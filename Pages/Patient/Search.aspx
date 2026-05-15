@@ -7,7 +7,7 @@
 
 <asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
 
-<div class="sea-root">
+    <div class="sea-root">
 
     <!-- HEADER -->
     <div class="sea-page-header">
@@ -52,7 +52,7 @@
             </div>
         </div>
     </div>
-
+        </div>
     <div id="searchMsg" class="sea-inline-msg" style="display:none;"></div>
 
     <div class="sea-results-grid">

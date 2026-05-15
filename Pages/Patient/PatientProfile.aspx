@@ -100,18 +100,15 @@
                 <div id="patientSection">
 
                     <div class="pro-row">
+                        <div class="pro-field">
+                            <label>Height (cm)</label>
+                            <asp:TextBox ID="txtHeight" runat="server" CssClass="input" TextMode="Number" />
+                        </div>
 
                         <div class="pro-field">
-                            <div class="pro-field">
-                                <label>Height (cm)</label>
-                                <asp:TextBox ID="txtHeight" runat="server" CssClass="input" TextMode="Number" />
-                            </div>
-
-                            <div class="pro-field">
-                                <label>Weight (kg)</label>
-                                <asp:TextBox ID="txtWeight" runat="server" CssClass="input" TextMode="Number" />
-                            </div>
-
+                            <label>Weight (kg)</label>
+                            <asp:TextBox ID="txtWeight" runat="server" CssClass="input" TextMode="Number" />
+                        </div>
                     </div>
 
                     <div class="pro-field">
@@ -129,7 +126,13 @@
                         <asp:TextBox ID="txtFamilyHistory" runat="server" CssClass="input" TextMode="MultiLine" />
                     </div>
 
-                </div>
+                </div><%-- end patientSection --%>
+
+            </div><%-- end pro-card__body --%>
+
+        </div><%-- end pro-card RIGHT --%>
+
+    </div><%-- end pro-grid --%>
 
     <!-- ACTIONS -->
     <div class="pro-actions">
@@ -137,7 +140,6 @@
         <button type="button"
                 class="pro-btn pro-btn--primary"
                 onclick="saveProfile()">
-
             <i class="fa-solid fa-floppy-disk"></i>
             Save Changes
         </button>
@@ -145,7 +147,6 @@
         <button type="button"
                 class="pro-btn pro-btn--gray"
                 onclick="resetProfile()">
-
             <i class="fa-solid fa-rotate-left"></i>
             Reset
         </button>
@@ -158,8 +159,8 @@
          style="display:none;">
     </div>
 
-</div>
+</div><%-- end pro-root --%>
 
 <script src="/js/profile.js"></script>
 
-</asp:Content>
+</asp:Content><%--  --%>

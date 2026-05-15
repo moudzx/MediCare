@@ -13,5 +13,13 @@ namespace MediCare.Pages.Patient
         {
 
         }
+        protected void gvMedicines_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "AddToFavorites") // change this to whatever your button does
+            {
+                int medicineId = Convert.ToInt32(e.CommandArgument);
+                // your logic here
+            }
+        }
     }
 }
