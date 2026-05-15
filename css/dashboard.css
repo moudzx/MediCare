@@ -31,7 +31,21 @@
     position: relative;
     overflow: hidden;
 }
+.pd-inventory-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+    .pd-inventory-grid td,
+    .pd-inventory-grid th {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .pd-inventory-grid th {
+        text-align: left;
+        font-weight: 600;
+    }
     .pd-topbar::before {
         content: '';
         position: absolute;
