@@ -455,7 +455,7 @@
                             <p class="mc-form__terms">By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
                             <asp:Button ID="btnPatientSignUp" runat="server" Text="Create Patient Account"
                                 CssClass="mc-btn mc-btn--primary mc-btn--lg mc-btn--submit"
-                                ValidationGroup="PatientGroup" OnClick="btnPatientSignUp_Click" />
+                                ValidationGroup="PatientGroup" />
                         </div>
 
                         <asp:Label ID="lblPatientMessage" runat="server" CssClass="mc-form__message" Visible="false" />
@@ -555,7 +555,7 @@
                             <p class="mc-form__terms">By registering, you confirm all information is accurate and agree to our <a href="#">Terms of Service</a>.</p>
                             <asp:Button ID="btnDoctorSignUp" runat="server" Text="Apply as Doctor"
                                 CssClass="mc-btn mc-btn--primary mc-btn--lg mc-btn--submit"
-                                ValidationGroup="DoctorGroup" OnClick="btnDoctorSignUp_Click" />
+                                ValidationGroup="DoctorGroup"/>
                         </div>
 
                         <asp:Label ID="lblDoctorMessage" runat="server" CssClass="mc-form__message" Visible="false" />

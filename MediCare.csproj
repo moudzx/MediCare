@@ -1,33 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!-- ===================== -->
-  <!-- BASIC PROJECT CONFIG  -->
-  <!-- ===================== -->
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BFD69083-51A1-4196-9508-7DDFB9BA84D0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MediCare</RootNamespace>
     <AssemblyName>MediCare</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
+    <IISExpressSSLPort>44301</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <!-- ===================== -->
-  <!-- REFERENCES           -->
-  <!-- ===================== -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
-  <!-- ===================== -->
-  <!-- YOUR FILES (FIXED)   -->
-  <!-- ===================== -->
   <ItemGroup>
     <Compile Include="App_Code\Models\ConsultationRequest.cs" />
     <Compile Include="App_Code\Models\FoodItem.cs" />
@@ -44,6 +77,7 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="MasterPage\PatientSite.Master.cs">
       <DependentUpon>PatientSite.Master</DependentUpon>
@@ -79,20 +113,6 @@
     </Compile>
     <Compile Include="Pages\Account\NewPassword.aspx.designer.cs">
       <DependentUpon>NewPassword.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Profile.aspx.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Profile.aspx.designer.cs">
-      <DependentUpon>Profile.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\Registration.aspx.designer.cs">
-      <DependentUpon>Registration.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Patient\PatientProfile.aspx.cs">
       <DependentUpon>PatientProfile.aspx</DependentUpon>
@@ -201,8 +221,85 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <!-- ===================== -->
-  <!-- IMPORTS              -->
-  <!-- ===================== -->
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="css\dashboard.css" />
+    <Content Include="css\default.css" />
+    <Content Include="css\mealCalculator.css" />
+    <Content Include="css\medications.css" />
+    <Content Include="css\nutritions.css" />
+    <Content Include="css\profile.css" />
+    <Content Include="css\search.css" />
+    <Content Include="Database\Medicine+Food.sql" />
+    <Content Include="Database\Users+Doctors+Patients.sql" />
+    <Content Include="Database\lebanese_food_database.csv" />
+    <Content Include="Database\lebanese_food_reference.pdf" />
+    <Content Include="Database\lebanon_drugs_database.csv" />
+    <Content Include="default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="js\dashboard.js" />
+    <Content Include="js\default.js" />
+    <Content Include="js\mealCalculator.js" />
+    <Content Include="js\Nutritions.js" />
+    <Content Include="js\profile.js" />
+    <Content Include="js\search.js" />
+    <Content Include="MasterPage\PatientSite.Master" />
+    <Content Include="MasterPage\Site.Master" />
+    <Content Include="Pages\Account\ForgotPassword.aspx" />
+    <Content Include="Pages\Account\Login.aspx" />
+    <Content Include="Pages\Account\NewPassword.aspx" />
+    <Content Include="Pages\Admin\Dashboard.aspx" />
+    <Content Include="Pages\Admin\FoodCatalog.aspx" />
+    <Content Include="Pages\Admin\MedicineCatalog.aspx" />
+    <Content Include="Pages\Admin\UserManagement.aspx" />
+    <Content Include="Pages\Doctor\ConsultationRequests.aspx" />
+    <Content Include="Pages\Doctor\Dashboard.aspx" />
+    <Content Include="Pages\Doctor\ManageMedication.aspx" />
+    <Content Include="Pages\Doctor\ManageNutrition.aspx" />
+    <Content Include="Pages\Doctor\PatientList.aspx" />
+    <Content Include="Pages\Patient\Dashboard.aspx" />
+    <Content Include="Pages\Patient\Medications.aspx" />
+    <Content Include="Pages\Patient\Nutritions.aspx" />
+    <Content Include="Pages\Patient\PatientProfile.aspx" />
+    <Content Include="Pages\Patient\Search.aspx" />
+    <Content Include="Pages\Shared\Chatbot.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>62009</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44301/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
