@@ -29,7 +29,6 @@ namespace MediCare.Pages.Patient
         {
             // All fields are now editable, so you can read them
             string email = txtEmail.Text;
-            string password = txtPassword.Text;
             string fullName = txtFullName.Text;
             int age = int.Parse(txtAge.Text);
             // ... save to database ...
