@@ -9,18 +9,186 @@ Inherits="MediCare.MasterPage.PatientSite" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="MediCare – Patient Health Dashboard" />
     <title>MediCare – Patient Portal</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/css/default.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* =========================
+           NOTIFICATIONS
+        ========================= */
+
+        .pn-notification {
+            position: relative;
+        }
+
+        .pn-notification__btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: .2s ease;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .pn-notification__btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .pn-notification__badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+        }
+
+        .pn-notification__menu {
+            position: absolute;
+            top: 52px;
+            right: 0;
+            width: 340px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: .2s ease;
+            z-index: 999;
+        }
+
+        .pn-notification__menu--open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .pn-notification__header {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            font-weight: 700;
+            color: #111827;
+            background: #f9fafb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pn-notification__markall {
+            border: none;
+            background: transparent;
+            color: #16a34a;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .pn-notification__empty {
+            padding: 18px 16px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .pn-notification__item {
+            display: flex;
+            gap: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            color: inherit;
+            transition: .2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .pn-notification__item:hover {
+            background: #f9fafb;
+        }
+
+        .pn-notification__item--unread {
+            background: #f0fdf4;
+        }
+
+        .pn-notification__item--unread:hover {
+            background: #dcfce7;
+        }
+
+        .pn-notification__icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pn-notification__content {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .pn-notification__content strong {
+            font-size: 13px;
+            color: #111827;
+        }
+
+        .pn-notification__content small {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .pn-notification__footer {
+            display: block;
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #16a34a;
+            text-decoration: none;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .pn-notification__footer:hover {
+            background: #f9fafb;
+        }
+    </style>
+
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
-<body runat="server">
-     <form id="form1" runat="server">
 
-    <!-- ═══════════════════════════════════════════
-         PATIENT NAVBAR
-    ═══════════════════════════════════════════ -->
+<body runat="server">
+<form id="form1" runat="server">
+
+    <!-- PATIENT NAVBAR -->
     <header class="mc-navbar" id="mcNavbar">
         <div class="mc-container mc-navbar__inner">
 
@@ -39,59 +207,105 @@ Inherits="MediCare.MasterPage.PatientSite" %>
             <nav class="mc-navbar__nav" aria-label="Patient navigation">
                 <a href="Dashboard.aspx" class="mc-nav-link" id="navDashboard">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
                     </svg>
                     Dashboard
                 </a>
+
                 <a href="Medications.aspx" class="mc-nav-link" id="navMedications">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M10.5 20H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H20a2 2 0 0 1 2 2v3"/>
-                        <circle cx="18" cy="18" r="3"/><path d="m22 22-1.5-1.5"/>
+                        <circle cx="18" cy="18" r="3"/>
+                        <path d="m22 22-1.5-1.5"/>
                     </svg>
                     Medications
                 </a>
+
                 <a href="Nutritions.aspx" class="mc-nav-link" id="navNutrition">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-                        <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                        <line x1="6" y1="1" x2="6" y2="4"/>
+                        <line x1="10" y1="1" x2="10" y2="4"/>
+                        <line x1="14" y1="1" x2="14" y2="4"/>
                     </svg>
                     Nutrition
                 </a>
+
                 <a href="Search.aspx" class="mc-nav-link" id="navSearch">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
                     </svg>
                     Search
                 </a>
             </nav>
 
-            <!-- Right side: profile -->
+            <!-- Right side -->
             <div class="mc-navbar__actions">
+
+                <!-- Notifications -->
+                <div class="pn-notification">
+                    <button type="button"
+                            class="pn-notification__btn"
+                            id="btnNotification"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-label="Notifications">
+
+                        <i class="fa-regular fa-bell"></i>
+
+                        <asp:Label ID="lblNotifCount" runat="server" CssClass="pn-notification__badge" Text="0" />
+                    </button>
+
+                    <div class="pn-notification__menu" id="notificationMenu" aria-hidden="true">
+                        <div class="pn-notification__header">
+                            <span>Notifications</span>
+
+                            <asp:LinkButton ID="btnMarkAllRead"
+                                            runat="server"
+                                            CssClass="pn-notification__markall">
+                                Mark all as read
+                            </asp:LinkButton>
+                        </div>
+
+                        <asp:PlaceHolder ID="phNotifications" runat="server" />
+
+                        <a href="Notifications.aspx" class="pn-notification__footer">
+                            View all notifications
+                        </a>
+                    </div>
+                </div>
 
                 <!-- Profile dropdown -->
                 <div class="pn-profile" id="profileDropdown">
-
-                    <button type="button" class="pn-profile__btn" id="btnProfile"
-                            aria-haspopup="true" aria-expanded="false" aria-label="Patient profile menu">
+                    <button type="button"
+                            class="pn-profile__btn"
+                            id="btnProfile"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            aria-label="Patient profile menu">
 
                         <span class="pn-profile__name">
                             <asp:Label ID="lblFirstName" runat="server" Text=""></asp:Label>
                         </span>
+
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <polyline points="6 9 12 15 18 9"/>
                         </svg>
                     </button>
 
-
                     <div class="pn-profile__menu" id="profileMenu" aria-hidden="true">
-
                         <div class="pn-profile__menu-header">
                             <strong><asp:Label ID="lblFullName" runat="server" Text=""></asp:Label></strong>
                             <small><asp:Label ID="lblEmail" runat="server" Text=""></asp:Label></small>
                         </div>
 
                         <div class="pn-profile__menu-divider"></div>
+
                         <a href="PatientProfile.aspx" class="pn-menu-item">
                             <i class="fa-solid fa-user-pen"></i> Profile
                         </a>
@@ -103,16 +317,12 @@ Inherits="MediCare.MasterPage.PatientSite" %>
         </div>
     </header>
 
-    <!-- ═══════════════════════════════════════════
-         PAGE CONTENT
-    ═══════════════════════════════════════════ -->
+    <!-- PAGE CONTENT -->
     <main id="mainContent">
         <asp:ContentPlaceHolder ID="MainContent" runat="server" />
     </main>
 
-    <!-- ═══════════════════════════════════════════
-         PATIENT FOOTER (minimal)
-    ═══════════════════════════════════════════ -->
+    <!-- FOOTER -->
     <footer class="pn-footer">
         <div class="mc-container pn-footer__inner">
             <div class="pn-footer__logo">
@@ -124,7 +334,9 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                 </div>
                 <span class="mc-logo-text">Medi<strong>Care</strong></span>
             </div>
+
             <p class="pn-footer__copy">&copy; 2025 MediCare Health Platform. All rights reserved.</p>
+
             <div class="pn-footer__links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Use</a>
@@ -137,7 +349,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
     <script>
         (function () {
 
-            /* ── Active nav link highlight ──────────────────────── */
+            /* Active nav link */
             var path = window.location.pathname.toLowerCase();
             var links = {
                 'dashboard': document.getElementById('navDashboard'),
@@ -145,27 +357,28 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                 'nutrition': document.getElementById('navNutrition'),
                 'search': document.getElementById('navSearch')
             };
+
             Object.keys(links).forEach(function (key) {
                 if (links[key] && path.indexOf(key) !== -1) {
                     links[key].classList.add('mc-nav-link--active');
                 }
             });
 
-            /* ── Profile dropdown ───────────────────────────────── */
+            /* Profile dropdown */
             var btnProfile = document.getElementById('btnProfile');
             var profileMenu = document.getElementById('profileMenu');
             var profileWrap = document.getElementById('profileDropdown');
-            var isOpen = false;
+            var profileOpen = false;
 
-            function openMenu() {
-                isOpen = true;
+            function openProfile() {
+                profileOpen = true;
                 profileMenu.classList.add('pn-profile__menu--open');
                 btnProfile.setAttribute('aria-expanded', 'true');
                 profileMenu.setAttribute('aria-hidden', 'false');
             }
 
-            function closeMenu() {
-                isOpen = false;
+            function closeProfile() {
+                profileOpen = false;
                 profileMenu.classList.remove('pn-profile__menu--open');
                 btnProfile.setAttribute('aria-expanded', 'false');
                 profileMenu.setAttribute('aria-hidden', 'true');
@@ -174,40 +387,58 @@ Inherits="MediCare.MasterPage.PatientSite" %>
             if (btnProfile && profileMenu) {
                 btnProfile.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    isOpen ? closeMenu() : openMenu();
+                    profileOpen ? closeProfile() : openProfile();
                 });
 
                 document.addEventListener('click', function (e) {
-                    if (isOpen && !profileWrap.contains(e.target)) {
-                        closeMenu();
+                    if (profileOpen && !profileWrap.contains(e.target)) {
+                        closeProfile();
                     }
                 });
 
                 document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && isOpen) closeMenu();
+                    if (e.key === 'Escape' && profileOpen) {
+                        closeProfile();
+                    }
                 });
             }
 
-            /* ── Hamburger / mobile menu ────────────────────────── */
-            var hamburger = document.getElementById('mcHamburger');
-            var mobileMenu = document.getElementById('mcMobileMenu');
+            /* Notifications dropdown */
+            var btnNotification = document.getElementById('btnNotification');
+            var notificationMenu = document.getElementById('notificationMenu');
+            var notificationWrap = document.querySelector('.pn-notification');
+            var notifOpen = false;
 
-            if (hamburger && mobileMenu) {
-                hamburger.addEventListener('click', function () {
-                    var menuOpen = mobileMenu.classList.contains('mc-mobile-menu--open');
-                    mobileMenu.classList.toggle('mc-mobile-menu--open', !menuOpen);
-                    hamburger.setAttribute('aria-expanded', String(!menuOpen));
-                    mobileMenu.setAttribute('aria-hidden', String(menuOpen));
-                    document.body.style.overflow = menuOpen ? '' : 'hidden';
+            function openNotif() {
+                notifOpen = true;
+                notificationMenu.classList.add('pn-notification__menu--open');
+                btnNotification.setAttribute('aria-expanded', 'true');
+                notificationMenu.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeNotif() {
+                notifOpen = false;
+                notificationMenu.classList.remove('pn-notification__menu--open');
+                btnNotification.setAttribute('aria-expanded', 'false');
+                notificationMenu.setAttribute('aria-hidden', 'true');
+            }
+
+            if (btnNotification && notificationMenu) {
+                btnNotification.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    notifOpen ? closeNotif() : openNotif();
                 });
 
-                document.querySelectorAll('.mc-mobile-link, .mc-mobile-actions .mc-btn').forEach(function (link) {
-                    link.addEventListener('click', function () {
-                        mobileMenu.classList.remove('mc-mobile-menu--open');
-                        hamburger.setAttribute('aria-expanded', 'false');
-                        mobileMenu.setAttribute('aria-hidden', 'true');
-                        document.body.style.overflow = '';
-                    });
+                document.addEventListener('click', function (e) {
+                    if (notifOpen && notificationWrap && !notificationWrap.contains(e.target)) {
+                        closeNotif();
+                    }
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && notifOpen) {
+                        closeNotif();
+                    }
                 });
             }
 
@@ -215,6 +446,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
     </script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
-    </form>
+
+</form>
 </body>
 </html>
