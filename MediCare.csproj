@@ -82,6 +82,13 @@
       <DependentUpon>Global.asax</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="MasterPage\DoctorSite.Master.cs">
+      <DependentUpon>DoctorSite.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\DoctorSite.Master.designer.cs">
+      <DependentUpon>DoctorSite.Master</DependentUpon>
+    </Compile>
     <Compile Include="MasterPage\PatientSite.Master.cs">
       <DependentUpon>PatientSite.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -226,12 +233,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\dashboard.css" />
+    <Content Include="css\DashboardDc.css" />
     <Content Include="css\default.css" />
     <Content Include="css\ForgetPassword.css" />
     <Content Include="css\mealCalculator.css" />
     <Content Include="css\medications.css" />
     <Content Include="css\NewPassword.css" />
     <Content Include="css\nutritions.css" />
+    <Content Include="css\PatientList.css" />
     <Content Include="css\profile.css" />
     <Content Include="css\search.css" />
     <Content Include="Database\Medicine+Food.sql" />
@@ -242,11 +251,13 @@
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="js\dashboard.js" />
+    <Content Include="js\DashboardDc.js" />
     <Content Include="js\default.js" />
     <Content Include="js\ForgetPassword.js" />
     <Content Include="js\mealCalculator.js" />
     <Content Include="js\NewPassword.js" />
     <Content Include="js\Nutritions.js" />
+    <Content Include="js\PatientList.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\search.js" />
     <Content Include="MasterPage\PatientSite.Master" />
@@ -271,6 +282,7 @@
     <Content Include="Pages\Shared\Chatbot.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MasterPage\DoctorSite.Master" />
     <None Include="packages.config" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">

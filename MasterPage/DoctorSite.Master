@@ -1,0 +1,772 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="DoctorSite.Master.cs"
+    Inherits="MediCare.DoctorSiteMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare – Doctor Portal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="/Styles/Medicare.css" />
+
+    <style>
+    :root {
+        --ds-sidebar-w:      260px;
+        --ds-sidebar-collapsed: 72px;
+        --ds-topbar-h:       64px;
+        --ds-green:          #1A9E5C;
+        --ds-green-dark:     #16855E;
+        --ds-green-light:    #F0FDF4;
+        --ds-blue:           #2563EB;
+        --ds-sidebar-bg:     #0F1D2E;
+        --ds-sidebar-hover:  rgba(255,255,255,.07);
+        --ds-sidebar-active: rgba(26,158,92,.18);
+        --ds-sidebar-text:   rgba(255,255,255,.7);
+        --ds-sidebar-text-active: #ffffff;
+        --ds-border:         #E5E7EB;
+        --ds-radius:         16px;
+        --ds-shadow:         0 4px 24px rgba(0,0,0,.07);
+        --ds-font:           'DM Sans', sans-serif;
+        --ds-font-display:   'DM Serif Display', serif;
+        --ds-ease:           cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: var(--ds-font);
+        font-size: 15px;
+        color: #111827;
+        background: #F4F6F9;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: var(--ds-font); cursor: pointer; }
+
+    .ds-shell {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .ds-sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: var(--ds-sidebar-w);
+        background: var(--ds-sidebar-bg);
+        display: flex;
+        flex-direction: column;
+        z-index: 200;
+        transition: width .3s var(--ds-ease), transform .3s var(--ds-ease);
+        overflow: hidden;
+    }
+
+    .ds-sidebar__logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 22px 20px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+        flex-shrink: 0;
+    }
+    .ds-logo-icon {
+        width: 38px; height: 38px;
+        background: var(--ds-green);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(26,158,92,.35);
+    }
+    .ds-logo-icon svg { width: 20px; height: 20px; }
+    .ds-logo-text {
+        font-size: 19px;
+        font-weight: 300;
+        color: rgba(255,255,255,.9);
+        letter-spacing: -.01em;
+        white-space: nowrap;
+    }
+    .ds-logo-text strong { font-weight: 700; color: #fff; }
+    .ds-logo-badge {
+        margin-left: auto;
+        font-size: 10px;
+        font-weight: 700;
+        background: rgba(26,158,92,.25);
+        color: #6EE7B7;
+        border: 1px solid rgba(26,158,92,.3);
+        padding: 3px 8px;
+        border-radius: 20px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .ds-sidebar__profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+
+flex-shrink: 0;
+    }
+    .ds-profile-avatar {
+        width: 40px; height: 40px;
+        background: linear-gradient(135deg, var(--ds-green), #16855E);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+        border: 2px solid rgba(255,255,255,.15);
+    }
+    .ds-profile-info { min-width: 0; }
+    .ds-profile-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .ds-profile-role {
+        font-size: 11px;
+        color: rgba(255,255,255,.45);
+        margin-top: 1px;
+    }
+    .ds-profile-dot {
+        width: 7px; height: 7px;
+        background: #22C55E;
+        border-radius: 50%;
+        margin-left: auto;
+        flex-shrink: 0;
+        animation: ds-pulse 2s ease-in-out infinite;
+    }
+    @keyframes ds-pulse {
+        0%,100% { opacity:1; transform:scale(1); }
+        50%      { opacity:.6; transform:scale(1.3); }
+    }
+
+    .ds-sidebar__nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px 0;
+        scrollbar-width: none;
+    }
+    .ds-sidebar__nav::-webkit-scrollbar { display: none; }
+
+    .ds-nav-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: rgba(255,255,255,.25);
+        padding: 14px 20px 6px;
+    }
+
+    .ds-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 20px;
+        color: var(--ds-sidebar-text);
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 10px;
+        margin: 2px 10px;
+        transition: all .2s var(--ds-ease);
+        position: relative;
+        white-space: nowrap;
+    }
+    .ds-nav-link:hover {
+        background: var(--ds-sidebar-hover);
+        color: #fff;
+    }
+    .ds-nav-link--active {
+        background: var(--ds-sidebar-active) !important;
+        color: #fff !important;
+    }
+    .ds-nav-link--active::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 20%; bottom: 20%;
+        width: 3px;
+        background: var(--ds-green);
+        border-radius: 0 3px 3px 0;
+    }
+    .ds-nav-link__icon {
+        width: 34px; height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+        background: rgba(255,255,255,.06);
+        transition: background .2s var(--ds-ease);
+    }
+    .ds-nav-link:hover .ds-nav-link__icon,
+    .ds-nav-link--active .ds-nav-link__icon {
+        background: rgba(26,158,92,.2);
+        color: #6EE7B7;
+    }
+    .ds-nav-link__badge {
+        margin-left: auto;
+        background: var(--ds-green);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 20px;
+        flex-shrink: 0;
+    }
+
+    .ds-sidebar__footer {
+        padding: 14px 10px;
+        border-top: 1px solid rgba(255,255,255,.06);
+        flex-shrink: 0;
+    }
+    .ds-logout-btn {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 20px;
+        background: rgba(239,68,68,.1);
+        border: 1px solid rgba(239,68,68,.15);
+        border-radius: 10px;
+        color: #FCA5A5;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all .2s var(--ds-ease);
+    }
+    .ds-logout-btn:hover {
+        background: rgba(239,68,68,.2);
+        color: #fff;
+    }
+    .ds-logout-btn i { font-size: 15px; }
+
+    .ds-sidebar-toggle {
+        position: absolute;
+        top: 18px;
+right: -14px;
+        width: 28px; height: 28px;
+        background: #fff;
+        border: 1px solid var(--ds-border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 11px;
+        color: #6B7280;
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        z-index: 10;
+        transition: all .2s var(--ds-ease);
+    }
+    .ds-sidebar-toggle:hover { background: var(--ds-green); color: #fff; border-color: var(--ds-green); }
+
+    .ds-shell--collapsed .ds-sidebar { width: var(--ds-sidebar-collapsed); }
+    .ds-shell--collapsed .ds-logo-text,
+    .ds-shell--collapsed .ds-logo-badge,
+    .ds-shell--collapsed .ds-profile-info,
+    .ds-shell--collapsed .ds-profile-dot,
+    .ds-shell--collapsed .ds-nav-link__badge,
+    .ds-shell--collapsed .ds-nav-section-label,
+    .ds-shell--collapsed .ds-logout-btn span { display: none; }
+    .ds-shell--collapsed .ds-nav-link { justify-content: center; padding: 11px; margin: 2px 6px; }
+    .ds-shell--collapsed .ds-nav-link__icon { margin: 0; }
+    .ds-shell--collapsed .ds-sidebar__profile { justify-content: center; padding: 12px; }
+    .ds-shell--collapsed .ds-sidebar__logo { justify-content: center; }
+    .ds-shell--collapsed .ds-logout-btn { justify-content: center; padding: 11px; }
+    .ds-shell--collapsed .ds-main { margin-left: var(--ds-sidebar-collapsed); }
+
+    .ds-main {
+        margin-left: var(--ds-sidebar-w);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        transition: margin-left .3s var(--ds-ease);
+    }
+
+    .ds-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: var(--ds-topbar-h);
+        background: rgba(255,255,255,.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--ds-border);
+        display: flex;
+        align-items: center;
+        padding: 0 28px;
+        gap: 16px;
+        box-shadow: 0 1px 8px rgba(0,0,0,.04);
+    }
+
+    .ds-topbar__page-title {
+        font-family: var(--ds-font-display);
+        font-size: 20px;
+        font-weight: 400;
+        color: #111827;
+        flex: 1;
+    }
+    .ds-topbar__page-title span {
+        font-size: 13px;
+        font-weight: 500;
+        color: #9CA3AF;
+        font-family: var(--ds-font);
+        margin-left: 10px;
+    }
+
+    .ds-topbar__search {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .ds-topbar__search i {
+        position: absolute;
+        left: 12px;
+        color: #9CA3AF;
+        font-size: 14px;
+    }
+    .ds-topbar__search input {
+        height: 38px;
+        padding: 0 14px 0 36px;
+        background: #F9FAFB;
+        border: 1.5px solid var(--ds-border);
+        border-radius: 20px;
+        font-size: 13px;
+        font-family: var(--ds-font);
+        color: #111827;
+        outline: none;
+        width: 220px;
+        transition: all .2s var(--ds-ease);
+    }
+    .ds-topbar__search input:focus {
+        border-color: var(--ds-green);
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(26,158,92,.1);
+        width: 260px;
+    }
+
+    .ds-topbar__actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ds-icon-btn {
+        position: relative;
+        width: 38px; height: 38px;
+        border: 1.5px solid var(--ds-border);
+        border-radius: 10px;
+        background: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6B7280;
+        font-size: 15px;
+        transition: all .2s var(--ds-ease);
+    }
+    .ds-icon-btn:hover {
+        background: var(--ds-green-light);
+        border-color: #A7F3D0;
+        color: var(--ds-green);
+    }
+    .ds-notif-dot {
+        position: absolute;
+        top: 6px; right: 6px;
+        width: 8px; height: 8px;
+        background: #EF4444;
+        border-radius: 50%;
+        border: 2px solid #fff;
+    }
+.ds-topbar__profile { position: relative; }
+    .ds-topbar__profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 5px 12px 5px 5px;
+        border: 1.5px solid var(--ds-border);
+        border-radius: 20px;
+        background: none;
+        transition: all .2s var(--ds-ease);
+        color: #374151;
+    }
+    .ds-topbar__profile-btn:hover {
+        background: var(--ds-green-light);
+        border-color: #A7F3D0;
+    }
+    .ds-topbar-avatar {
+        width: 30px; height: 30px;
+        background: linear-gradient(135deg, var(--ds-green), #16855E);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+    }
+    .ds-topbar__profile-name { font-size: 13px; font-weight: 600; }
+
+    .ds-profile-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 200px;
+        background: #fff;
+        border: 1px solid var(--ds-border);
+        border-radius: 14px;
+        box-shadow: 0 16px 40px rgba(0,0,0,.12);
+        overflow: hidden;
+        z-index: 999;
+        animation: ds-fadeDown .2s var(--ds-ease) both;
+    }
+    .ds-profile-dropdown--open { display: block; }
+    @keyframes ds-fadeDown {
+        from { opacity:0; transform:translateY(-8px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    .ds-dropdown-header {
+        padding: 14px 16px;
+        background: var(--ds-green-light);
+        border-bottom: 1px solid #D1FAE5;
+    }
+    .ds-dropdown-header strong { display:block; font-size:14px; color:#065F46; }
+    .ds-dropdown-header small  { font-size:12px; color:#6B7280; }
+    .ds-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        font-size: 14px;
+        color: #374151;
+        transition: background .15s var(--ds-ease);
+    }
+    .ds-dropdown-item:hover { background: #F9FAFB; }
+    .ds-dropdown-item--danger { color: #DC2626; }
+    .ds-dropdown-item--danger:hover { background: #FEF2F2; }
+    .ds-dropdown-divider { height: 1px; background: var(--ds-border); }
+
+    .ds-page-content {
+        flex: 1;
+        padding: 28px 32px 48px;
+    }
+
+    .ds-footer {
+        padding: 16px 32px;
+        border-top: 1px solid var(--ds-border);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .ds-footer p { font-size: 12px; color: #9CA3AF; }
+    .ds-footer a { font-size: 12px; color: #9CA3AF; margin-left: 16px; }
+    .ds-footer a:hover { color: var(--ds-green); }
+
+    @media (max-width: 900px) {
+        .ds-sidebar { transform: translateX(-100%); }
+        .ds-sidebar--mobile-open { transform: translateX(0); }
+        .ds-main { margin-left: 0 !important; }
+        .ds-topbar { padding: 0 16px; }
+        .ds-page-content { padding: 16px; }
+        .ds-topbar__search { display: none; }
+        .ds-mobile-menu-btn { display: flex !important; }
+    }
+
+    .ds-mobile-menu-btn {
+        display: none;
+        width: 38px; height: 38px;
+        border: 1.5px solid var(--ds-border);
+        border-radius: 10px;
+        background: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #6B7280;
+    }
+
+    .ds-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 199;
+        backdrop-filter: blur(2px);
+    }
+    .ds-overlay--visible { display: block; }
+    </style>
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+
+<%-- ✅ FIX: form runat="server" wraps the entire body so all
+     server controls in content pages render correctly --%>
+<form id="masterForm" runat="server">
+
+<div class="ds-shell" id="dsShell">
+
+    <div class="ds-overlay" id="dsOverlay" onclick="closeMobileSidebar()"></div>
+    <aside class="ds-sidebar" id="dsSidebar" aria-label="Doctor navigation">
+
+        <button class="ds-sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+        </button>
+
+        <div class="ds-sidebar__logo">
+            <div class="ds-logo-icon">
+                <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 7v18M7 16h18" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="ds-logo-text">Medi<strong>Care</strong></span>
+            <span class="ds-logo-badge">Doctor</span>
+        </div>
+
+        <div class="ds-sidebar__profile">
+            <div class="ds-profile-avatar">A</div>
+            <div class="ds-profile-info">
+                <div class="ds-profile-name">Dr. Ahmad Karimi</div>
+                <div class="ds-profile-role">Cardiologist</div>
+            </div>
+            <div class="ds-profile-dot" title="Online"></div>
+        </div>
+
+        <nav class="ds-sidebar__nav" aria-label="Doctor menu">
+
+            <div class="ds-nav-section-label">Main</div>
+
+            <a href="/Pages/Doctor/Dashboard.aspx" class="ds-nav-link ds-nav-link--active" id="navDashboard">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-gauge-high"></i></span>
+                Dashboard
+                <span class="ds-nav-link__badge">Today</span>
+            </a>
+
+            <a href="/Pages/Doctor/PatientList.aspx" class="ds-nav-link" id="navPatients">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-users"></i></span>
+                Patient List
+                <span class="ds-nav-link__badge">24</span>
+            </a>
+
+            <a href="/Pages/Doctor/Search.aspx" class="ds-nav-link" id="navSearch">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                Search
+            </a>
+
+            <div class="ds-nav-section-label">Management</div>
+
+            <a href="/Pages/Doctor/Appointments.aspx" class="ds-nav-link" id="navAppointments">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-calendar-check"></i></span>
+                Appointments
+            </a>
+
+            <a href="/Pages/Doctor/Prescriptions.aspx" class="ds-nav-link" id="navPrescriptions">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-prescription-bottle-medical"></i></span>
+                Prescriptions
+            </a>
+
+            <a href="/Pages/Doctor/Reports.aspx" class="ds-nav-link" id="navReports">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-chart-line"></i></span>
+                Reports
+            </a>
+
+            <div class="ds-nav-section-label">Account</div>
+
+            <a href="/Pages/Doctor/Profile.aspx" class="ds-nav-link" id="navProfile">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-user-doctor"></i></span>
+                My Profile
+            </a>
+
+            <a href="/Pages/Doctor/Settings.aspx" class="ds-nav-link" id="navSettings">
+                <span class="ds-nav-link__icon"><i class="fa-solid fa-gear"></i></span>
+                Settings
+            </a>
+
+        </nav>
+
+        <div class="ds-sidebar__footer">
+            <button class="ds-logout-btn" onclick="window.location.href='/Default.aspx'">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sign Out</span>
+            </button>
+        </div>
+
+    </aside>
+
+    <div class="ds-main" id="dsMain">
+
+        <header class="ds-topbar">
+            <button class="ds-mobile-menu-btn" onclick="openMobileSidebar()" aria-label="Open menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="ds-topbar__page-title" id="pageTitle">
+                Dashboard
+                <span id="pageBreadcrumb">/ Overview</span>
+            </div>
+            <div class="ds-topbar__search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search patients..." aria-label="Search" />
+            </div>
+
+            <div class="ds-topbar__actions">
+
+                <button class="ds-icon-btn" aria-label="Notifications" title="Notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="ds-notif-dot"></span>
+                </button>
+
+                <button class="ds-icon-btn" aria-label="Messages" title="Messages">
+                    <i class="fa-solid fa-envelope"></i>
+                </button>
+
+                <div class="ds-topbar__profile" id="topbarProfile">
+                    <button class="ds-topbar__profile-btn" onclick="toggleProfileMenu()" aria-haspopup="true" aria-expanded="false" id="profileBtn">
+                        <div class="ds-topbar-avatar">A</div>
+                        <span class="ds-topbar__profile-name">Dr. Karimi</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size:11px;color:#9CA3AF;"></i>
+                    </button>
+
+                    <div class="ds-profile-dropdown" id="profileDropdown" aria-hidden="true">
+                        <div class="ds-dropdown-header">
+                            <strong>Dr. Ahmad Karimi</strong>
+                            <small>dr.karimi@medicare.com</small>
+                        </div>
+                        <div class="ds-dropdown-divider"></div>
+                        <a href="/Pages/Doctor/Profile.aspx" class="ds-dropdown-item">
+                            <i class="fa-solid fa-user-doctor" style="color:#1A9E5C;"></i> My Profile
+                        </a>
+                        <a href="/Pages/Doctor/Settings.aspx" class="ds-dropdown-item">
+                            <i class="fa-solid fa-gear" style="color:#6B7280;"></i> Settings
+                        </a>
+                        <div class="ds-dropdown-divider"></div>
+                        <a href="/Default.aspx" class="ds-dropdown-item ds-dropdown-item--danger">
+                            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <main class="ds-page-content" id="mainContent">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <footer class="ds-footer">
+            <p>&copy; 2025 MediCare Health Platform — Doctor Portal</p>
+            <div>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Support</a>
+            </div>
+        </footer>
+
+    </div>
+</div>
+
+</form>
+
+<script>
+    (function () {
+        'use strict';
+
+        var path = window.location.pathname.toLowerCase();
+        var navMap = {
+            'dashboard': 'navDashboard',
+            'patientlist': 'navPatients',
+            'search': 'navSearch',
+            'appointments': 'navAppointments',
+            'prescriptions': 'navPrescriptions',
+            'reports': 'navReports',
+            'profile': 'navProfile',
+            'settings': 'navSettings'
+        };
+        Object.keys(navMap).forEach(function (key) {
+            var el = document.getElementById(navMap[key]);
+            if (el) el.classList.remove('ds-nav-link--active');
+            if (el && path.indexOf(key) !== -1) el.classList.add('ds-nav-link--active');
+        });
+
+        var shell = document.getElementById('dsShell');
+        var toggleIcon = document.getElementById('toggleIcon');
+        var collapsed = false;
+
+        window.toggleSidebar = function () {
+            collapsed = !collapsed;
+            shell.classList.toggle('ds-shell--collapsed', collapsed);
+            toggleIcon.className = collapsed
+                ? 'fa-solid fa-chevron-right'
+                : 'fa-solid fa-chevron-left';
+        };
+
+        var sidebar = document.getElementById('dsSidebar');
+        var overlay = document.getElementById('dsOverlay');
+        window.openMobileSidebar = function () {
+            sidebar.classList.add('ds-sidebar--mobile-open');
+            overlay.classList.add('ds-overlay--visible');
+            document.body.style.overflow = 'hidden';
+        };
+        window.closeMobileSidebar = function () {
+            sidebar.classList.remove('ds-sidebar--mobile-open');
+            overlay.classList.remove('ds-overlay--visible');
+            document.body.style.overflow = '';
+        };
+
+        var profileDropdown = document.getElementById('profileDropdown');
+        var profileBtn = document.getElementById('profileBtn');
+        var isOpen = false;
+
+        window.toggleProfileMenu = function () {
+            isOpen = !isOpen;
+            profileDropdown.classList.toggle('ds-profile-dropdown--open', isOpen);
+            profileBtn.setAttribute('aria-expanded', String(isOpen));
+            profileDropdown.setAttribute('aria-hidden', String(!isOpen));
+        };
+
+        document.addEventListener('click', function (e) {
+            if (isOpen && !document.getElementById('topbarProfile').contains(e.target)) {
+                isOpen = false;
+                profileDropdown.classList.remove('ds-profile-dropdown--open');
+                profileBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isOpen) {
+                isOpen = false;
+                profileDropdown.classList.remove('ds-profile-dropdown--open');
+            }
+        });
+
+        var topbar = document.querySelector('.ds-topbar');
+        window.addEventListener('scroll', function () {
+            if (topbar) topbar.style.boxShadow =
+                window.scrollY > 10
+                    ? '0 4px 20px rgba(0,0,0,.08)'
+                    : '0 1px 8px rgba(0,0,0,.04)';
+        }, { passive: true });
+
+    })();
+</script>
+
+<asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
+</body>
+</html>

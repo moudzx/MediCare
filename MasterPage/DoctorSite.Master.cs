@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MediCare.Pages.Doctor
+namespace MediCare
 {
-    public partial class Dashboard : System.Web.UI.Page
+    public partial class DoctorSiteMaster : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
