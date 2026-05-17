@@ -1,0 +1,213 @@
+Patient
+Dashboard, Medications, MyMedications, Nutritions, Search, PatientProfile, editprofile
+
+Doctor
+patient profile
+Dashboard, ConsultationRequest, PatientList, ManageMedications, ManageNutritions, doctorprofile
+
+Admin
+Dashboard, FoodCatalog, MedicineCatalog, UserManagement
+
+
+Tables:
+
+Users, Patients, Doctors
+All Medication, All Food
+PatientDoctorConnection
+PatientMedications, NutritionPlan, PatientCustomFood, Notifications
+Converstation,Messages, appointment
+
+
+
+
+CREATE TABLE [dbo].[PatientDoctorConnections] (
+    [ConnectionId] INT IDENTITY(1,1) NOT NULL,
+    [PatientId] INT NOT NULL,
+    [DoctorId] INT NOT NULL,
+
+    [Status] NVARCHAR(20) NOT NULL DEFAULT 'Pending',
+    [RequestedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+    [RespondedAt] DATETIME NULL,
+
+    CONSTRAINT [PK_PatientDoctorConnections] PRIMARY KEY CLUSTERED ([ConnectionId]),
+    CONSTRAINT [UQ_PatientDoctorConnections] UNIQUE ([PatientId], [DoctorId]),
+    CONSTRAINT [CK_PatientDoctorConnections_Status]
+        CHECK ([Status] IN ('Pending','Accepted','Rejected'))
+);
+
+
+
+CREATE TABLE [dbo].[Appointments] (
+    [AppointmentId] INT IDENTITY(1,1) NOT NULL,
+    [PatientId] INT NOT NULL,
+    [DoctorId] INT NOT NULL,
+
+    [AppointmentDate] DATETIME NOT NULL,
+    [Status] NVARCHAR(20) NOT NULL DEFAULT 'Pending',
+    [Reason] NVARCHAR(MAX) NULL,
+
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    CONSTRAINT [PK_Appointments] PRIMARY KEY CLUSTERED ([AppointmentId]),
+    CONSTRAINT [CK_Appointments_Status]
+        CHECK ([Status] IN ('Pending','Accepted','Rejected','Cancelled','Completed'))
+);
+
+
+
+CREATE TABLE [dbo].[DoctorAvailability] (
+    [AvailabilityId] INT IDENTITY(1,1) NOT NULL,
+    [DoctorId] INT NOT NULL,
+
+    [StartTime] DATETIME NOT NULL,
+    [EndTime] DATETIME NOT NULL,
+
+    CONSTRAINT [PK_DoctorAvailability] PRIMARY KEY CLUSTERED ([AvailabilityId])
+);
+
+
+
+CREATE TABLE [dbo].[Notifications] (
+    [NotificationId] INT IDENTITY(1,1) NOT NULL,
+    [UserId] INT NOT NULL,
+
+    [Type] NVARCHAR(50) NOT NULL,
+    [Title] NVARCHAR(255) NOT NULL,
+    [Message] NVARCHAR(MAX) NOT NULL,
+
+    [RelatedId] INT NULL,
+    [IsRead] BIT NOT NULL DEFAULT 0,
+
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    CONSTRAINT [PK_Notifications] PRIMARY KEY CLUSTERED ([NotificationId]),
+    CONSTRAINT [CK_Notifications_Type]
+        CHECK ([Type] IN (
+            'ConnectionRequest',
+            'ConnectionAccepted',
+            'ConnectionRejected',
+            'MedicationAdded',
+            'NutritionPlanAdded',
+            'AppointmentRequested',
+            'AppointmentAccepted',
+            'AppointmentRejected'
+        ))
+);
+
+
+
+CREATE TABLE [dbo].[NutritionPlans] (
+    [PlanId] INT IDENTITY(1,1) NOT NULL,
+    [PatientId] INT NOT NULL,
+    [DoctorId] INT NULL,
+
+    [Calories] INT NULL,
+    [Protein] INT NULL,
+    [Carbs] INT NULL,
+    [Fat] INT NULL,
+
+    [Goal] NVARCHAR(100) NULL,
+    [Notes] NVARCHAR(MAX) NULL,
+
+    [Status] NVARCHAR(20) NOT NULL DEFAULT 'Active',
+
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+    [UpdatedAt] DATETIME NULL,
+
+    CONSTRAINT [PK_NutritionPlans] PRIMARY KEY CLUSTERED ([PlanId]),
+    CONSTRAINT [CK_NutritionPlans_Status]
+        CHECK ([Status] IN ('Active','Inactive','Completed','Replaced'))
+);
+
+
+
+CREATE TABLE [dbo].[PatientMedications] (
+    [PatientMedicationId] INT IDENTITY(1,1) NOT NULL,
+    [PatientId] INT NOT NULL,
+    [DoctorId] INT NOT NULL,
+    [MedicineId] NVARCHAR(20) NOT NULL,
+
+    [Dosage] NVARCHAR(100) NOT NULL,
+    [Frequency] NVARCHAR(100) NOT NULL,
+    [Duration] NVARCHAR(100) NULL,
+
+    [StartDate] DATE NULL,
+    [EndDate] DATE NULL,
+
+    [Status] NVARCHAR(20) NOT NULL DEFAULT 'Active',
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    CONSTRAINT [PK_PatientMedications] PRIMARY KEY CLUSTERED ([PatientMedicationId]),
+    CONSTRAINT [CK_PatientMedications_Status]
+        CHECK ([Status] IN ('Active','Stopped','Completed'))
+);
+
+CREATE TABLE [dbo].[Conversations] (
+    [ConversationId] INT IDENTITY(1,1) NOT NULL,
+    [PatientId] INT NOT NULL,
+    [DoctorId] INT NOT NULL,
+
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    CONSTRAINT [PK_Conversations]
+        PRIMARY KEY CLUSTERED ([ConversationId]),
+
+    CONSTRAINT [UQ_Conversations_Pair]
+        UNIQUE ([PatientId], [DoctorId])
+);
+
+CREATE TABLE [dbo].[Messages] (
+    [MessageId] INT IDENTITY(1,1) NOT NULL,
+    [ConversationId] INT NOT NULL,
+    [SenderUserId] INT NOT NULL,
+
+    [MessageText] NVARCHAR(MAX) NOT NULL,
+
+    [IsRead] BIT NOT NULL DEFAULT 0,
+    [SentAt] DATETIME NOT NULL DEFAULT GETDATE(),
+
+    CONSTRAINT [PK_Messages]
+        PRIMARY KEY CLUSTERED ([MessageId])
+);
+
+CREATE NONCLUSTERED INDEX IX_Users_Email
+ON [dbo].[Users] ([Email]);
+
+CREATE NONCLUSTERED INDEX IX_Patients_UserId
+ON [dbo].[Patients] ([UserId]);
+
+CREATE NONCLUSTERED INDEX IX_Doctors_UserId
+ON [dbo].[Doctors] ([UserId]);
+
+CREATE NONCLUSTERED INDEX IX_Connections_Patient
+ON [dbo].[PatientDoctorConnections] ([PatientId]);
+
+CREATE NONCLUSTERED INDEX IX_Connections_Doctor
+ON [dbo].[PatientDoctorConnections] ([DoctorId]);
+
+CREATE NONCLUSTERED INDEX IX_Appointments_Doctor_Date
+ON [dbo].[Appointments] ([DoctorId], [AppointmentDate]);
+
+CREATE NONCLUSTERED INDEX IX_Appointments_Patient
+ON [dbo].[Appointments] ([PatientId]);
+
+CREATE NONCLUSTERED INDEX IX_Notifications_User
+ON [dbo].[Notifications] ([UserId], [IsRead]);
+
+CREATE NONCLUSTERED INDEX IX_NutritionPlans_Patient
+ON [dbo].[NutritionPlans] ([PatientId], [Status]);
+
+CREATE NONCLUSTERED INDEX IX_PatientMedications_Patient
+ON [dbo].[PatientMedications] ([PatientId], [Status]);
+
+CREATE NONCLUSTERED INDEX IX_Conversations_Patient
+ON [dbo].[Conversations] ([PatientId]);
+
+CREATE NONCLUSTERED INDEX IX_Conversations_Doctor
+ON [dbo].[Conversations] ([DoctorId]);
+
+CREATE NONCLUSTERED INDEX IX_Messages_Conversation
+ON [dbo].[Messages] ([ConversationId], [SentAt]);
+
+CREATE NONCLUSTERED INDEX IX_Messages_Read
+ON [dbo].[Messages] ([ConversationId], [IsRead]);

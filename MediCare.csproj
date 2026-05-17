@@ -243,6 +243,7 @@
     <Content Include="css\PatientList.css" />
     <Content Include="css\profile.css" />
     <Content Include="css\search.css" />
+    <Content Include="Database\database.txt" />
     <Content Include="Database\Medicine+Food.sql" />
     <Content Include="Database\Users+Doctors+Patients.sql" />
     <Content Include="Database\lebanese_food_database.csv" />
