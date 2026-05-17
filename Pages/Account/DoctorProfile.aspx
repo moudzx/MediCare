@@ -7,7 +7,7 @@
 <asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <%-- ═══════════════════════════════════════════════════
-         DOCTOR PROFILE ROOT
+         DOCTOR PROFILE ROOTaddaasda
          Plain HTML throughout — no runat=server inputs.
          DB integration points are marked in DoctorProfile.js
          ═══════════════════════════════════════════════════ --%>

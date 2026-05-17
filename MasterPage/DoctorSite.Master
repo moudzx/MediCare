@@ -722,10 +722,7 @@
                     <span class="ds-notif-dot"></span>
                 </button>
 
-                <!-- Messages -->
-                <button class="ds-icon-btn" aria-label="Messages" title="Messages">
-                    <i class="fa-solid fa-envelope"></i>
-                </button>
+
 
                 <!-- Profile dropdown -->
                 <div class="ds-topbar__profile" id="topbarProfile">
