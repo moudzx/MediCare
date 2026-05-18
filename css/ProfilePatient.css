@@ -1,0 +1,883 @@
+﻿/* ═══════════════════════════════════════════════════════════════════
+   FILE:     ProfilePatient.css
+   LOCATION: /Styles/ProfilePatient.css
+   PAGE:     Patient Profile — MediCare Healthcare System
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. CSS Variables (matches MediCare design system) ─────────── */
+:root {
+    --prp-navy: #0F1D2E;
+    --prp-green: #1A9E5C;
+    --prp-green-dark: #16855E;
+    --prp-green-light: #D1FAE5;
+    --prp-green-xlight: #F0FDF4;
+    --prp-blue: #2563EB;
+    --prp-blue-light: #DBEAFE;
+    --prp-blue-xlight: #EFF6FF;
+    --prp-orange: #D97706;
+    --prp-orange-light: #FEF3C7;
+    --prp-orange-xlight: #FFFBEB;
+    --prp-red: #DC2626;
+    --prp-red-light: #FEE2E2;
+    --prp-gray-50: #F9FAFB;
+    --prp-gray-100: #F3F4F6;
+    --prp-gray-200: #E5E7EB;
+    --prp-gray-300: #D1D5DB;
+    --prp-gray-400: #9CA3AF;
+    --prp-gray-500: #6B7280;
+    --prp-gray-700: #374151;
+    --prp-gray-900: #111827;
+    --prp-white: #ffffff;
+    --prp-radius-sm: 10px;
+    --prp-radius: 16px;
+    --prp-radius-lg: 22px;
+    --prp-shadow-xs: 0 1px 4px rgba(0,0,0,.05);
+    --prp-shadow-sm: 0 2px 12px rgba(0,0,0,.07);
+    --prp-shadow: 0 6px 28px rgba(0,0,0,.10);
+    --prp-shadow-lg: 0 16px 48px rgba(0,0,0,.14);
+    --prp-ease: .22s cubic-bezier(.4,0,.2,1);
+    --prp-font: 'DM Sans', sans-serif;
+    --prp-serif: 'DM Serif Display', serif;
+}
+
+/* ── 2. Page Root ───────────────────────────────────────────────── */
+.prp-root {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    font-family: var(--prp-font);
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ── 3. Banner ──────────────────────────────────────────────────── */
+.prp-banner {
+    position: relative;
+    border-radius: var(--prp-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--prp-shadow);
+    min-height: 160px;
+}
+
+/* Gradient background */
+.prp-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--prp-navy) 0%, #1A3A5C 55%, var(--prp-green-dark) 100%);
+}
+
+    /* Decorative SVG-wave-like circles */
+    .prp-banner__overlay::before {
+        content: '';
+        position: absolute;
+        top: -90px;
+        right: -90px;
+        width: 280px;
+        height: 280px;
+        background: rgba(255,255,255,.04);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .prp-banner__overlay::after {
+        content: '';
+        position: absolute;
+        bottom: -60px;
+        left: 32%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255,255,255,.03);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+/* Inner row */
+.prp-banner__body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 30px 36px;
+    flex-wrap: wrap;
+}
+
+/* ── 4. Avatar (shared, two sizes) ─────────────────────────────── */
+.prp-avatar-ring {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.prp-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--prp-blue), #0D9488);
+    border: 3px solid rgba(255,255,255,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,.22);
+    transition: transform var(--prp-ease);
+}
+
+    .prp-avatar:hover {
+        transform: scale(1.05);
+    }
+
+    .prp-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+.prp-avatar__initials {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--prp-white);
+    text-transform: uppercase;
+    user-select: none;
+}
+
+/* Larger avatar inside profile card */
+.prp-avatar--lg {
+    width: 100px;
+    height: 100px;
+    border: 4px solid var(--prp-gray-200);
+    box-shadow: var(--prp-shadow);
+}
+
+    .prp-avatar--lg .prp-avatar__initials {
+        font-size: 34px;
+    }
+
+/* Online dot */
+.prp-online-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #34D399;
+    border: 2px solid var(--prp-navy);
+    box-shadow: 0 0 0 2px rgba(52,211,153,.35);
+}
+
+/* ── 5. Banner Info & Actions ───────────────────────────────────── */
+.prp-banner__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.prp-banner__name {
+    font-family: var(--prp-serif);
+    font-size: clamp(20px, 2.8vw, 30px);
+    font-weight: 400;
+    color: var(--prp-white);
+    margin: 0 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prp-banner__role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,.85);
+}
+
+.prp-banner__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* ── 6. Buttons ─────────────────────────────────────────────────── */
+.prp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-family: var(--prp-font);
+    font-size: 13px;
+    font-weight: 600;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: all var(--prp-ease);
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+    .prp-btn i {
+        font-size: 13px;
+    }
+
+/* Outline (banner) */
+.prp-btn--outline {
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.3);
+    color: var(--prp-white);
+}
+
+    .prp-btn--outline:hover {
+        background: rgba(255,255,255,.24);
+        border-color: rgba(255,255,255,.5);
+        transform: translateY(-2px);
+    }
+
+/* Primary green */
+.prp-btn--primary {
+    background: var(--prp-green);
+    border-color: var(--prp-green);
+    color: var(--prp-white);
+    box-shadow: 0 4px 14px rgba(26,158,92,.30);
+}
+
+    .prp-btn--primary:hover {
+        background: var(--prp-green-dark);
+        border-color: var(--prp-green-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(26,158,92,.40);
+    }
+
+/* Ghost (cancel) */
+.prp-btn--ghost {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.2);
+    color: rgba(255,255,255,.75);
+}
+
+    .prp-btn--ghost:hover {
+        background: rgba(255,255,255,.16);
+        color: var(--prp-white);
+    }
+
+/* Link-style text button */
+.prp-link-btn {
+    background: none;
+    border: none;
+    font-family: var(--prp-font);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--prp-blue);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background var(--prp-ease);
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+    .prp-link-btn:hover {
+        background: var(--prp-blue-light);
+    }
+
+/* ── 7. Profile Body Layout ─────────────────────────────────────── */
+.prp-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.prp-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── 8. Cards ───────────────────────────────────────────────────── */
+.prp-card {
+    background: var(--prp-white);
+    border: 1px solid var(--prp-gray-200);
+    border-radius: var(--prp-radius-lg);
+    box-shadow: var(--prp-shadow-sm);
+    overflow: hidden;
+    transition: box-shadow var(--prp-ease), transform var(--prp-ease);
+}
+
+    .prp-card:hover {
+        box-shadow: var(--prp-shadow);
+        transform: translateY(-3px);
+    }
+
+/* Accent borders */
+.prp-card--contact {
+    border-left: 4px solid var(--prp-green);
+}
+
+.prp-card--security {
+    border-left: 4px solid var(--prp-orange);
+}
+
+.prp-card--profile {
+    border-top: 4px solid var(--prp-blue);
+}
+
+/* Profile card inner layout */
+.prp-card__avatar-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px 16px;
+    gap: 8px;
+}
+
+.prp-card__name {
+    font-family: var(--prp-serif);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--prp-gray-900);
+    margin: 0;
+    text-align: center;
+}
+
+.prp-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--prp-blue-light);
+    color: var(--prp-blue);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.prp-card__divider {
+    height: 1px;
+    background: var(--prp-gray-100);
+    margin: 0 16px;
+}
+
+/* Card header (icon + text) */
+.prp-card__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--prp-gray-100);
+    background: linear-gradient(135deg, var(--prp-gray-50), var(--prp-white));
+}
+
+.prp-card__header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+}
+
+.prp-card__header-icon--blue {
+    background: var(--prp-blue-light);
+    color: var(--prp-blue);
+}
+
+.prp-card__header-icon--green {
+    background: var(--prp-green-light);
+    color: var(--prp-green);
+}
+
+.prp-card__header-icon--orange {
+    background: var(--prp-orange-light);
+    color: var(--prp-orange);
+}
+
+.prp-card__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--prp-gray-900);
+    margin: 0 0 2px;
+}
+
+.prp-card__sub {
+    font-size: 12px;
+    color: var(--prp-gray-400);
+    margin: 0;
+}
+
+.prp-card__body {
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ── 9. Quick info pills (left column) ──────────────────────────── */
+.prp-quick-info {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 18px 18px;
+    gap: 2px;
+}
+
+.prp-quick-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--prp-gray-100);
+    transition: background var(--prp-ease);
+    border-radius: var(--prp-radius-sm);
+}
+
+    .prp-quick-pill:last-child {
+        border-bottom: none;
+    }
+
+    .prp-quick-pill:hover {
+        background: var(--prp-gray-50);
+    }
+
+    .prp-quick-pill > i {
+        width: 32px;
+        height: 32px;
+        background: var(--prp-gray-100);
+        color: var(--prp-gray-500);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+.prp-quick-pill__label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--prp-gray-400);
+    margin-bottom: 1px;
+}
+
+.prp-quick-pill__val {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--prp-gray-900);
+}
+
+/* ── 10. Form Fields ────────────────────────────────────────────── */
+.prp-field {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--prp-gray-100);
+}
+
+    .prp-field:last-child {
+        border-bottom: none;
+    }
+
+/* Highlight field (phone) */
+.prp-field--highlight {
+    background: linear-gradient(135deg, var(--prp-green-xlight), var(--prp-white));
+    border-radius: var(--prp-radius-sm);
+    padding: 14px;
+    border: 1px solid #A7F3D0;
+    margin-top: 4px;
+}
+
+.prp-field__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--prp-gray-500);
+    margin-bottom: 7px;
+}
+
+    .prp-field__label i {
+        font-size: 11px;
+        color: var(--prp-gray-400);
+    }
+
+/* Required star */
+.prp-required-dot {
+    color: var(--prp-red);
+    font-size: 14px;
+    line-height: 1;
+    margin-left: 2px;
+}
+
+/* View mode value */
+.prp-field__view {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.prp-field__value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--prp-gray-900);
+}
+
+/* Phone number stands out */
+.prp-field__value--phone {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--prp-green);
+    letter-spacing: .02em;
+}
+
+/* Verified badge */
+.prp-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--prp-green-light);
+    color: #065F46;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+    .prp-verified-badge i {
+        font-size: 10px;
+    }
+
+/* Field hint text */
+.prp-field__hint {
+    display: block;
+    font-size: 11px;
+    color: var(--prp-gray-400);
+    margin-top: 5px;
+}
+
+/* ── 11. Inputs ─────────────────────────────────────────────────── */
+.prp-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--prp-gray-300);
+    border-radius: var(--prp-radius-sm);
+    font-family: var(--prp-font);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--prp-gray-900);
+    background: var(--prp-white);
+    outline: none;
+    transition: border-color var(--prp-ease), box-shadow var(--prp-ease);
+    box-sizing: border-box;
+}
+
+    .prp-input:focus {
+        border-color: var(--prp-green);
+        box-shadow: 0 0 0 3px rgba(26,158,92,.12);
+    }
+
+    .prp-input.prp-input--error {
+        border-color: var(--prp-red);
+        box-shadow: 0 0 0 3px rgba(220,38,38,.10);
+    }
+
+/* Phone row: flag select + number input side by side */
+.prp-phone-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.prp-select {
+    padding: 10px 10px;
+    border: 1.5px solid var(--prp-gray-300);
+    border-radius: var(--prp-radius-sm);
+    font-family: var(--prp-font);
+    font-size: 13px;
+    color: var(--prp-gray-700);
+    background: var(--prp-white);
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--prp-ease);
+    flex-shrink: 0;
+}
+
+    .prp-select:focus {
+        border-color: var(--prp-green);
+    }
+
+.prp-input--phone {
+    flex: 1;
+}
+
+/* ── 12. Security Section ───────────────────────────────────────── */
+.prp-security-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prp-security-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 12px;
+    background: var(--prp-gray-50);
+    border: 1px solid var(--prp-gray-100);
+    border-radius: var(--prp-radius-sm);
+    transition: background var(--prp-ease);
+}
+
+    .prp-security-item:hover {
+        background: var(--prp-orange-xlight);
+    }
+
+    .prp-security-item > i {
+        width: 34px;
+        height: 34px;
+        background: var(--prp-orange-light);
+        color: var(--prp-orange);
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+.prp-security-item__label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--prp-gray-400);
+    margin-bottom: 2px;
+}
+
+.prp-security-item__val {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--prp-gray-900);
+}
+
+.prp-security-item__val--enabled {
+    color: var(--prp-green);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ── 13. Toast ──────────────────────────────────────────────────── */
+.prp-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: var(--prp-navy);
+    color: var(--prp-white);
+    border-radius: 50px;
+    padding: 13px 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--prp-font);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(15,29,46,.30);
+    z-index: 2000;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .36s cubic-bezier(.34,1.56,.64,1);
+    pointer-events: none;
+}
+
+.prp-toast--show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.prp-toast__icon {
+    color: #34D399;
+    font-size: 16px;
+}
+
+/* ── 14. Edit-mode input animation ─────────────────────────────── */
+.prp-field__edit {
+    animation: prp-slide-in .22s cubic-bezier(.4,0,.2,1) both;
+}
+
+@keyframes prp-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── 15. Validation error label ─────────────────────────────────── */
+.prp-error-msg {
+    display: block;
+    font-size: 11px;
+    color: var(--prp-red);
+    font-weight: 600;
+    margin-top: 5px;
+    display: none;
+}
+
+.prp-error-msg--visible {
+    display: block;
+}
+
+/* ── 16. Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .prp-body {
+        grid-template-columns: 240px 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .prp-body {
+        grid-template-columns: 1fr;
+    }
+
+    .prp-col--left {
+        /* Move avatar card inline on mobile */
+        order: -1;
+    }
+
+    .prp-banner__body {
+        padding: 22px 20px;
+        gap: 16px;
+    }
+
+    .prp-card__header {
+        padding: 14px 16px;
+    }
+
+    .prp-card__body {
+        padding: 14px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .prp-banner__name {
+        font-size: 18px;
+    }
+
+    .prp-banner__actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .prp-toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        justify-content: center;
+    }
+
+    .prp-phone-wrap {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+/* ═══════════════════════════════════════════════════════════════════
+   FIX: Icon display — paste at the VERY BOTTOM of ProfilePatient.css
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Fix 1: Quick pill icons ────────────────────────────────────── */
+/* The > i selector targets direct child <i> but Font Awesome needs
+   the element to NOT be display:flex itself — use the wrapper approach */
+.prp-quick-pill > i {
+    width: 32px;
+    height: 32px;
+    background: var(--prp-gray-100);
+    color: var(--prp-gray-500);
+    border-radius: 8px;
+    display: inline-flex; /* changed from flex to inline-flex */
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    line-height: 1; /* prevents height collapse */
+}
+
+/* ── Fix 2: Card header icons ───────────────────────────────────── */
+.prp-card__header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex; /* was flex — inline-flex fixes FA */
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+/* ── Fix 3: Security item icons ─────────────────────────────────── */
+.prp-security-item > i {
+    width: 34px;
+    height: 34px;
+    background: var(--prp-orange-light);
+    color: var(--prp-orange);
+    border-radius: 9px;
+    display: inline-flex; /* was flex */
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+/* ── Fix 4: Font Awesome must never be display:flex ─────────────── */
+/* This global rule prevents any <i> from being set to display:flex
+   which breaks Font Awesome's pseudo-element rendering */
+i.fas, i.far, i.fab, i.fal, i.fad, i.fa-solid,
+i.fa-regular, i.fa-brands {
+    display: inline-block !important;
+    line-height: 1;
+}
+
+/* ── Fix 5: Make icon wrappers work with inline-block FA icons ───── */
+/* When the parent is inline-flex and child is inline-block, 
+   everything aligns correctly */
+.prp-card__header-icon--blue {
+    background: var(--prp-blue-light);
+    color: var(--prp-blue);
+}
+
+.prp-card__header-icon--green {
+    background: var(--prp-green-light);
+    color: var(--prp-green);
+}
+
+.prp-card__header-icon--orange {
+    background: var(--prp-orange-light);
+    color: var(--prp-orange);
+}
+
+/* ── Fix 6: Ensure Font Awesome loads — add to PatientSite.Master ──
+   If icons STILL don't show, add this inside your <head> in
+   PatientSite.Master (already there check it exists):
+   
+   <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+   
+   ──────────────────────────────────────────────────────────────── */
