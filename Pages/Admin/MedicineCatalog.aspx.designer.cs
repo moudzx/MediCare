@@ -15,13 +15,40 @@ namespace MediCare.Pages.Admin
     {
 
         /// <summary>
-        /// form4 control.
+        /// form1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form4;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+
+        /// <summary>
+        /// btnHamburger control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnHamburger;
+
+        /// <summary>
+        /// btnOpenAddModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOpenAddModal;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// txtSearch control.
@@ -42,15 +69,6 @@ namespace MediCare.Pages.Admin
         protected global::System.Web.UI.WebControls.GridView gvMedicines;
 
         /// <summary>
-        /// txtMedName control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMedName;
-
-        /// <summary>
         /// txtATC control.
         /// </summary>
         /// <remarks>
@@ -60,31 +78,22 @@ namespace MediCare.Pages.Admin
         protected global::System.Web.UI.WebControls.TextBox txtATC;
 
         /// <summary>
-        /// txtDosage control.
+        /// txtName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDosage;
+        protected global::System.Web.UI.WebControls.TextBox txtName;
 
         /// <summary>
-        /// ddlForm control.
+        /// txtBG control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlForm;
-
-        /// <summary>
-        /// txtPrice control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPrice;
+        protected global::System.Web.UI.WebControls.TextBox txtBG;
 
         /// <summary>
         /// txtIngredients control.
@@ -96,6 +105,33 @@ namespace MediCare.Pages.Admin
         protected global::System.Web.UI.WebControls.TextBox txtIngredients;
 
         /// <summary>
+        /// txtDosage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDosage;
+
+        /// <summary>
+        /// txtForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtForm;
+
+        /// <summary>
+        /// txtPrice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPrice;
+
+        /// <summary>
         /// btnAddMedicine control.
         /// </summary>
         /// <remarks>
@@ -103,5 +139,14 @@ namespace MediCare.Pages.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddMedicine;
+
+        /// <summary>
+        /// btnCancelModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancelModal;
     }
 }

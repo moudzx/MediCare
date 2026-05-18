@@ -1,70 +1,141 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
+using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace MediCare.Pages.Admin
 {
-    public partial class MedicineCatalog : System.Web.UI.Page
+    public partial class MedicineCatalog : Page
     {
-       
-
-            //string conStr = ConfigurationManager.ConnectionStrings["MediCareDB"].ConnectionString;
+        string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!IsPostBack)
-            //{
-            //    LoadMedicines();
-            //}
+            if (!IsPostBack)
+                LoadMedicines();
         }
 
         private void LoadMedicines(string search = "")
         {
-            //using (SqlConnection con = new SqlConnection(conStr))
-            //{
-            //    string query = @"
-            //    SELECT 
-            //        ID,
-            //        MedicineName,
-            //        Description,
-            //        ATCCode,
-            //        Dosage,
-            //        Form,
-            //        FormIcon,
-            //        Ingredients,
-            //        Price
-            //    FROM Medicines
-            //    WHERE 
-            //        MedicineName LIKE @search
-            //        OR ATCCode LIKE @search
-            //    ORDER BY MedicineName";
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = "SELECT * FROM Medicine";
 
-            //    SqlCommand cmd = new SqlCommand(query, con);
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query += " WHERE name LIKE @search OR atc LIKE @search";
+                }
 
-            //    cmd.Parameters.AddWithValue("@search", "%" + search + "%");
+                SqlCommand cmd = new SqlCommand(query, conn);
 
-            //    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                if (!string.IsNullOrEmpty(search))
+                    cmd.Parameters.AddWithValue("@search", "%" + search + "%");
 
-            //    DataTable dt = new DataTable();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-            //    da.Fill(dt);
-
-            //    gvMedicines.DataSource = dt;
-            //    gvMedicines.DataBind();
-            //}
+                gvMedicines.DataSource = dt;
+                gvMedicines.DataBind();
+            }
         }
 
         protected void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            //LoadMedicines(txtSearch.Text.Trim());
+            LoadMedicines(txtSearch.Text.Trim());
         }
 
-    
+        protected void btnAddMedicine_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = @"
+INSERT INTO Medicine
+(atc, name, b_g, ingredients, dosage, form, price)
+VALUES
+(@atc, @name, @b_g, @ingredients, @dosage, @form, @price)";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                cmd.Parameters.AddWithValue("@atc", txtATC.Text.Trim());
+                cmd.Parameters.AddWithValue("@name", txtName.Text.Trim());
+                cmd.Parameters.AddWithValue("@b_g", txtBG.Text.Trim());
+                cmd.Parameters.AddWithValue("@ingredients", txtIngredients.Text.Trim());
+                cmd.Parameters.AddWithValue("@dosage", txtDosage.Text.Trim());
+                cmd.Parameters.AddWithValue("@form", txtForm.Text.Trim());
+                cmd.Parameters.AddWithValue("@price", txtPrice.Text.Trim());
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            lblMessage.Text = "Medicine added successfully.";
+            lblMessage.Visible = true;
+
+            ClearFields();
+            LoadMedicines();
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            string atc = ((Button)sender).CommandArgument;
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                SqlCommand cmd = new SqlCommand("DELETE FROM Medicine WHERE atc=@atc", conn);
+                cmd.Parameters.AddWithValue("@atc", atc);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            lblMessage.Text = "Medicine deleted.";
+            lblMessage.Visible = true;
+
+            LoadMedicines();
+        }
+
+        protected void btnEdit_Click(object sender, EventArgs e)
+        {
+            string atc = ((Button)sender).CommandArgument;
+
+            lblMessage.Text = "Edit clicked: " + atc;
+            lblMessage.Visible = true;
+
+            // later you can load data into modal for editing
+        }
+
+        protected void gvMedicines_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            // optional (you can move logic here later)
+        }
+
+        protected void btnOpenAddModal_Click(object sender, EventArgs e)
+        {
+            // if you use JS modal later, you can trigger it here
+        }
+
+        protected void btnCancelModal_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+        }
+
+        protected void btnHamburger_Click(object sender, EventArgs e)
+        {
+            // optional mobile menu logic
+        }
+
+        private void ClearFields()
+        {
+            txtATC.Text = "";
+            txtName.Text = "";
+            txtBG.Text = "";
+            txtIngredients.Text = "";
+            txtDosage.Text = "";
+            txtForm.Text = "";
+            txtPrice.Text = "";
+        }
     }
 }

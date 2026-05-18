@@ -42,6 +42,7 @@ CREATE TABLE [dbo].[Doctors] (
     [Age] INT NOT NULL,
     [ClinicAddress] NVARCHAR(255) NULL,
     [CertificatePath] NVARCHAR(500) NOT NULL,
+    [Speciality] NVARCHAR(255) NULL,
 
     CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED ([DoctorId]),
     CONSTRAINT [CK_Doctors_Age] CHECK ([Age] > 0 AND [Age] <= 150)
