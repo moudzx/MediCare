@@ -11,53 +11,44 @@ namespace MediCare.Pages.Admin
 {
 
 
-    public partial class Dashboard
+    public partial class PatientManagement
     {
 
         /// <summary>
-        /// form1 control.
+        /// form3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.HtmlControls.HtmlForm form3;
 
         /// <summary>
-        /// lblDoctors control.
+        /// lblPatientsCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDoctors;
+        protected global::System.Web.UI.WebControls.Label lblPatientsCount;
 
         /// <summary>
-        /// lblPatients control.
+        /// lblNewPatients control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPatients;
+        protected global::System.Web.UI.WebControls.Label lblNewPatients;
 
         /// <summary>
-        /// lblFoods control.
+        /// txtSearchPatients control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFoods;
-
-        /// <summary>
-        /// lblMedicines control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMedicines;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchPatients;
 
         /// <summary>
         /// gvPatients control.

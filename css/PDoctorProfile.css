@@ -1,0 +1,269 @@
+﻿/* ═══════════════════════════════════════════════════════════════════
+   FILE:     DoctorProfile.css
+   PAGE:     Doctor Profile – MediCare Patient Portal
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+    --dpro-green: #1A9E5C;
+    --dpro-green-light: #D1FAE5;
+    --dpro-green-xlight: #F0FDF4;
+    --dpro-blue: #2563EB;
+    --dpro-blue-light: #DBEAFE;
+    --dpro-gray-50: #F9FAFB;
+    --dpro-gray-100: #F3F4F6;
+    --dpro-gray-200: #E5E7EB;
+    --dpro-gray-300: #D1D5DB;
+    --dpro-gray-400: #9CA3AF;
+    --dpro-gray-700: #374151;
+    --dpro-gray-900: #111827;
+    --dpro-white: #ffffff;
+    --dpro-radius-sm: 10px;
+    --dpro-radius: 16px;
+    --dpro-radius-lg: 22px;
+    --dpro-shadow-sm: 0 2px 12px rgba(0,0,0,.07);
+    --dpro-shadow: 0 6px 28px rgba(0,0,0,.10);
+    --dpro-ease: .22s cubic-bezier(.4,0,.2,1);
+    --dpro-font: 'DM Sans', sans-serif;
+    --dpro-serif: 'DM Serif Display', serif;
+}
+
+/* Page Root */
+.dpro-root {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    font-family: var(--dpro-font);
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ── Page Header ────────────────────────────── */
+.dpro-page-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+}
+
+.dpro-page-header__icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--dpro-green-light);
+    color: var(--dpro-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.dpro-page-header__title {
+    font-family: var(--dpro-serif);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--dpro-gray-900);
+    margin: 0 0 2px;
+}
+
+.dpro-page-header__sub {
+    font-size: 13px;
+    color: var(--dpro-gray-400);
+    margin: 0;
+}
+
+/* ── Cards ──────────────────────────────────── */
+.dpro-card {
+    background: var(--dpro-white);
+    border: 1px solid var(--dpro-gray-200);
+    border-radius: var(--dpro-radius-lg);
+    box-shadow: var(--dpro-shadow-sm);
+    overflow: hidden;
+    transition: box-shadow var(--dpro-ease);
+}
+
+    .dpro-card:hover {
+        box-shadow: var(--dpro-shadow);
+    }
+
+.dpro-card__body {
+    padding: 24px;
+}
+
+.dpro-card__header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--dpro-gray-100);
+    background: linear-gradient(135deg, var(--dpro-gray-50), var(--dpro-white));
+}
+
+.dpro-card__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dpro-gray-900);
+    margin: 0 0 2px;
+}
+
+.dpro-card__sub {
+    font-size: 12px;
+    color: var(--dpro-gray-400);
+    margin: 0;
+}
+
+/* ── Doctor Info Card ───────────────────────── */
+.dpro-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.dpro-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--dpro-green), #0F1D2E);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dpro-avatar__text {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+}
+
+.dpro-doctor-name {
+    font-family: var(--dpro-serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--dpro-gray-900);
+    margin: 0 0 4px;
+}
+
+.dpro-specialization {
+    font-size: 14px;
+    color: var(--dpro-green);
+    font-weight: 600;
+    margin: 0 0 6px;
+}
+
+.dpro-badge--verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--dpro-green-light);
+    color: #065F46;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ── Info Grid ──────────────────────────────── */
+.dpro-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.dpro-info-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    background: var(--dpro-gray-50);
+    border: 1px solid var(--dpro-gray-100);
+    border-radius: var(--dpro-radius-sm);
+    align-items: flex-start;
+}
+
+.dpro-info-item--full {
+    grid-column: 1 / -1;
+}
+
+.dpro-info-item > i {
+    width: 34px;
+    height: 34px;
+    background: var(--dpro-green-light);
+    color: var(--dpro-green);
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.dpro-info-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--dpro-gray-400);
+    margin-bottom: 3px;
+}
+
+.dpro-info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dpro-gray-900);
+}
+
+/* ── Appointment Slots ──────────────────────── */
+.dpro-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.dpro-slot-link {
+    display: block;
+    padding: 12px 14px;
+    background: var(--dpro-white);
+    border: 1.5px solid var(--dpro-gray-200);
+    border-radius: var(--dpro-radius-sm);
+    text-align: center;
+    text-decoration: none;
+    color: var(--dpro-gray-900);
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--dpro-ease);
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+    .dpro-slot-link:hover {
+        border-color: var(--dpro-green);
+        background: var(--dpro-green-xlight);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(26,158,92,.15);
+        color: var(--dpro-green);
+    }
+
+.dpro-no-slots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 20px;
+    color: var(--dpro-gray-400);
+}
+
+    .dpro-no-slots i {
+        font-size: 36px;
+    }
+
+/* ── Responsive ─────────────────────────────── */
+@media (max-width: 600px) {
+    .dpro-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dpro-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

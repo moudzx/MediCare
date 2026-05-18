@@ -270,6 +270,7 @@
     <Content Include="css\NewPassword.css" />
     <Content Include="css\nutritions.css" />
     <Content Include="css\PatientList.css" />
+    <Content Include="css\PDoctorProfile.css" />
     <Content Include="css\profile.css" />
     <Content Include="css\ProfilePatient.css" />
     <Content Include="css\search.css" />
