@@ -138,13 +138,6 @@
     <Compile Include="Pages\Account\NewPassword.aspx.designer.cs">
       <DependentUpon>NewPassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Account\PatientProfile.aspx.cs">
-      <DependentUpon>PatientProfile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\PatientProfile.aspx.designer.cs">
-      <DependentUpon>PatientProfile.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Patient\AddMedicine.aspx.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -152,6 +145,7 @@
     <Compile Include="Pages\Patient\AddMedicine.aspx.designer.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
     </Compile>
+
     <Compile Include="Pages\Admin\PatientManagement.aspx.cs">
       <DependentUpon>PatientManagement.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -159,9 +153,11 @@
     <Compile Include="Pages\Admin\PatientManagement.aspx.designer.cs">
       <DependentUpon>PatientManagement.aspx</DependentUpon>
     </Compile>
- 
+    
+
     <Compile Include="Pages\Patient\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
+>>>>>>> origin/develop
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Patient\DoctorProfile.aspx.designer.cs">
