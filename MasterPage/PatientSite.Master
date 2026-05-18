@@ -183,6 +183,60 @@ Inherits="MediCare.MasterPage.PatientSite" %>
         .pn-notification__footer:hover {
             background: #f9fafb;
         }
+        /* =========================
+           CHAT BUTTON
+        ========================= */
+
+        .pn-chat-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            color: #374151;
+            text-decoration: none;
+            font-size: 16px;
+
+            transition: .2s ease;
+        }
+
+        .pn-chat-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #16a34a;
+        }
+
+        .pn-chat-btn__badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+
+            min-width: 18px;
+            height: 18px;
+
+            padding: 0 5px;
+
+            border-radius: 999px;
+
+            background: #16a34a;
+            color: #ffffff;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid #ffffff;
+        }
     </style>
 
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
@@ -249,6 +303,19 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
             <!-- Right side -->
             <div class="mc-navbar__actions">
+                <!-- Chat Button -->
+                <a href="Chat.aspx"
+                   class="pn-chat-btn"
+                   title="Open Chat">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    <!-- Optional unread count -->
+                   <asp:Label ID="lblUnreadChats"
+                       runat="server"
+                       CssClass="pn-chat-btn__badge"
+                       Text="0" />
+                </a>
 
                 <!-- Notifications -->
                 <div class="pn-notification">
