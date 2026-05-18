@@ -21,6 +21,7 @@ CREATE TABLE [dbo].[Patients] (
     [PatientId] INT IDENTITY(1,1) NOT NULL,
     [UserId] INT NOT NULL,
     [FullName] NVARCHAR(100) NOT NULL,
+    [PhoneNumber] NVARCHAR(20) NOT NULL,
     [Age] INT NOT NULL,
     [Height] FLOAT NULL,
     [Weight] FLOAT NULL,
@@ -32,6 +33,20 @@ CREATE TABLE [dbo].[Patients] (
     CONSTRAINT [CK_Patients_Age] CHECK ([Age] > 0 AND [Age] <= 150)
 );
 
+
+CREATE TABLE [dbo].[Doctors] (
+    [DoctorId] INT IDENTITY(1,1) NOT NULL,
+    [UserId] INT NOT NULL,
+    [FullName] NVARCHAR(100) NOT NULL,
+    [PhoneNumber] NVARCHAR(20) NOT NULL,
+    [Age] INT NOT NULL,
+    [ClinicAddress] NVARCHAR(255) NOT NULL,
+    [CertificatePath] NVARCHAR(500) NOT NULL,
+
+    CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED ([DoctorId]),
+    CONSTRAINT [CK_Doctors_Age] CHECK ([Age] > 0 AND [Age] <= 150)
+);
+
 ALTER TABLE [dbo].[Patients]
     ADD CONSTRAINT [FK_Patients_Users]
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
@@ -41,18 +56,6 @@ ALTER TABLE [dbo].[Doctors]
     ADD CONSTRAINT [FK_Doctors_Users]
     FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([UserId])
     ON DELETE CASCADE;
-
-CREATE TABLE [dbo].[Doctors] (
-    [DoctorId] INT IDENTITY(1,1) NOT NULL,
-    [UserId] INT NOT NULL,
-    [FullName] NVARCHAR(100) NOT NULL,
-    [Age] INT NOT NULL,
-    [CertificatePath] NVARCHAR(500) NOT NULL,
-
-    CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED ([DoctorId]),
-    CONSTRAINT [CK_Doctors_Age] CHECK ([Age] > 0 AND [Age] <= 150)
-);
-
 
 CREATE TABLE [dbo].[Food] (
     [id] INT PRIMARY KEY,
