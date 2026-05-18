@@ -138,6 +138,20 @@
     <Compile Include="Pages\Account\NewPassword.aspx.designer.cs">
       <DependentUpon>NewPassword.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Admin\DoctorManagement.aspx.cs">
+      <DependentUpon>DoctorManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\DoctorManagement.aspx.designer.cs">
+      <DependentUpon>DoctorManagement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Admin\PatientManagement.aspx.cs">
+      <DependentUpon>PatientManagement.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Admin\PatientManagement.aspx.designer.cs">
+      <DependentUpon>PatientManagement.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Patient\AddMedicine.aspx.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -257,6 +271,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\admin.css" />
+    <Content Include="css\AdminProfile.css" />
     <Content Include="css\dashboard.css" />
     <Content Include="css\DashboardDc.css" />
     <Content Include="css\DcSearch.css" />
@@ -299,8 +315,10 @@
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\NewPassword.aspx" />
     <Content Include="Pages\Admin\Dashboard.aspx" />
+    <Content Include="Pages\Admin\DoctorManagement.aspx" />
     <Content Include="Pages\Admin\FoodCatalog.aspx" />
     <Content Include="Pages\Admin\MedicineCatalog.aspx" />
+    <Content Include="Pages\Admin\PatientManagement.aspx" />
     <Content Include="Pages\Admin\UserManagement.aspx" />
     <Content Include="Pages\Doctor\Search.aspx" />
     <Content Include="Pages\Doctor\Dashboard.aspx" />
