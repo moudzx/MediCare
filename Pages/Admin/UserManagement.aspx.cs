@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace MediCare.Pages.Admin
 {
-    public partial class FoodCatalog : System.Web.UI.Page
+    public partial class UseManagement : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -145,19 +145,8 @@
     <Compile Include="Pages\Patient\AddMedicine.aspx.designer.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
     </Compile>
-
-    <Compile Include="Pages\Admin\PatientManagement.aspx.cs">
-      <DependentUpon>PatientManagement.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Admin\PatientManagement.aspx.designer.cs">
-      <DependentUpon>PatientManagement.aspx</DependentUpon>
-    </Compile>
-    
-
     <Compile Include="Pages\Patient\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
->>>>>>> origin/develop
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\Patient\DoctorProfile.aspx.designer.cs">
@@ -191,12 +180,12 @@
     <Compile Include="Pages\Admin\MedicineCatalog.aspx.designer.cs">
       <DependentUpon>MedicineCatalog.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Admin\DoctorManagement.aspx.cs">
-      <DependentUpon>DoctorManagement.aspx</DependentUpon>
+    <Compile Include="Pages\Admin\UserManagement.aspx.cs">
+      <DependentUpon>UserManagement.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Admin\DoctorManagement.aspx.designer.cs">
-      <DependentUpon>DoctorManagement.aspx</DependentUpon>
+    <Compile Include="Pages\Admin\UserManagement.aspx.designer.cs">
+      <DependentUpon>UserManagement.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Doctor\Search.aspx.cs">
       <DependentUpon>Search.aspx</DependentUpon>
@@ -268,12 +257,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="css\admin.css" />
-    <Content Include="css\AdminProfile.css" />
     <Content Include="css\dashboard.css" />
     <Content Include="css\DashboardDc.css" />
     <Content Include="css\DcSearch.css" />
-    <Content Include="css\def.css" />
     <Content Include="css\default.css" />
     <Content Include="css\DoctorProfile.css" />
     <Content Include="css\ForgetPassword.css" />
@@ -293,11 +279,8 @@
     <Content Include="Database\lebanon_drugs_database.csv" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="js\AdminProfile.js" />
-    <Content Include="js\dashboard.js" />
     <Content Include="js\DashboardDc.js" />
     <Content Include="js\DcSearch.js" />
-    <Content Include="js\def.js" />
     <Content Include="js\default.js" />
     <Content Include="js\DoctorProfile.js" />
     <Content Include="js\ForgetPassword.js" />
@@ -317,8 +300,7 @@
     <Content Include="Pages\Admin\Dashboard.aspx" />
     <Content Include="Pages\Admin\FoodCatalog.aspx" />
     <Content Include="Pages\Admin\MedicineCatalog.aspx" />
-    <Content Include="Pages\Admin\DoctorManagement.aspx" />
-    <Content Include="Pages\Admin\PatientManagement.aspx" />
+    <Content Include="Pages\Admin\UserManagement.aspx" />
     <Content Include="Pages\Doctor\Search.aspx" />
     <Content Include="Pages\Doctor\Dashboard.aspx" />
     <Content Include="Pages\Doctor\ManageMedication.aspx" />
