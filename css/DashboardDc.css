@@ -3,7 +3,25 @@
    LOCATION: /Styles/Dashboard.css
    Doctor Dashboard — full stylesheet
    ═══════════════════════════════════════════════════════════════════ */
+.status-booked {
+    color: #2563eb;
+    font-weight: 600;
+}
 
+.status-break {
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.db-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .db-grid td, .db-grid th {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
 /* ── 1. Root ─────────────────────────────────────────────────────── */
 .db-root {
     display: flex;
