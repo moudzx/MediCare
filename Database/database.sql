@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[Patients] (
     [PatientId] INT IDENTITY(1,1) NOT NULL,
     [UserId] INT NOT NULL,
     [FullName] NVARCHAR(100) NOT NULL,
-    [PhoneNumber] NVARCHAR(20) NOT NULL,
+    [PhoneNumber] NVARCHAR(20) NULL,
     [Age] INT NOT NULL,
     [Height] FLOAT NULL,
     [Weight] FLOAT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE [dbo].[Doctors] (
     [DoctorId] INT IDENTITY(1,1) NOT NULL,
     [UserId] INT NOT NULL,
     [FullName] NVARCHAR(100) NOT NULL,
-    [PhoneNumber] NVARCHAR(20) NOT NULL,
+    [PhoneNumber] NVARCHAR(20) NULL,
     [Age] INT NOT NULL,
-    [ClinicAddress] NVARCHAR(255) NOT NULL,
+    [ClinicAddress] NVARCHAR(255) NULL,
     [CertificatePath] NVARCHAR(500) NOT NULL,
 
     CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED ([DoctorId]),
@@ -278,16 +278,6 @@ CREATE INDEX [IX_medicine_form] ON [dbo].[Medicine] ([form]);
 CREATE INDEX [IX_medicine_atc_price] ON [dbo].[Medicine] ([atc], [price]);
 
 
-
-CREATE NONCLUSTERED INDEX IX_Users_Email
-ON [dbo].[Users] ([Email]);
-
-CREATE NONCLUSTERED INDEX IX_Patients_UserId
-ON [dbo].[Patients] ([UserId]);
-
-CREATE NONCLUSTERED INDEX IX_Doctors_UserId
-ON [dbo].[Doctors] ([UserId]);
-
 CREATE NONCLUSTERED INDEX IX_Connections_Patient
 ON [dbo].[PatientDoctorConnections] ([PatientId]);
 
@@ -360,3 +350,4 @@ FROM OPENROWSET(
     FORMATFILE = '~\medicine_format.xml',
     FIRSTROW = 2
 ) AS csv;
+

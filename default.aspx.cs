@@ -26,8 +26,15 @@ namespace MediCare
         {
             lblPatientMessage.Visible = true;
 
+            if (!Page.IsValid)
+            {
+                Response.Redirect("~/Default.aspx#auth-section");
+                return;
+            }
+
             if (!ValidatePatient(out string errorMessage))
             {
+                Response.Redirect("~/Default.aspx#auth-section");
                 lblPatientMessage.Text = errorMessage;
                 return;
             }
@@ -78,6 +85,12 @@ namespace MediCare
         protected void btnDoctorSignUp_Click(object sender, EventArgs e)
         {
             lblDoctorMessage.Visible = true;
+
+            if (!Page.IsValid)
+            {
+                Response.Redirect("~/Default.aspx#auth-section");
+                return;
+            }
 
             if (!ValidateDoctor(out string errorMessage, out string certificatePath))
             {
@@ -319,5 +332,5 @@ namespace MediCare
             return count > 0;
               }
 
-        }
+    }
 }

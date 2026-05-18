@@ -43,7 +43,7 @@
             <div class="mc-navbar__actions">
                 <!-- Action buttons point to your new Login page location -->
                 <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--ghost mc-btn--sm">Sign In</a>
-                <a href="<%= ResolveUrl("~/Pages/Account/Login.aspx") %>" class="mc-btn mc-btn--primary mc-btn--sm">Get Started</a>
+                <a href="<%= ResolveUrl("~/Default.aspx#auth-section") %>" class="mc-btn mc-btn--primary mc-btn--sm">Get Started</a>
             </div>
 
             <button class="mc-hamburger" id="mcHamburger" aria-label="Toggle menu" aria-expanded="false">

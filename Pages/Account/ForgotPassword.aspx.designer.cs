@@ -24,13 +24,13 @@ namespace MediCare.Pages.Account
         protected global::System.Web.UI.WebControls.TextBox txtEmail;
 
         /// <summary>
-        /// lblEmailError control.
+        /// lblMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblEmailError;
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
         /// btnSendCode control.
@@ -51,12 +51,21 @@ namespace MediCare.Pages.Account
         protected global::System.Web.UI.WebControls.TextBox txtCode;
 
         /// <summary>
-        /// btnVerify control.
+        /// btnVerifyCode control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerify;
+        protected global::System.Web.UI.WebControls.Button btnVerifyCode;
+
+        /// <summary>
+        /// btnResendCode control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnResendCode;
     }
 }

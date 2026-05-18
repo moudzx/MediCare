@@ -73,7 +73,7 @@
                         placeholder="e.g. sara@example.com"
                         MaxLength="150" />
                 </div>
-                <asp:Label ID="lblEmailError" runat="server" CssClass="fp-field-error" Visible="false" />
+                <asp:Label ID="lblMessage" runat="server" CssClass="fp-field-error" Visible="false" />
             </div>
 
             <!-- Send Code button -->
@@ -82,7 +82,8 @@
                 runat="server"
                 Text="Send Verification Code"
                 CssClass="fp-btn fp-btn--primary"
-                OnClientClick="handleSendCode(event); return false;" />
+                OnClientClick="handleSendCode(event);"
+                OnClick="btnSendCode_Click" />
 
             <!-- Success message (hidden initially) -->
             <div class="fp-alert fp-alert--success" id="sendSuccessMsg" style="display:none;" role="alert">
@@ -160,11 +161,12 @@
 
             <!-- Verify button -->
             <asp:Button
-                ID="btnVerify"
+                ID="btnVerifyCode"
                 runat="server"
                 Text="Verify Code"
                 CssClass="fp-btn fp-btn--primary"
-                OnClientClick="handleVerify(event); return false;" />
+              OnClientClick="handleVerify(event);"
+                OnClick="btnVerifyCode_Click"/>
 
             <!-- Locked message (hidden initially) -->
             <div class="fp-alert fp-alert--error" id="lockedMsg" style="display:none;" role="alert">
@@ -198,13 +200,20 @@
 
             <!-- Resend link -->
             <div class="fp-resend" id="resendWrap" style="display:none;">
-                <button class="fp-resend__btn" onclick="handleResend(event)" type="button">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <polyline points="1 4 1 10 7 10"/>
-                        <path d="M3.51 15a9 9 0 1 0 .49-3.32"/>
-                    </svg>
-                    Resend verification code
-                </button>
+    <asp:LinkButton 
+    ID="btnResendCode" 
+    runat="server" 
+    CssClass="fp-resend__btn"
+OnClientClick="handleResend(event);"
+    OnClick="btnResendCode_Click">
+
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="1 4 1 10 7 10"/>
+        <path d="M3.51 15a9 9 0 1 0 .49-3.32"/>
+    </svg>
+
+    Resend verification code
+</asp:LinkButton>
             </div>
 
         </div>
