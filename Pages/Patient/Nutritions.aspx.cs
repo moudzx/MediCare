@@ -13,5 +13,9 @@ namespace MediCare.Pages.Patient
         {
 
         }
+        protected void btnSaveMyPlan_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
