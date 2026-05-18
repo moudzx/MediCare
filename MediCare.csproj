@@ -145,6 +145,13 @@
     <Compile Include="Pages\Account\PatientProfile.aspx.designer.cs">
       <DependentUpon>PatientProfile.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Patient\Chat.aspx.cs">
+      <DependentUpon>Chat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\Chat.aspx.designer.cs">
+      <DependentUpon>Chat.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Patient\PatientProfile.aspx.cs">
       <DependentUpon>PatientProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -304,6 +311,7 @@
     <Content Include="Pages\Doctor\ManageMedication.aspx" />
     <Content Include="Pages\Doctor\ManageNutrition.aspx" />
     <Content Include="Pages\Doctor\PatientList.aspx" />
+    <Content Include="Pages\Patient\Chat.aspx" />
     <Content Include="Pages\Patient\Dashboard.aspx" />
     <Content Include="Pages\Patient\Medications.aspx" />
     <Content Include="Pages\Patient\Nutritions.aspx" />

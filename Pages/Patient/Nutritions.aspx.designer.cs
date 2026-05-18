@@ -15,58 +15,121 @@ namespace MediCare.Pages.Patient
     {
 
         /// <summary>
-        /// gvBreakfast control.
+        /// txtCalories control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvBreakfast;
+        protected global::System.Web.UI.WebControls.TextBox txtCalories;
 
         /// <summary>
-        /// gvLunch control.
+        /// txtProtein control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvLunch;
+        protected global::System.Web.UI.WebControls.TextBox txtProtein;
 
         /// <summary>
-        /// gvSnack control.
+        /// txtCarbs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvSnack;
+        protected global::System.Web.UI.WebControls.TextBox txtCarbs;
 
         /// <summary>
-        /// gvOwnFoods control.
+        /// txtFat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvOwnFoods;
+        protected global::System.Web.UI.WebControls.TextBox txtFat;
 
         /// <summary>
-        /// emptyOwnFoods control.
+        /// btnSearchFoods control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl emptyOwnFoods;
+        protected global::System.Web.UI.WebControls.Button btnSearchFoods;
 
         /// <summary>
-        /// btnAddFood control.
+        /// gvSearchResults control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddFood;
+        protected global::System.Web.UI.WebControls.GridView gvSearchResults;
+
+        /// <summary>
+        /// gvNutritionPlan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvNutritionPlan;
+
+        /// <summary>
+        /// txtMyCalories control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMyCalories;
+
+        /// <summary>
+        /// txtMyProtein control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMyProtein;
+
+        /// <summary>
+        /// txtMyCarbs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMyCarbs;
+
+        /// <summary>
+        /// txtMyFiber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMyFiber;
+
+        /// <summary>
+        /// txtMyFat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMyFat;
+
+        /// <summary>
+        /// btnSaveMyPlan control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveMyPlan;
 
         /// <summary>
         /// txtFoodName control.
@@ -105,15 +168,6 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.TextBox txtFoodCarbs;
 
         /// <summary>
-        /// txtFoodFiber control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFoodFiber;
-
-        /// <summary>
         /// txtFoodFat control.
         /// </summary>
         /// <remarks>
@@ -121,15 +175,6 @@ namespace MediCare.Pages.Patient
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtFoodFat;
-
-        /// <summary>
-        /// lblFoodMsg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFoodMsg;
 
         /// <summary>
         /// btnSaveFood control.
