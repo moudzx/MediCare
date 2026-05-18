@@ -143,16 +143,6 @@
                 <asp:BoundField DataField="Fiber" HeaderText="Fiber" />
                 <asp:BoundField DataField="Fat" HeaderText="Fat" />
 
-                <asp:TemplateField HeaderText="Action">
-                    <ItemTemplate>
-                        <asp:Button ID="btnUsePlan"
-                            runat="server"
-                            Text="Use Plan"
-                            CssClass="nut-btn nut-btn--small nut-btn--primary"
-                            CommandName="UsePlan"
-                            CommandArgument='<%# Eval("Source") %>' />
-                    </ItemTemplate>
-                </asp:TemplateField>
 
             </Columns>
 
