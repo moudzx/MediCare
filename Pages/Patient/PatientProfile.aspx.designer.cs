@@ -15,6 +15,15 @@ namespace MediCare.Pages.Patient
     {
 
         /// <summary>
+        /// lblInitials control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblInitials;
+
+        /// <summary>
         /// lblDisplayName control.
         /// </summary>
         /// <remarks>
@@ -24,6 +33,15 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.Label lblDisplayName;
 
         /// <summary>
+        /// btnEdit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnEdit;
+
+        /// <summary>
         /// btnSave control.
         /// </summary>
         /// <remarks>
@@ -31,6 +49,24 @@ namespace MediCare.Pages.Patient
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSave;
+
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
+
+        /// <summary>
+        /// lblInitialsCard control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblInitialsCard;
 
         /// <summary>
         /// lblCardName control.

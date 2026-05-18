@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 
 namespace MediCare.Pages.Patient
 {
@@ -13,6 +14,16 @@ namespace MediCare.Pages.Patient
                 
                 
             }
+        }
+        
+        protected void btnSearchMedication_Click(object sender, EventArgs e)
+        {
+            // TODO: Implement search logic for gvMedications
+        }
+
+        protected void btnSaveMedication_Click(object sender, EventArgs e)
+        {
+            // TODO: Save custom medication from form inputs
         }
     }
 }

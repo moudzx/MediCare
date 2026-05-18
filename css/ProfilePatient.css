@@ -3,13 +3,29 @@
    LOCATION: /Styles/ProfilePatient.css
    PAGE:     Patient Profile — MediCare Healthcare System
    ═══════════════════════════════════════════════════════════════════ */
-/* Locked state for inputs/selects */
-.prp-input.locked, .prp-select.locked {
-    background-color: #F3F4F6 !important;
-    color: #374151 !important;
+/* =========================
+   LOCKED INPUT STYLING
+   ========================= */
+.prp-input--locked {
+    background-color: #f3f4f6 !important;
+    border-color: #e5e7eb !important;
+    color: #4b5563;
     cursor: not-allowed;
-    border-color: #E5E7EB !important;
-    pointer-events: auto; /* allow focus for consistency, but readonly prevents edit */
+    /* Do NOT use pointer-events: none; it blocks all interaction */
+}
+
+/* Locked select (dropdown) */
+.prp-select--locked {
+    pointer-events: none; /* safe here because it's a <select> */
+    background-color: #f3f4f6 !important;
+    border-color: #e5e7eb !important;
+    opacity: 0.7;
+}
+
+    /* Make sure locked selects still look disabled */
+    .prp-select--locked option {
+        color: #4b5563;
+    }
 }
 /* ── 1. CSS Variables (matches MediCare design system) ─────────── */
 :root {

@@ -15,16 +15,12 @@
 <asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
 
 <div class="pd-root">
-
     <!-- TOPBAR -->
     <div class="pd-topbar">
-
         <div class="pd-topbar__left">
-
             <div class="pd-topbar__avatar">
                 <i class="fa-solid fa-user"></i>
             </div>
-
             <div>
                 <asp:Label ID="lblGreeting"
                     runat="server"
@@ -34,9 +30,7 @@
                     <asp:Label ID="lblPatientName" runat="server" />
                 </h1>
             </div>
-
         </div>
-
         <div class="pd-topbar__right">
 
             <div class="pd-topbar__date">
@@ -49,46 +43,32 @@
                 <asp:Label ID="lblPatientStatus"
                     runat="server" />
             </div>
-
         </div>
-
     </div>
 
     <!-- MAIN GRID -->
     <div class="pd-main-grid">
-
         <!-- LEFT -->
         <div class="pd-col-left">
-
             <!-- HEALTH INFO -->
             <div class="pd-card">
-
                 <div class="pd-card__header">
-
                     <div class="pd-card__title-group">
-
                         <div class="pd-card__icon pd-card__icon--green">
                             <i class="fa-solid fa-heart-pulse"></i>
                         </div>
-
                         <div>
                             <h2 class="pd-card__title">
                                 Health Information
                             </h2>
-
                             <p class="pd-card__subtitle">
                                 Your medical profile
                             </p>
                         </div>
-
                     </div>
-
                 </div>
-
                 <div class="pd-card__body">
-
                     <div class="pd-hv-grid">
-
                         <div class="pd-hv-item">
                             <span class="pd-hv-label">Height</span>
                             <span class="pd-hv-value">
@@ -158,11 +138,8 @@
 
             <!-- DOSES -->
             <div class="pd-card pd-card--doses">
-
                 <div class="pd-card__header">
-
                     <div>
-
                         <h2 class="pd-card__title">
                             Today's Doses
                         </h2>
@@ -173,11 +150,8 @@
                         </p>
 
                     </div>
-
                     <div class="pd-dpm-ring">
-
                         <svg viewBox="0 0 36 36" width="52" height="52">
-
                             <circle cx="18"
                                     cy="18"
                                     r="15.9"
@@ -195,7 +169,6 @@
                                     stroke-linecap="round"
                                     id="dpmArc"
                                     runat="server" />
-
                         </svg>
 
                         <asp:Label ID="lblDosePct"
