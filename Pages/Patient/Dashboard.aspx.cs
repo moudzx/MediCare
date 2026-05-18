@@ -10,10 +10,17 @@ namespace MediCare.Patient
         
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["UserId"] == null || Session["Role"] == null || 
+                Session["Role"].ToString() != "Patient")
             {
-                
+                Response.Redirect("Pages/Account/Login.aspx");
+                return;
             }
+
+
+            int userId = Convert.ToInt32(Session["UserId"]);
+
+            //
         }
     }
 }

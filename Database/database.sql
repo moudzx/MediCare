@@ -210,35 +210,6 @@ CREATE TABLE [dbo].[PatientMedications] (
         CHECK ([Status] IN ('Active','Stopped','Completed'))
 );
 
-CREATE TABLE [dbo].[Conversations] (
-    [ConversationId] INT IDENTITY(1,1) NOT NULL,
-    [PatientId] INT NOT NULL,
-    [DoctorId] INT NOT NULL,
-
-    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
-
-    CONSTRAINT [PK_Conversations]
-        PRIMARY KEY CLUSTERED ([ConversationId]),
-
-    CONSTRAINT [UQ_Conversations_Pair]
-        UNIQUE ([PatientId], [DoctorId])
-);
-
-CREATE TABLE [dbo].[Messages] (
-    [MessageId] INT IDENTITY(1,1) NOT NULL,
-    [ConversationId] INT NOT NULL,
-    [SenderUserId] INT NOT NULL,
-
-    [MessageText] NVARCHAR(MAX) NOT NULL,
-
-    [IsRead] BIT NOT NULL DEFAULT 0,
-    [SentAt] DATETIME NOT NULL DEFAULT GETDATE(),
-
-    CONSTRAINT [PK_Messages]
-        PRIMARY KEY CLUSTERED ([MessageId])
-);
-
-
 -- Indexes:
 
 
@@ -298,18 +269,6 @@ ON [dbo].[NutritionPlans] ([PatientId], [Status]);
 
 CREATE NONCLUSTERED INDEX IX_PatientMedications_Patient
 ON [dbo].[PatientMedications] ([PatientId], [Status]);
-
-CREATE NONCLUSTERED INDEX IX_Conversations_Patient
-ON [dbo].[Conversations] ([PatientId]);
-
-CREATE NONCLUSTERED INDEX IX_Conversations_Doctor
-ON [dbo].[Conversations] ([DoctorId]);
-
-CREATE NONCLUSTERED INDEX IX_Messages_Conversation
-ON [dbo].[Messages] ([ConversationId], [SentAt]);
-
-CREATE NONCLUSTERED INDEX IX_Messages_Read
-ON [dbo].[Messages] ([ConversationId], [IsRead]);
 
 
 
