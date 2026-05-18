@@ -3,7 +3,14 @@
    LOCATION: /Styles/ProfilePatient.css
    PAGE:     Patient Profile — MediCare Healthcare System
    ═══════════════════════════════════════════════════════════════════ */
-
+/* Locked state for inputs/selects */
+.prp-input.locked, .prp-select.locked {
+    background-color: #F3F4F6 !important;
+    color: #374151 !important;
+    cursor: not-allowed;
+    border-color: #E5E7EB !important;
+    pointer-events: auto; /* allow focus for consistency, but readonly prevents edit */
+}
 /* ── 1. CSS Variables (matches MediCare design system) ─────────── */
 :root {
     --prp-navy: #0F1D2E;

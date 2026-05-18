@@ -15,26 +15,14 @@ namespace MediCare.Pages.Patient
         {
             if (!IsPostBack)
             {
-                // Load your data but DO NOT change ReadOnly properties here!
-                // The JavaScript will lock the fields on page load.
-                txtEmail.Text = "user@example.com";
-                txtFullName.Text = "John Doe";
-                txtAge.Text = "30";
-                // ... load health labels ...
+                
             }
-            // DO NOT write: txtEmail.ReadOnly = false;
+           
         }
 
-        protected void btnSaveAll_Click(object sender, EventArgs e)
+        protected void btnSave_Click(object sender, EventArgs e)
         {
-            // All fields are now editable, so you can read them
-            string email = txtEmail.Text;
-            string fullName = txtFullName.Text;
-            int age = int.Parse(txtAge.Text);
-            // ... save to database ...
 
-            // After saving, you can either redirect or reload the page.
-            // If you want to keep the page in view mode, just call Page_Load again.
         }
     }
 }

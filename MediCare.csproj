@@ -138,13 +138,6 @@
     <Compile Include="Pages\Account\NewPassword.aspx.designer.cs">
       <DependentUpon>NewPassword.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Account\PatientProfile.aspx.cs">
-      <DependentUpon>PatientProfile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Account\PatientProfile.aspx.designer.cs">
-      <DependentUpon>PatientProfile.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Patient\AddMedicine.aspx.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -152,12 +145,12 @@
     <Compile Include="Pages\Patient\AddMedicine.aspx.designer.cs">
       <DependentUpon>AddMedicine.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Patient\Chat.aspx.cs">
-      <DependentUpon>Chat.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\DoctorProfile.aspx.cs">
+      <DependentUpon>DoctorProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Patient\Chat.aspx.designer.cs">
-      <DependentUpon>Chat.aspx</DependentUpon>
+    <Compile Include="Pages\Patient\DoctorProfile.aspx.designer.cs">
+      <DependentUpon>DoctorProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Patient\PatientProfile.aspx.cs">
       <DependentUpon>PatientProfile.aspx</DependentUpon>
@@ -297,7 +290,6 @@
     <Content Include="js\NewPassword.js" />
     <Content Include="js\PatientList.js" />
     <Content Include="js\profile.js" />
-    <Content Include="js\ProfilePatient.js" />
     <Content Include="MasterPage\PatientSite.Master" />
     <Content Include="MasterPage\Site.Master" />
     <Content Include="Pages\Account\AdminProfile.aspx" />
@@ -305,7 +297,6 @@
     <Content Include="Pages\Account\ForgotPassword.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\NewPassword.aspx" />
-    <Content Include="Pages\Account\PatientProfile.aspx" />
     <Content Include="Pages\Admin\Dashboard.aspx" />
     <Content Include="Pages\Admin\FoodCatalog.aspx" />
     <Content Include="Pages\Admin\MedicineCatalog.aspx" />
@@ -316,8 +307,8 @@
     <Content Include="Pages\Doctor\ManageNutrition.aspx" />
     <Content Include="Pages\Doctor\PatientList.aspx" />
     <Content Include="Pages\Patient\AddMedicine.aspx" />
-    <Content Include="Pages\Patient\Chat.aspx" />
     <Content Include="Pages\Patient\Dashboard.aspx" />
+    <Content Include="Pages\Patient\DoctorProfile.aspx" />
     <Content Include="Pages\Patient\Medications.aspx" />
     <Content Include="Pages\Patient\Nutritions.aspx" />
     <Content Include="Pages\Patient\PatientProfile.aspx" />
