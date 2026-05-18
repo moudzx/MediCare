@@ -87,13 +87,22 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.Label lblAbout;
 
         /// <summary>
-        /// litSlots control.
+        /// calAppointments control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litSlots;
+        protected global::System.Web.UI.WebControls.Calendar calAppointments;
+
+        /// <summary>
+        /// gvSlots control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvSlots;
 
         /// <summary>
         /// phNoSlots control.
@@ -103,5 +112,14 @@ namespace MediCare.Pages.Patient
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phNoSlots;
+
+        /// <summary>
+        /// lblMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMessage;
     }
 }

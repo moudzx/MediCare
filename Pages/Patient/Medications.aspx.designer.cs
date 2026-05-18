@@ -15,49 +15,49 @@ namespace MediCare.Pages.Patient
     {
 
         /// <summary>
-        /// txtSearchApproved control.
+        /// txtSearchMedication control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSearchApproved;
+        protected global::System.Web.UI.WebControls.TextBox txtSearchMedication;
 
         /// <summary>
-        /// btnSearchApproved control.
+        /// btnSearchMedication control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearchApproved;
+        protected global::System.Web.UI.WebControls.Button btnSearchMedication;
 
         /// <summary>
-        /// lblApprovedMsg control.
+        /// lblMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblApprovedMsg;
+        protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
-        /// gvApprovedMedications control.
+        /// gvMedications control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvApprovedMedications;
+        protected global::System.Web.UI.WebControls.GridView gvMedications;
 
         /// <summary>
-        /// txtMedName control.
+        /// txtMedicationName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMedName;
+        protected global::System.Web.UI.WebControls.TextBox txtMedicationName;
 
         /// <summary>
         /// txtDosage control.
@@ -78,6 +78,15 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.DropDownList ddlFrequency;
 
         /// <summary>
+        /// txtPills control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPills;
+
+        /// <summary>
         /// txtStartDate control.
         /// </summary>
         /// <remarks>
@@ -96,30 +105,12 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.TextBox txtEndDate;
 
         /// <summary>
-        /// txtPillCount control.
+        /// btnSaveMedication control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPillCount;
-
-        /// <summary>
-        /// lblCustomMsg control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCustomMsg;
-
-        /// <summary>
-        /// btnSaveCustomMed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveCustomMed;
+        protected global::System.Web.UI.WebControls.Button btnSaveMedication;
     }
 }

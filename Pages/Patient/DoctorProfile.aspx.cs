@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -12,6 +14,15 @@ namespace MediCare.Pages.Patient
         protected void Page_Load(object sender, EventArgs e)
         {
 
+        }
+        protected void calAppointments_SelectionChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        protected void gvSlots_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            
         }
     }
 }

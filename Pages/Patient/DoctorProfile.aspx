@@ -94,28 +94,51 @@
             </div>
         </div>
 
-        <!-- Available Appointments Card -->
+        <!-- Appointment Scheduling Card -->
         <div class="dpro-card dpro-card--appointments">
             <div class="dpro-card__header">
-                <div>
-                    <h2 class="dpro-card__title">Available Appointment Slots</h2>
-                    <p class="dpro-card__sub">Click a slot to schedule your appointment</p>
-                </div>
+                <h2 class="dpro-card__title">Schedule Appointment</h2>
+                <p class="dpro-card__sub">Choose a date and time</p>
             </div>
 
             <div class="dpro-card__body">
-                <!-- Dynamic slot list generated from code-behind -->
-                <asp:Literal ID="litSlots" runat="server" />
+                <!-- Calendar -->
+                <asp:Calendar ID="calAppointments" runat="server" 
+                              OnSelectionChanged="calAppointments_SelectionChanged" />
+
+                <!-- GridView for time slots -->
+               <asp:GridView ID="gvSlots" runat="server" AutoGenerateColumns="False"
+                              CssClass="slot-grid"
+                              OnRowCommand="gvSlots_RowCommand">
+                    <Columns>
+                        <asp:BoundField DataField="SlotText" HeaderText="Available Slot" />
+
+                        <asp:TemplateField HeaderText="Action">
+                            <ItemTemplate>
+                                <asp:Button ID="btnBook" runat="server"
+                                            Text="Book"
+                                            CommandName="BookSlot"
+                                            CommandArgument='<%# Eval("SlotValue") %>'
+                                            CssClass="slot-btn" />
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
+
 
                 <!-- Message when no slots -->
                 <asp:PlaceHolder ID="phNoSlots" runat="server" Visible="false">
                     <div class="dpro-no-slots">
                         <i class="fa-regular fa-calendar-xmark"></i>
-                        <p>No available slots at the moment. Please check back later.</p>
+                        <p>No available slots for this date.</p>
                     </div>
                 </asp:PlaceHolder>
+
+                <!-- Confirmation -->
+                <asp:Label ID="lblMessage" runat="server" CssClass="confirmation-msg" />
             </div>
         </div>
+
 
     </div>
 
