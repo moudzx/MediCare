@@ -667,7 +667,7 @@
 
             <div class="ds-nav-section-label">Account</div>
 
-            <a href="/Pages/Doctor/Profile.aspx" class="ds-nav-link" id="navProfile">
+            <a href="/Pages/Account/DoctorProfile.aspx" class="ds-nav-link" id="navProfile">
                 <span class="ds-nav-link__icon"><i class="fa-solid fa-user-doctor"></i></span>
                 My Profile
             </a>
@@ -738,10 +738,10 @@
                             <small>dr.karimi@medicare.com</small>
                         </div>
                         <div class="ds-dropdown-divider"></div>
-                        <a href="/Pages/Doctor/Profile.aspx" class="ds-dropdown-item">
+                        <a href="/Pages/Account/DoctorProfile.aspx" class="ds-dropdown-item">
                             <i class="fa-solid fa-user-doctor" style="color:#1A9E5C;"></i> My Profile
                         </a>
-                        <a href="/Pages/Doctor/Settings.aspx" class="ds-dropdown-item">
+                        <a href="/Pages/Account/Settings.aspx" class="ds-dropdown-item">
                             <i class="fa-solid fa-gear" style="color:#6B7280;"></i> Settings
                         </a>
                         <div class="ds-dropdown-divider"></div>
