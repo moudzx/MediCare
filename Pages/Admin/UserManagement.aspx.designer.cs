@@ -11,7 +11,7 @@ namespace MediCare.Pages.Admin
 {
 
 
-    public partial class MedicineCatalog
+    public partial class UseManagement
     {
     }
 }
