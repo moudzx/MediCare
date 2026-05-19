@@ -280,7 +280,7 @@
                                         <div class="pd-inv-bar-wrap">
 
                                             <div class="pd-inv-bar"
-                                                 style='width:<%# Eval("Percentage") %>%'>
+                                                    style="<%# 'width:' + Eval('Percentage') + '%;' %>">
                                             </div>
 
                                         </div>
@@ -351,44 +351,60 @@
 
 </div>
 
-<script>
-    (function () {
+    <script>
+(function () {
 
-        if (!('IntersectionObserver' in window)) return;
+    if (!('IntersectionObserver' in window)) {
+        return;
+    }
 
-        const cards = document.querySelectorAll('.pd-card');
+    const cards = document.querySelectorAll('.pd-card');
 
-        cards.forEach(function (card, i) {
+    cards.forEach(function (card, i) {
 
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition =
-                'opacity .45s ease, transform .45s ease';
+        var el = card;
 
-            card.style.transitionDelay = (i * 80) + 'ms';
-        });
+        if (!(el instanceof HTMLElement)) {
+            return;
+        }
 
-        const observer = new IntersectionObserver(function (entries) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition =
+            'opacity .45s ease, transform .45s ease';
 
-            entries.forEach(function (entry) {
+        el.style.transitionDelay = (i * 80) + 'ms';
+    });
 
-                if (entry.isIntersecting) {
+    const observer = new IntersectionObserver(function (entries) {
 
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+        entries.forEach(function (entry) {
 
-                    observer.unobserve(entry.target);
+            if (entry.isIntersecting) {
+
+                var target = entry.target;
+
+                if (!(target instanceof HTMLElement)) {
+                    return;
                 }
 
-            });
+                target.style.opacity = '1';
+                target.style.transform = 'translateY(0)';
 
-        }, { threshold: 0.12 });
+                observer.unobserve(target);
+            }
 
-        cards.forEach(function (card) {
-            observer.observe(card);
         });
 
-    })();
+    }, {
+        threshold: 0.12
+    });
+
+    cards.forEach(function (card) {
+        observer.observe(card);
+    });
+
+})();
 </script>
 
 </asp:Content>
