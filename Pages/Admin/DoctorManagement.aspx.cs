@@ -8,12 +8,7 @@ namespace MediCare.Pages.Admin
 {
     public partial class DoctorManagement : System.Web.UI.Page
     {
-        private readonly string _connStr =
-              System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-        // ═════════════════════════════════════════════════════════════════════
-        #region Page Events
-        // ═════════════════════════════════════════════════════════════════════
+        private readonly string _connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -23,26 +18,13 @@ namespace MediCare.Pages.Admin
             }
         }
 
-        #endregion
-
-        // ═════════════════════════════════════════════════════════════════════
-        #region Data Loading
-        // ═════════════════════════════════════════════════════════════════════
-
         private void LoadDoctors(string searchTerm)
         {
             const string query = @"
-                SELECT
-                    d.DoctorId,
-                    d.FullName,
-                    d.Speciality,
-                    d.PhoneNumber,
-                    u.Email
-                FROM   Doctors d
-                JOIN   Users   u ON d.UserId = u.UserId
-                WHERE  (@Search = ''
-                        OR d.FullName   LIKE '%' + @Search + '%'
-                        OR d.Speciality LIKE '%' + @Search + '%')
+                SELECT d.DoctorId, d.FullName, d.Speciality, d.PhoneNumber, u.Email
+                FROM Doctors d
+                JOIN Users u ON d.UserId = u.UserId
+                WHERE (@Search = '' OR d.FullName LIKE '%' + @Search + '%' OR d.Speciality LIKE '%' + @Search + '%')
                 ORDER BY d.FullName";
 
             using (var conn = new SqlConnection(_connStr))
@@ -57,22 +39,10 @@ namespace MediCare.Pages.Admin
             }
         }
 
-        #endregion
-
-        // ═════════════════════════════════════════════════════════════════════
-        #region Search
-        // ═════════════════════════════════════════════════════════════════════
-
         protected void txtSearchDoctors_TextChanged(object sender, EventArgs e)
         {
             LoadDoctors(txtSearchDoctors.Text.Trim());
         }
-
-        #endregion
-
-        // ═════════════════════════════════════════════════════════════════════
-        #region Delete
-        // ═════════════════════════════════════════════════════════════════════
 
         protected void btnDelete_Click(object sender, EventArgs e)
         {
@@ -91,7 +61,7 @@ namespace MediCare.Pages.Admin
         {
             const string getUserId = "SELECT UserId FROM Doctors WHERE DoctorId = @DoctorId";
             const string deleteDoctor = "DELETE FROM Doctors WHERE DoctorId = @DoctorId";
-            const string deleteUser = "DELETE FROM Users   WHERE UserId   = @UserId";
+            const string deleteUser = "DELETE FROM Users WHERE UserId = @UserId";
 
             using (var conn = new SqlConnection(_connStr))
             {
@@ -100,25 +70,21 @@ namespace MediCare.Pages.Admin
                 {
                     try
                     {
-                        // 1. Get linked UserId
                         int userId;
                         using (var cmd = new SqlCommand(getUserId, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@DoctorId", doctorId);
                             var result = cmd.ExecuteScalar();
-                            if (result == null || result == DBNull.Value)
-                                throw new Exception("Doctor not found.");
+                            if (result == null || result == DBNull.Value) throw new Exception("Doctor not found.");
                             userId = Convert.ToInt32(result);
                         }
 
-                        // 2. Delete doctor row
                         using (var cmd = new SqlCommand(deleteDoctor, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@DoctorId", doctorId);
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 3. Delete linked user row
                         using (var cmd = new SqlCommand(deleteUser, conn, tx))
                         {
                             cmd.Parameters.AddWithValue("@UserId", userId);
@@ -137,12 +103,6 @@ namespace MediCare.Pages.Admin
             }
         }
 
-        #endregion
-
-        // ═════════════════════════════════════════════════════════════════════
-        #region UI Helpers
-        // ═════════════════════════════════════════════════════════════════════
-
         private void ShowSuccess(string message)
         {
             lblMessage.Text = message;
@@ -156,7 +116,5 @@ namespace MediCare.Pages.Admin
             lblMessage.CssClass = "mc-alert mc-alert--danger";
             lblMessage.Visible = true;
         }
-
-        #endregion
     }
 }
