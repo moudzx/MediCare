@@ -150,6 +150,15 @@ namespace MediCare
         protected global::System.Web.UI.WebControls.TextBox txtPatientWeight;
 
         /// <summary>
+        /// txtPatientPhone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPatientPhone;
+
+        /// <summary>
         /// txtDisability control.
         /// </summary>
         /// <remarks>
@@ -283,6 +292,33 @@ namespace MediCare
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDoctorAge;
+
+        /// <summary>
+        /// txtDoctorPhone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDoctorPhone;
+
+        /// <summary>
+        /// txtDoctorSpeciality control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDoctorSpeciality;
+
+        /// <summary>
+        /// txtDoctorClinicAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDoctorClinicAddress;
 
         /// <summary>
         /// fuDoctorCertificate control.

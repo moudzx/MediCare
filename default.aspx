@@ -238,65 +238,66 @@
     <!-- ══════════════════════════════════════════════════
          SECTION 4 — FEATURES
     ══════════════════════════════════════════════════ -->
- <section class="mc-features">
-    <div class="mc-container">
-        <div class="mc-features__grid">
-            <!-- Smart Reminders -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <section class="mc-features">
+        <div class="mc-container">
+            <div class="mc-features__grid">
+                <!-- Smart Reminders -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <h4>Smart Reminders</h4>
+                    <p>Never miss a dose. Get timely alerts for every medication on your schedule.</p>
                 </div>
-                <h4>Smart Reminders</h4>
-                <p>Never miss a dose. Get timely alerts for every medication on your schedule.</p>
-            </div>
 
-            <!-- Pill Inventory -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+                <!-- Pill Inventory -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+                    </div>
+                    <h4>Pill Inventory</h4>
+                    <p>Track remaining pills automatically and get refill alerts before you run out.</p>
                 </div>
-                <h4>Pill Inventory</h4>
-                <p>Track remaining pills automatically and get refill alerts before you run out.</p>
-            </div>
 
-            <!-- Doctor Connect -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                <!-- Doctor Connect -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </div>
+                    <h4>Doctor Connect</h4>
+                    <p>Share health data with your doctor securely. Better information, better care.</p>
                 </div>
-                <h4>Doctor Connect</h4>
-                <p>Share health data with your doctor securely. Better information, better care.</p>
-            </div>
 
-            <!-- Private & Secure -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <!-- Private & Secure -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h4>Private &amp; Secure</h4>
+                    <p>Your medical data is encrypted end-to-end. Full HIPAA-aligned privacy controls.</p>
                 </div>
-                <h4>Private &amp; Secure</h4>
-                <p>Your medical data is encrypted end-to-end. Full HIPAA-aligned privacy controls.</p>
-            </div>
 
-            <!-- Health Records -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <!-- Health Records -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <h4>Health Records</h4>
+                    <p>Store chronic diseases, family history, and vitals in one organized place.</p>
                 </div>
-                <h4>Health Records</h4>
-                <p>Store chronic diseases, family history, and vitals in one organized place.</p>
-            </div>
 
-            <!-- Any Device -->
-            <div class="mc-feature-card">
-                <div class="mc-feature-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                <!-- Any Device -->
+                <div class="mc-feature-card">
+                    <div class="mc-feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                    </div>
+                    <h4>Any Device</h4>
+                    <p>Access your health dashboard from desktop, tablet, or mobile — anywhere.</p>
                 </div>
-                <h4>Any Device</h4>
-                <p>Access your health dashboard from desktop, tablet, or mobile — anywhere.</p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
     <!-- ══════════════════════════════════════════════════
          SECTION 5 — PORTAL SELECTION + FORMS
     ══════════════════════════════════════════════════ -->
@@ -308,55 +309,57 @@
                 <p class="mc-section-sub">Whether you're a patient managing health or a doctor connecting with patients, we have the right tools for you.</p>
             </div>
 
-          <!-- Portal Selector Tabs -->
-<div class="mc-portal-tabs" role="tablist">
+            <!-- Portal Selector Tabs -->
+            <div class="mc-portal-tabs" role="tablist">
 
-    <button type="button"
-        class="mc-portal-tab mc-portal-tab--active"
-        id="tabPatient"
-        role="tab"
-        aria-selected="true"
-        aria-controls="panelPatient"
-        data-target="patient">
+                <button type="button"
+                    class="mc-portal-tab mc-portal-tab--active"
+                    id="tabPatient"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="panelPatient"
+                    data-target="patient">
 
-        <div class="mc-portal-tab__icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-            </svg>
-        </div>
+                    <div class="mc-portal-tab__icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
 
-        <div>
-            <strong>Patient Portal</strong>
-            <small>Manage your medications &amp; health</small>
-        </div>
+                    <div>
+                        <strong>Patient Portal</strong>
+                        <small>Manage your medications &amp; health</small>
+                    </div>
 
-    </button>
+                </button>
 
-    <button type="button"
-        class="mc-portal-tab"
-        id="tabDoctor"
-        role="tab"
-        aria-selected="false"
-        aria-controls="panelDoctor"
-        data-target="doctor">
+                <button type="button"
+                    class="mc-portal-tab"
+                    id="tabDoctor"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="panelDoctor"
+                    data-target="doctor">
 
-        <div class="mc-portal-tab__icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-        </div>
+                    <div class="mc-portal-tab__icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
 
-        <div>
-            <strong>Doctor Portal</strong>
-            <small>Connect with patients &amp; manage care</small>
-        </div>
+                    <div>
+                        <strong>Doctor Portal</strong>
+                        <small>Connect with patients &amp; manage care</small>
+                    </div>
 
-    </button>
+                </button>
 
-</div>
+            </div>
 
-            <!-- PATIENT SIGN UP FORM -->
+            <!-- ═══════════════════════════════════════
+                 PATIENT SIGN UP FORM
+            ═══════════════════════════════════════ -->
             <div class="mc-form-panel" id="panelPatient" role="tabpanel" aria-labelledby="tabPatient">
                 <div class="mc-form-card">
                     <div class="mc-form-card__header">
@@ -436,9 +439,16 @@
 
                         <div class="mc-form__row">
                             <div class="mc-form__group">
+                                <label class="mc-label">Phone Number</label>
+                                <asp:TextBox ID="txtPatientPhone" runat="server" CssClass="mc-input" TextMode="Phone" placeholder="+961 71 123 456" />
+                            </div>
+                            <div class="mc-form__group">
                                 <label class="mc-label">Disability (if any)</label>
                                 <asp:TextBox ID="txtDisability" runat="server" CssClass="mc-input" placeholder="e.g. Visual impairment, None" />
                             </div>
+                        </div>
+
+                        <div class="mc-form__row">
                             <div class="mc-form__group">
                                 <label class="mc-label">Chronic Disease (if any)</label>
                                 <asp:TextBox ID="txtChronicDisease" runat="server" CssClass="mc-input" placeholder="e.g. Diabetes Type 2, None" />
@@ -462,14 +472,16 @@
                         <asp:Label ID="lblPatientMessage" runat="server" CssClass="mc-form__message" Visible="false" />
 
                         <div class="mc-form__signin-link">
-    Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
-</div>
+                            Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
+                        </div>
 
                     </asp:Panel>
                 </div>
             </div>
 
-            <!-- DOCTOR SIGN UP FORM -->
+            <!-- ═══════════════════════════════════════
+                 DOCTOR SIGN UP FORM
+            ═══════════════════════════════════════ -->
             <div class="mc-form-panel mc-form-panel--hidden" id="panelDoctor" role="tabpanel" aria-labelledby="tabDoctor">
                 <div class="mc-form-card">
                     <div class="mc-form-card__header">
@@ -524,8 +536,24 @@
                             </div>
                         </div>
 
+                        <div class="mc-form__row">
+                            <div class="mc-form__group">
+                                <label class="mc-label">Phone Number</label>
+                                <asp:TextBox ID="txtDoctorPhone" runat="server" CssClass="mc-input" TextMode="Phone" placeholder="+961 71 123 456" />
+                            </div>
+                            <div class="mc-form__group">
+                                <label class="mc-label">Speciality</label>
+                                <asp:TextBox ID="txtDoctorSpeciality" runat="server" CssClass="mc-input" placeholder="e.g. Cardiology, General Practice" />
+                            </div>
+                        </div>
+
                         <div class="mc-form__group mc-form__group--full">
-                            <label class="mc-label">Medical Certificate <span class="mc-required">*</span></label>
+                            <label class="mc-label">Clinic Address</label>
+                            <asp:TextBox ID="txtDoctorClinicAddress" runat="server" CssClass="mc-input" placeholder="e.g. 14 Hamra St, Beirut" />
+                        </div>
+
+                        <div class="mc-form__group mc-form__group--full">
+                            <label class="mc-label">Certificate <span class="mc-required">*</span></label>
                             <div class="mc-upload-zone" id="uploadZone" role="button" tabindex="0">
                                 <div class="mc-upload-icon">
                                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1A9E5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -547,11 +575,6 @@
                                 ValidationGroup="DoctorGroup" CssClass="mc-error" ErrorMessage="Please upload your medical certificate." Display="Dynamic" />
                         </div>
 
-                        <div class="mc-doctor-notice">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A9E5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            <p>Your certificate will be reviewed by our medical team within <strong>24–48 hours</strong>. You'll receive an email confirmation once verified.</p>
-                        </div>
-
                         <div class="mc-form__footer">
                             <p class="mc-form__terms">By registering, you confirm all information is accurate and agree to our <a href="#">Terms of Service</a>.</p>
                             <asp:Button ID="btnDoctorSignUp" runat="server" Text="Apply as Doctor"
@@ -561,9 +584,10 @@
                         </div>
 
                         <asp:Label ID="lblDoctorMessage" runat="server" CssClass="mc-form__message" Visible="false" />
+
                         <div class="mc-form__signin-link">
-    Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
-</div>
+                            Already have an account? <a href="Pages/Account/Login.aspx">Sign in instead</a>
+                        </div>
 
                     </asp:Panel>
                 </div>
