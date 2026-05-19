@@ -75,53 +75,78 @@ namespace MediCare.Pages.Patient
             cardFoods.Visible = false;
         }
 
+        // Helper Method to dynamically extract PatientId from the authenticated UserId
+        private int GetPatientId(SqlConnection conn)
+        {
+            int userId = Convert.ToInt32(Session["UserId"]);
+            string sql = "SELECT PatientId FROM [dbo].[Patients] WHERE UserId = @UserId";
+
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToInt32(result);
+                }
+            }
+            return 0;
+        }
+
         private void SearchDoctors(string query)
         {
-            int patientId = Convert.ToInt32(Session["PatientId"]);
-
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"
-                SELECT
-                    d.DoctorId,
-                    d.FullName AS Name,
-                    d.Speciality AS Specialization,
-
-                    ISNULL(
-                    (
-                        SELECT TOP 1 Status
-                        FROM PatientDoctorConnections
-                        WHERE PatientId = @PatientId
-                        AND DoctorId = d.DoctorId
-                    ),
-                    'Not Connected'
-                    ) AS ConnectionStatus
-
-                FROM Doctors d
-
-                WHERE
-                    (
-                        @Query = ''
-                        OR d.FullName LIKE @Search
-                        OR d.Speciality LIKE @Search
-                    )
-
-                ORDER BY d.FullName";
-
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@PatientId", patientId);
-                    cmd.Parameters.AddWithValue("@Query", query);
-                    cmd.Parameters.AddWithValue("@Search", "%" + query + "%");
+                    conn.Open();
+                    // FIXED: Dynamic PatientId translation lookup
+                    int patientId = GetPatientId(conn);
 
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    if (patientId == 0) return;
 
-                    DataTable dt = new DataTable();
+                    string sql = @"
+                    SELECT
+                        d.DoctorId,
+                        d.FullName AS Name,
+                        d.Speciality AS Specialization,
+                        ISNULL(
+                        (
+                            SELECT TOP 1 Status
+                            FROM PatientDoctorConnections
+                            WHERE PatientId = @PatientId
+                            AND DoctorId = d.DoctorId
+                        ),
+                        'Not Connected'
+                        ) AS ConnectionStatus
+                    FROM Doctors d
+                    WHERE
+                        (
+                            @Query = ''
+                            OR d.FullName LIKE @Search
+                            OR d.Speciality LIKE @Search
+                        )
+                    ORDER BY d.FullName";
 
-                    da.Fill(dt);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@PatientId", patientId);
+                        cmd.Parameters.AddWithValue("@Query", query);
+                        cmd.Parameters.AddWithValue("@Search", "%" + query + "%");
 
-                    gvDoctors.DataSource = dt;
-                    gvDoctors.DataBind();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            gvDoctors.DataSource = dt;
+                            gvDoctors.DataBind();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lblSearchMsg.Text = "Error pulling directory records: " + ex.Message;
+                    lblSearchMsg.Visible = true;
                 }
             }
         }
@@ -135,16 +160,13 @@ namespace MediCare.Pages.Patient
                     atc AS Id,
                     name AS Name,
                     ingredients AS Description
-
                 FROM Medicine
-
                 WHERE
                     (
                         @Query = ''
                         OR name LIKE @Search
                         OR ingredients LIKE @Search
                     )
-
                 ORDER BY name";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -152,14 +174,13 @@ namespace MediCare.Pages.Patient
                     cmd.Parameters.AddWithValue("@Query", query);
                     cmd.Parameters.AddWithValue("@Search", "%" + query + "%");
 
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                    DataTable dt = new DataTable();
-
-                    da.Fill(dt);
-
-                    gvMedicines.DataSource = dt;
-                    gvMedicines.DataBind();
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        gvMedicines.DataSource = dt;
+                        gvMedicines.DataBind();
+                    }
                 }
             }
         }
@@ -175,15 +196,12 @@ namespace MediCare.Pages.Patient
                     protein AS Protein,
                     carbohydrate AS Carbs,
                     total_fat AS Fat
-
                 FROM Food
-
                 WHERE
                     (
                         @Query = ''
                         OR description LIKE @Search
                     )
-
                 ORDER BY description";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -191,26 +209,37 @@ namespace MediCare.Pages.Patient
                     cmd.Parameters.AddWithValue("@Query", query);
                     cmd.Parameters.AddWithValue("@Search", "%" + query + "%");
 
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                    DataTable dt = new DataTable();
-
-                    da.Fill(dt);
-
-                    gvFoods.DataSource = dt;
-                    gvFoods.DataBind();
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        gvFoods.DataSource = dt;
+                        gvFoods.DataBind();
+                    }
                 }
             }
         }
+
         protected void gvDoctors_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int doctorId = Convert.ToInt32(e.CommandArgument);
+            if (e.CommandName != "ConnectDoctor" && e.CommandName != "UndoConnect") return;
 
-            int patientId = Convert.ToInt32(Session["PatientId"]);
+            int doctorId = Convert.ToInt32(e.CommandArgument);
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                conn.Open();
+                try
+                {
+                    conn.Open();
+                    // FIXED: Lookup authentic profile assignment mapping sequence
+                    int patientId = GetPatientId(conn);
+
+                    if (patientId == 0)
+                    {
+                        lblSearchMsg.Text = "Error: Active profile could not be localized.";
+                        lblSearchMsg.Visible = true;
+                        return;
+                    }
 
                 if (e.CommandName == "ConnectDoctor")
                 {
@@ -220,63 +249,62 @@ namespace MediCare.Pages.Patient
                                     WHERE PatientId = @PatientId
                                     AND DoctorId = @DoctorId";
 
-                    SqlCommand checkCmd = new SqlCommand(checkSql, conn);
-
-                    checkCmd.Parameters.AddWithValue("@PatientId", patientId);
-                    checkCmd.Parameters.AddWithValue("@DoctorId", doctorId);
-
-                    int exists = Convert.ToInt32(checkCmd.ExecuteScalar());
+                        using (SqlCommand checkCmd = new SqlCommand(checkSql, conn))
+                        {
+                            checkCmd.Parameters.AddWithValue("@PatientId", patientId);
+                            checkCmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                            int exists = Convert.ToInt32(checkCmd.ExecuteScalar());
 
                     if (exists == 0)
                     {
                         string insertSql = @"
-                                        INSERT INTO PatientDoctorConnections
-                                        (
-                                            PatientId,
-                                            DoctorId,
-                                            Status
-                                        )
-                                        VALUES
-                                        (
-                                            @PatientId,
-                                            @DoctorId,
-                                            'Pending'
-                                        )";
+                INSERT INTO PatientDoctorConnections
+                (
+                    PatientId,
+                    DoctorId,
+                    Status
+                )
+                VALUES
+                (
+                    @PatientId,
+                    @DoctorId,
+                    'Pending'
+                )";
 
-                        SqlCommand insertCmd =
-                            new SqlCommand(insertSql, conn);
+                                using (SqlCommand insertCmd = new SqlCommand(insertSql, conn))
+                                {
+                                    insertCmd.Parameters.AddWithValue("@PatientId", patientId);
+                                    insertCmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                                    insertCmd.ExecuteNonQuery();
+                                }
 
-                        insertCmd.Parameters.AddWithValue("@PatientId", patientId);
-                        insertCmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                                lblSearchMsg.Text = "Connection request sent successfully.";
+                                lblSearchMsg.Visible = true;
+                            }
+                        }
+                    }
+                    else if (e.CommandName == "UndoConnect")
+                    {
+                        string deleteSql = @"
+                            DELETE FROM PatientDoctorConnections
+                            WHERE PatientId = @PatientId
+                            AND DoctorId = @DoctorId
+                            AND Status = 'Pending'";
 
-                        insertCmd.ExecuteNonQuery();
+                        using (SqlCommand deleteCmd = new SqlCommand(deleteSql, conn))
+                        {
+                            deleteCmd.Parameters.AddWithValue("@PatientId", patientId);
+                            deleteCmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                            deleteCmd.ExecuteNonQuery();
+                        }
 
-                        lblSearchMsg.Text =
-                            "Connection request sent successfully.";
-
+                        lblSearchMsg.Text = "Connection request cancelled.";
                         lblSearchMsg.Visible = true;
                     }
                 }
-
-                else if (e.CommandName == "UndoConnect")
+                catch (Exception ex)
                 {
-                    string deleteSql = @"
-            DELETE FROM PatientDoctorConnections
-            WHERE PatientId = @PatientId
-            AND DoctorId = @DoctorId
-            AND Status = 'Pending'";
-
-                    SqlCommand deleteCmd =
-                        new SqlCommand(deleteSql, conn);
-
-                    deleteCmd.Parameters.AddWithValue("@PatientId", patientId);
-                    deleteCmd.Parameters.AddWithValue("@DoctorId", doctorId);
-
-                    deleteCmd.ExecuteNonQuery();
-
-                    lblSearchMsg.Text =
-                        "Connection request cancelled.";
-
+                    lblSearchMsg.Text = "Transaction process error: " + ex.Message;
                     lblSearchMsg.Visible = true;
                 }
             }
@@ -301,54 +329,45 @@ namespace MediCare.Pages.Patient
             gvFoods.PageIndex = e.NewPageIndex;
             LoadAllData();
         }
+
         protected void gvDoctors_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                string status =
-                    DataBinder.Eval(e.Row.DataItem, "ConnectionStatus").ToString();
-
-                Button btnConnect =
-                    (Button)e.Row.FindControl("btnConnect");
+                string status = DataBinder.Eval(e.Row.DataItem, "ConnectionStatus").ToString();
+                Button btnConnect = (Button)e.Row.FindControl("btnConnect");
 
                 if (btnConnect != null)
                 {
+                    // FIXED: Clean validation matching command behavior
                     switch (status)
                     {
                         case "Pending":
-
                             btnConnect.Text = "Undo Request";
+                            btnConnect.CommandName = "UndoConnect";
                             btnConnect.Enabled = true;
-                            btnConnect.CssClass =
-                                "sea-btn sea-btn--small sea-btn--danger";
-
+                            btnConnect.CssClass = "sea-btn sea-btn--small sea-btn--danger";
                             break;
 
                         case "Accepted":
-
                             btnConnect.Text = "Connected";
+                            btnConnect.CommandName = "";
                             btnConnect.Enabled = false;
-                            btnConnect.CssClass =
-                                "sea-btn sea-btn--small sea-btn--green";
-
+                            btnConnect.CssClass = "sea-btn sea-btn--small sea-btn--green";
                             break;
 
                         case "Rejected":
-
                             btnConnect.Text = "Rejected";
+                            btnConnect.CommandName = "";
                             btnConnect.Enabled = false;
-                            btnConnect.CssClass =
-                                "sea-btn sea-btn--small sea-btn--gray";
-
+                            btnConnect.CssClass = "sea-btn sea-btn--small sea-btn--gray";
                             break;
 
                         default:
-
                             btnConnect.Text = "Connect";
+                            btnConnect.CommandName = "ConnectDoctor";
                             btnConnect.Enabled = true;
-                            btnConnect.CssClass =
-                                "sea-btn sea-btn--small sea-btn--blue";
-
+                            btnConnect.CssClass = "sea-btn sea-btn--small sea-btn--blue";
                             break;
                     }
                 }

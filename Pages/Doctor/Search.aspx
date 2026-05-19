@@ -1,4 +1,5 @@
-﻿<%@ Page Title="Search – MediCare" 
+﻿<%-- Search.aspx --%>
+<%@ Page Title="Search – MediCare" 
     Language="C#" 
     MasterPageFile="~/MasterPage/DoctorSite.Master" 
     AutoEventWireup="true" 
@@ -13,7 +14,6 @@
 
 <div class="sea-root">
 
-    <!-- HEADER -->
     <div class="sea-page-header">
         <div class="sea-page-header__left">
             <div class="sea-page-header__icon">
@@ -28,12 +28,11 @@
         </div>
     </div>
 
-    <!-- SEARCH BAR -->
     <div class="sea-toolbar">
         <div class="sea-search-panel">
 
             <div class="sea-search-field">
-                <label class="sea-label" for="ddlSearchScope">
+                <label class="sea-label" for="<%= ddlSearchScope.ClientID %>">
                     Search scope
                 </label>
                 <asp:DropDownList ID="ddlSearchScope" runat="server" CssClass="sea-select">
@@ -44,7 +43,7 @@
             </div>
 
             <div class="sea-search-field sea-search-field--grow">
-                <label class="sea-label" for="txtSearchQuery">
+                <label class="sea-label" for="<%= txtSearchQuery.ClientID %>">
                     Search text
                 </label>
                 <div class="sea-search-input-wrap">
@@ -56,7 +55,7 @@
             </div>
 
             <div class="sea-search-field sea-search-field--btn">
-                <label class="sea-label sea-label--ghost">.</label>
+                <span class="sea-label sea-label--ghost" style="visibility:hidden; display:block;">.</span>
                 <asp:Button ID="btnSearch" runat="server"
                     CssClass="sea-btn sea-btn--primary"
                     Text="Search"
@@ -66,14 +65,12 @@
         </div>
     </div>
 
-    <!-- Message -->
     <asp:Panel ID="pnlMessage" runat="server" CssClass="sea-inline-msg" Visible="false">
         <asp:Label ID="lblMessage" runat="server" />
     </asp:Panel>
 
     <div class="sea-results-grid">
 
-        <!-- MEDICINES -->
         <div class="sea-card" id="cardMedicines" runat="server">
             <div class="sea-card__header">
                 <div>
@@ -89,34 +86,25 @@
                     AutoGenerateColumns="False"
                     ShowHeader="True"
                     GridLines="None"
+                    AllowPaging="True"
+                    PageSize="10"
                     EmptyDataText="No medicines found."
-                    OnRowCommand="gvMedicines_RowCommand">
+                    OnPageIndexChanging="gvMedicines_PageIndexChanging">
                     <Columns>
+                        <asp:BoundField DataField="id" HeaderText="ID" />
+                        <asp:BoundField DataField="atc" HeaderText="ATC Code" />
                         <asp:BoundField DataField="name" HeaderText="Name" />
-                        <asp:BoundField DataField="ingredients" HeaderText="Description" />
-                        <asp:TemplateField HeaderText="Pills">
-                            <ItemTemplate>
-                                <asp:TextBox ID="txtPillCount" runat="server"
-                                    CssClass="pill-input"
-                                    TextMode="Number"
-                                    Width="60px" />
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                        <asp:TemplateField HeaderText="">
-                            <ItemTemplate>
-                                <asp:Button ID="btnAddMedicine" runat="server"
-                                    Text="Add"
-                                    CssClass="sea-btn sea-btn--small sea-btn--green"
-                                    CommandName="AddMedicine"
-                                    CommandArgument='<%# Eval("id") %>' />
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField DataField="b_g" HeaderText="B/G" />
+                        <asp:BoundField DataField="ingredients" HeaderText="Ingredients" />
+                        <asp:BoundField DataField="dosage" HeaderText="Dosage" />
+                        <asp:BoundField DataField="form" HeaderText="Form" />
+                        <asp:BoundField DataField="price" HeaderText="Price" />
                     </Columns>
+                    <PagerStyle CssClass="sea-pager" />
                 </asp:GridView>
             </div>
         </div>
 
-        <!-- FOODS -->
         <div class="sea-card" id="cardFoods" runat="server">
             <div class="sea-card__header">
                 <div>
@@ -132,24 +120,29 @@
                     AutoGenerateColumns="False"
                     ShowHeader="True"
                     GridLines="None"
+                    AllowPaging="True"
+                    PageSize="10"
                     EmptyDataText="No foods found."
-                    OnRowCommand="gvFoods_RowCommand">
+                    OnPageIndexChanging="gvFoods_PageIndexChanging">
                     <Columns>
-                        <asp:BoundField DataField="description" HeaderText="Name" />
+                        <asp:BoundField DataField="id" HeaderText="ID" />
+                        <asp:BoundField DataField="description" HeaderText="Description" />
                         <asp:BoundField DataField="calories" HeaderText="Calories" />
-                        <asp:BoundField DataField="protein" HeaderText="Protein" />
-                        <asp:BoundField DataField="carbohydrate" HeaderText="Carbs" />
-                        <asp:BoundField DataField="total_fat" HeaderText="Fat" />
-                        <asp:TemplateField HeaderText="">
-                            <ItemTemplate>
-                                <asp:Button ID="btnAddFood" runat="server"
-                                    Text="Add"
-                                    CssClass="sea-btn sea-btn--small sea-btn--purple"
-                                    CommandName="AddFood"
-                                    CommandArgument='<%# Eval("id") %>' />
-                            </ItemTemplate>
-                        </asp:TemplateField>
+                        <asp:BoundField DataField="protein" HeaderText="Protein (g)" />
+                        <asp:BoundField DataField="total_fat" HeaderText="Total Fat (g)" />
+                        <asp:BoundField DataField="carbohydrate" HeaderText="Carbs (g)" />
+                        <asp:BoundField DataField="sodium" HeaderText="Sodium (mg)" />
+                        <asp:BoundField DataField="saturated_fat" HeaderText="Saturated Fat (g)" />
+                        <asp:BoundField DataField="cholesterol" HeaderText="Cholesterol (mg)" />
+                        <asp:BoundField DataField="sugar" HeaderText="Sugar (g)" />
+                        <asp:BoundField DataField="calcium" HeaderText="Calcium (mg)" />
+                        <asp:BoundField DataField="iron" HeaderText="Iron (mg)" />
+                        <asp:BoundField DataField="potassium" HeaderText="Potassium (mg)" />
+                        <asp:BoundField DataField="vitamin_c" HeaderText="Vitamin C (mg)" />
+                        <asp:BoundField DataField="vitamin_e" HeaderText="Vitamin E (mg)" />
+                        <asp:BoundField DataField="vitamin_d" HeaderText="Vitamin D (mcg)" />
                     </Columns>
+                    <PagerStyle CssClass="sea-pager" />
                 </asp:GridView>
             </div>
         </div>
