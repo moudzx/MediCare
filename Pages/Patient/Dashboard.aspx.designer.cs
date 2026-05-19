@@ -51,76 +51,76 @@ namespace MediCare.Patient
         protected global::System.Web.UI.WebControls.Label lblPatientStatus;
 
         /// <summary>
-        /// txtHeight control.
+        /// lblHeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtHeight;
+        protected global::System.Web.UI.WebControls.Label lblHeight;
 
         /// <summary>
-        /// txtWeight control.
+        /// lblWeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtWeight;
+        protected global::System.Web.UI.WebControls.Label lblWeight;
 
         /// <summary>
-        /// ddlGender control.
+        /// lblGender control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ddlGender;
+        protected global::System.Web.UI.WebControls.Label lblGender;
 
         /// <summary>
-        /// ddlBloodType control.
+        /// lblBloodType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ddlBloodType;
+        protected global::System.Web.UI.WebControls.Label lblBloodType;
 
         /// <summary>
-        /// txtAge control.
+        /// lblAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtAge;
+        protected global::System.Web.UI.WebControls.Label lblAge;
 
         /// <summary>
-        /// txtDisease control.
+        /// lblDisease control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtDisease;
+        protected global::System.Web.UI.WebControls.Label lblDisease;
 
         /// <summary>
-        /// txtDisability control.
+        /// lblDisability control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtDisability;
+        protected global::System.Web.UI.WebControls.Label lblDisability;
 
         /// <summary>
-        /// txtFamilyHistory control.
+        /// lblFamilyHistory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label txtFamilyHistory;
+        protected global::System.Web.UI.WebControls.Label lblFamilyHistory;
 
         /// <summary>
         /// lblHealthMessage control.
@@ -141,24 +141,6 @@ namespace MediCare.Patient
         protected global::System.Web.UI.WebControls.Label lblDoseCount;
 
         /// <summary>
-        /// dpmArc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dpmArc;
-
-        /// <summary>
-        /// lblDosePct control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDosePct;
-
-        /// <summary>
         /// gvDoses control.
         /// </summary>
         /// <remarks>
@@ -175,15 +157,6 @@ namespace MediCare.Patient
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblDoseSummary;
-
-        /// <summary>
-        /// gvInventory control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvInventory;
 
         /// <summary>
         /// gvDoctors control.

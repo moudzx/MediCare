@@ -9,7 +9,6 @@
 <asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
     <div class="sea-root">
 
-        <!-- HEADER -->
         <div class="sea-page-header">
             <div class="sea-page-header__left">
                 <div class="sea-page-header__icon">
@@ -25,7 +24,6 @@
             </div>
         </div>
 
-        <!-- FORM CARD -->
         <div class="sea-card">
             <div class="sea-card__header">
                 <h2 class="sea-card__title">Schedule Details</h2>
@@ -34,7 +32,6 @@
 
                 <asp:Label ID="lblMessage" runat="server" CssClass="sea-inline-msg" Visible="false" />
 
-                <!-- Date Row -->
                 <div class="med-grid">
                     <div class="med-field">
                         <label class="med-label">Start Date</label>
@@ -46,7 +43,6 @@
                     </div>
                 </div>
 
-                <!-- Frequency & Pills Row -->
                 <div class="med-grid">
                     <div class="med-field">
                         <label class="med-label">Frequency</label>
@@ -65,7 +61,6 @@
                     </div>
                 </div>
 
-                <!-- Time & Meal Row -->
                 <div class="med-grid">
                     <div class="med-field">
                         <label class="med-label">Time</label>
@@ -82,13 +77,11 @@
                     </div>
                 </div>
 
-                <!-- Reminder Checkbox -->
                 <div class="med-check">
                     <asp:CheckBox ID="chkReminder" runat="server" />
                     <label for="<%= chkReminder.ClientID %>">Enable reminders</label>
                 </div>
 
-                <!-- Buttons -->
                 <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
                     <asp:Button ID="btnCancel" runat="server" Text="Cancel"
                         CssClass="sea-btn sea-btn--gray" OnClick="btnCancel_Click" />
