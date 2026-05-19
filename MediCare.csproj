@@ -103,18 +103,18 @@
     <Compile Include="MasterPage\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Account\AdminProfile.aspx.cs">
+    <Compile Include="Pages\Admin\AdminProfile.aspx.cs">
       <DependentUpon>AdminProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Account\AdminProfile.aspx.designer.cs">
+    <Compile Include="Pages\Admin\AdminProfile.aspx.designer.cs">
       <DependentUpon>AdminProfile.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Account\DoctorProfile.aspx.cs">
+    <Compile Include="Pages\Doctor\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Account\DoctorProfile.aspx.designer.cs">
+    <Compile Include="Pages\Doctor\DoctorProfile.aspx.designer.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Account\ForgotPassword.aspx.cs">
@@ -271,6 +271,7 @@
     <Content Include="css\DcSearch.css" />
     <Content Include="css\default.css" />
     <Content Include="css\DoctorProfile.css" />
+    <Content Include="css\DrMaster.css" />
     <Content Include="css\ForgetPassword.css" />
     <Content Include="css\ManageMedication.css" />
     <Content Include="css\ManageNutrition.css" />
@@ -289,21 +290,19 @@
     <Content Include="Database\lebanon_drugs_database.csv" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="js\DashboardDc.js" />
     <Content Include="js\DcSearch.js" />
+    <Content Include="js\def.js" />
     <Content Include="js\default.js" />
     <Content Include="js\DoctorProfile.js" />
-    <Content Include="js\ForgetPassword.js" />
     <Content Include="js\ManageMedication.js" />
     <Content Include="js\ManageNutrition.js" />
     <Content Include="js\mealCalculator.js" />
-    <Content Include="js\NewPassword.js" />
     <Content Include="js\PatientList.js" />
     <Content Include="js\profile.js" />
     <Content Include="MasterPage\PatientSite.Master" />
     <Content Include="MasterPage\Site.Master" />
-    <Content Include="Pages\Account\AdminProfile.aspx" />
-    <Content Include="Pages\Account\DoctorProfile.aspx" />
+    <Content Include="Pages\Admin\AdminProfile.aspx" />
+    <Content Include="Pages\Doctor\DoctorProfile.aspx" />
     <Content Include="Pages\Account\ForgotPassword.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
     <Content Include="Pages\Account\NewPassword.aspx" />
