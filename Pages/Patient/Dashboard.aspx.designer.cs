@@ -51,76 +51,94 @@ namespace MediCare.Patient
         protected global::System.Web.UI.WebControls.Label lblPatientStatus;
 
         /// <summary>
-        /// lblHeight control.
+        /// btnSaveHealth control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblHeight;
+        protected global::System.Web.UI.WebControls.Button btnSaveHealth;
 
         /// <summary>
-        /// lblWeight control.
+        /// txtHeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblWeight;
+        protected global::System.Web.UI.WebControls.TextBox txtHeight;
 
         /// <summary>
-        /// lblCalories control.
+        /// txtWeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCalories;
+        protected global::System.Web.UI.WebControls.TextBox txtWeight;
 
         /// <summary>
-        /// lblBloodType control.
+        /// ddlGender control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblBloodType;
+        protected global::System.Web.UI.WebControls.DropDownList ddlGender;
 
         /// <summary>
-        /// lblAge control.
+        /// ddlBloodType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAge;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBloodType;
 
         /// <summary>
-        /// lblDisease control.
+        /// txtAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDisease;
+        protected global::System.Web.UI.WebControls.TextBox txtAge;
 
         /// <summary>
-        /// lblDisability control.
+        /// txtDisease control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDisability;
+        protected global::System.Web.UI.WebControls.TextBox txtDisease;
 
         /// <summary>
-        /// lblFamilyHistory control.
+        /// txtDisability control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFamilyHistory;
+        protected global::System.Web.UI.WebControls.TextBox txtDisability;
+
+        /// <summary>
+        /// txtFamilyHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFamilyHistory;
+
+        /// <summary>
+        /// lblHealthMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblHealthMessage;
 
         /// <summary>
         /// lblDoseCount control.
