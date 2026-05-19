@@ -555,6 +555,7 @@
 }
 
 /* ── 9. Modal ────────────────────────────────────────────────────── */
+/* Hidden by default */
 .mm-modal-overlay {
     display: none;
     position: fixed;
@@ -568,6 +569,7 @@
     padding: 20px;
 }
 
+/* Shown when open class is added */
 .mm-modal-overlay--open {
     display: flex;
     animation: mm-overlay-in .2s ease both;

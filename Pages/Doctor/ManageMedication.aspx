@@ -6,281 +6,554 @@
     Inherits="MediCare.Pages.Doctor.ManageMedication" %>
 
 <asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
+
     <link rel="stylesheet" href="/css/ManageMedication.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
 </asp:Content>
 
-<asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="PageContent"
+    ContentPlaceHolderID="MainContent"
+    runat="server">
 
-<!-- ═══════════════════════════════════════════════════════════
-     MANAGE MEDICATION PAGE ROOT
-═══════════════════════════════════════════════════════════ -->
-<div class="mm-root">
+    <!-- ROOT -->
+    <div class="mm-root">
 
-    <!-- ── PAGE HEADER ────────────────────────────────────────── -->
-    <div class="mm-page-header">
-        <div class="mm-page-header__left">
-            <div class="mm-page-header__icon">
-                <i class="fa-solid fa-pills"></i>
-            </div>
-            <div>
-                <h1 class="mm-page-header__title">Manage Medication</h1>
-                <p class="mm-page-header__sub">
-                    Patient: <strong id="mmPatientName">Sarah Johnson</strong>
-                    &nbsp;·&nbsp; ID: <span id="mmPatientId">PT-20248819</span>
-                </p>
-            </div>
-        </div>
-        <div class="mm-page-header__right">
-            <div class="mm-header-stat">
-                <span class="mm-header-stat__num" id="statTotal">0</span>
-                <span class="mm-header-stat__label">Total Meds</span>
-            </div>
-            <div class="mm-header-stat">
-                <span class="mm-header-stat__num" id="statActive">0</span>
-                <span class="mm-header-stat__label">Active</span>
-            </div>
-            <button class="mm-btn mm-btn--primary" id="btnOpenAddMed" onclick="openAddModal()">
-                <i class="fa-solid fa-plus"></i> Add Medication
-            </button>
-        </div>
-    </div>
+        <!-- HEADER -->
+        <div class="mm-page-header">
 
-    <!-- ── FILTER / SEARCH BAR ────────────────────────────────── -->
-    <div class="mm-toolbar">
-        <div class="mm-search-wrap">
-            <i class="fa-solid fa-magnifying-glass mm-search-icon"></i>
-            <input type="text" id="mmSearchInput" class="mm-search-input"
-                placeholder="Search medications..."
-                oninput="filterMedications(this.value)" />
-        </div>
-        <div class="mm-toolbar__filters">
-            <button class="mm-filter-btn mm-filter-btn--active" onclick="setFilter('all', this)">All</button>
-            <button class="mm-filter-btn" onclick="setFilter('active', this)">Active</button>
-            <button class="mm-filter-btn" onclick="setFilter('completed', this)">Completed</button>
-        </div>
-    </div>
+            <div class="mm-page-header__left">
 
-    <!-- ── MEDICATIONS TABLE CARD ──────────────────────────────── -->
-    <div class="mm-card">
-        <div class="mm-card__header">
-            <div class="mm-card__title-group">
-                <i class="fa-solid fa-clipboard-list mm-card__hdr-icon"></i>
+                <div class="mm-page-header__icon">
+                    <i class="fa-solid fa-pills"></i>
+                </div>
+
                 <div>
-                    <h2 class="mm-card__title">Current Medications</h2>
-                    <p class="mm-card__sub">Prescribed medications for this patient</p>
-                </div>
-            </div>
-            <span class="mm-count-badge" id="medCountBadge">0 medications</span>
-        </div>
 
-        <!-- Table wrapper (scrollable on mobile) -->
-        <div class="mm-table-wrap">
-            <table class="mm-table" id="mmTable">
-                <thead>
-                    <tr class="mm-table__head">
-                        <th><i class="fa-solid fa-pills"></i> Medication</th>
-                        <th><i class="fa-solid fa-weight-scale"></i> Dosage</th>
-                        <th><i class="fa-solid fa-clock"></i> Frequency</th>
-                        <th><i class="fa-solid fa-calendar-days"></i> Duration</th>
-                        <th><i class="fa-solid fa-circle-dot"></i> Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="mmTableBody">
-                    <!-- Filled by JavaScript -->
-                </tbody>
-            </table>
+                    <h1 class="mm-page-header__title">
+                        Manage Medication
+                    </h1>
 
-            <!-- Empty state -->
-            <div class="mm-empty" id="mmEmpty" style="display:none;">
-                <div class="mm-empty__icon"><i class="fa-solid fa-pills"></i></div>
-                <p class="mm-empty__text">No medications found.</p>
-                <p class="mm-empty__sub">Click "Add Medication" to prescribe a new medication.</p>
-            </div>
-        </div>
-    </div>
+                    <p class="mm-page-header__sub">
 
-    <!-- ── MEDICATION SUMMARY CARDS ────────────────────────────── -->
-    <div class="mm-summary-grid" id="mmSummaryGrid">
-        <!-- Filled by JavaScript -->
-    </div>
+                        Patient:
 
-</div>
-<!-- end mm-root -->
+                        <strong>
+                            <asp:Label ID="lblPatientName"
+                                runat="server"
+                                Text="Patient Name" />
+                        </strong>
 
-<!-- ═══════════════════════════════════════════════════════════
-     ADD MEDICATION MODAL
-═══════════════════════════════════════════════════════════ -->
-<div class="mm-modal-overlay" id="addMedModal" onclick="handleOverlayClick(event,'addMedModal')">
-    <div class="mm-modal" role="dialog" aria-modal="true" aria-label="Add Medication">
+                        &nbsp;•&nbsp;
 
-        <!-- Step 1: Search -->
-        <div id="modalStep1">
-            <div class="mm-modal__header">
-                <div class="mm-modal__title-group">
-                    <div class="mm-modal__icon mm-modal__icon--blue">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <div>
-                        <h3 class="mm-modal__title">Search Medication</h3>
-                        <p class="mm-modal__sub">Type to search the medication database</p>
-                    </div>
-                </div>
-                <button class="mm-modal__close" onclick="closeAddModal()" aria-label="Close">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+                        <asp:Label ID="lblPatientInfo"
+                            runat="server"
+                            Text="Gender • Blood Type" />
 
-            <div class="mm-modal__body">
-                <div class="mm-modal-search-wrap">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="modalSearchInput" class="mm-modal-search"
-                        placeholder="Search medication name..."
-                        oninput="searchMedications(this.value)"
-                        autocomplete="off" />
-                </div>
-
-                <!-- Search results list -->
-                <div class="mm-search-results" id="modalSearchResults">
-                    <p class="mm-search-hint">
-                        <i class="fa-solid fa-circle-info"></i>
-                        Start typing to search from the medication database.
-                        <!-- *** DB HOOK: Replace sample data with API call to medication DB *** -->
                     </p>
+
                 </div>
+
             </div>
+
+            <div class="mm-page-header__right">
+
+                <div class="mm-header-stat">
+
+                    <asp:Label ID="lblTotalMeds"
+                        runat="server"
+                        CssClass="mm-header-stat__num"
+                        Text="0" />
+
+                    <span class="mm-header-stat__label">
+                        Total Meds
+                    </span>
+
+                </div>
+
+                <div class="mm-header-stat">
+
+                    <asp:Label ID="lblActiveMeds"
+                        runat="server"
+                        CssClass="mm-header-stat__num"
+                        Text="0" />
+
+                    <span class="mm-header-stat__label">
+                        Active
+                    </span>
+
+                </div>
+
+                <div class="mm-header-stat">
+
+                    <asp:Label ID="lblCompletedMeds"
+                        runat="server"
+                        CssClass="mm-header-stat__num"
+                        Text="0" />
+
+                    <span class="mm-header-stat__label">
+                        Completed
+                    </span>
+
+                </div>
+
+                <asp:Button ID="btnOpenAddModal"
+                    runat="server"
+                    Text="Add Medication"
+                    CssClass="mm-btn mm-btn--primary"
+                    OnClick="btnOpenAddModal_Click" />
+
+            </div>
+
         </div>
 
-        <!-- Step 2: Set dosage / frequency / duration -->
-        <div id="modalStep2" style="display:none;">
-            <div class="mm-modal__header">
-                <div class="mm-modal__title-group">
-                    <div class="mm-modal__icon mm-modal__icon--green">
-                        <i class="fa-solid fa-prescription-bottle-medical"></i>
-                    </div>
+        <!-- TOOLBAR -->
+        <div class="mm-toolbar">
+
+            <!-- SEARCH -->
+            <div class="mm-search-wrap">
+
+                <i class="fa-solid fa-magnifying-glass mm-search-icon"></i>
+
+                <asp:TextBox ID="txtSearch"
+                    runat="server"
+                    CssClass="mm-search-input"
+                    placeholder="Search medications..."
+                    AutoPostBack="true"
+                    OnTextChanged="txtSearch_TextChanged" />
+
+            </div>
+
+            <!-- FILTER -->
+            <div class="mm-toolbar__filters">
+
+                <asp:DropDownList ID="ddlStatus"
+                    runat="server"
+                    CssClass="mm-input mm-select"
+                    AutoPostBack="true"
+                    OnSelectedIndexChanged="ddlStatus_SelectedIndexChanged">
+
+                    <asp:ListItem Value="">
+                        All
+                    </asp:ListItem>
+
+                    <asp:ListItem Value="Active">
+                        Active
+                    </asp:ListItem>
+
+                    <asp:ListItem Value="Completed">
+                        Completed
+                    </asp:ListItem>
+
+                    <asp:ListItem Value="Stopped">
+                        Stopped
+                    </asp:ListItem>
+
+                </asp:DropDownList>
+
+                <asp:Button ID="btnClearSearch"
+                    runat="server"
+                    Text="Clear"
+                    CssClass="mm-btn mm-btn--ghost"
+                    OnClick="btnClearSearch_Click" />
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="mm-card">
+
+            <!-- CARD HEADER -->
+            <div class="mm-card__header">
+
+                <div class="mm-card__title-group">
+
+                    <i class="fa-solid fa-clipboard-list mm-card__hdr-icon"></i>
+
                     <div>
-                        <h3 class="mm-modal__title">Set Prescription Details</h3>
-                        <p class="mm-modal__sub" id="step2SelectedMed">Medication selected</p>
+
+                        <h2 class="mm-card__title">
+                            Current Medications
+                        </h2>
+
+                        <p class="mm-card__sub">
+                            Prescribed medications for this patient
+                        </p>
+
                     </div>
+
                 </div>
-                <button class="mm-modal__close" onclick="closeAddModal()" aria-label="Close">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+
+                <asp:Label ID="lblMedicationCount"
+                    runat="server"
+                    CssClass="mm-count-badge"
+                    Text="0 medication(s)" />
+
             </div>
 
+            <!-- TABLE -->
+            <div class="mm-table-wrap">
+
+                <table class="mm-table">
+
+                    <thead>
+
+                        <tr class="mm-table__head">
+
+                            <th>
+                                <i class="fa-solid fa-pills"></i>
+                                Medication
+                            </th>
+
+                            <th>
+                                <i class="fa-solid fa-weight-scale"></i>
+                                Dosage
+                            </th>
+
+                            <th>
+                                <i class="fa-solid fa-clock"></i>
+                                Frequency
+                            </th>
+
+                            <th>
+                                <i class="fa-solid fa-calendar-days"></i>
+                                Duration
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <asp:Repeater ID="rptMedications"
+                            runat="server"
+                            OnItemCommand="rptMedications_ItemCommand">
+
+                            <ItemTemplate>
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            <%# Eval("MedicineName") %>
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+                                        <%# Eval("Dosage") %>
+                                    </td>
+
+                                    <td>
+                                        <%# Eval("Frequency") %>
+                                    </td>
+
+                                    <td>
+                                        <%# Eval("Duration") %>
+                                    </td>
+
+                                    <td>
+
+                                        <span class='mm-status mm-status--<%# Eval("Status").ToString().ToLower() %>'>
+
+                                            <%# Eval("Status") %>
+
+                                        </span>
+
+                                    </td>
+
+                                    <td class="mm-actions">
+
+                                        <asp:LinkButton ID="btnComplete"
+                                            runat="server"
+                                            CssClass="mm-btn mm-btn--sm mm-btn--green"
+                                            CommandName="CompleteMedication"
+                                            CommandArgument='<%# Eval("PatientMedicationId") %>'>
+
+                                            Complete
+
+                                        </asp:LinkButton>
+
+                                        <asp:LinkButton ID="btnStop"
+                                            runat="server"
+                                            CssClass="mm-btn mm-btn--sm mm-btn--orange"
+                                            CommandName="StopMedication"
+                                            CommandArgument='<%# Eval("PatientMedicationId") %>'>
+
+                                            Stop
+
+                                        </asp:LinkButton>
+
+                                        <asp:LinkButton ID="btnDelete"
+                                            runat="server"
+                                            CssClass="mm-btn mm-btn--sm mm-btn--danger"
+                                            CommandName="DeleteMedication"
+                                            CommandArgument='<%# Eval("PatientMedicationId") %>'
+                                            OnClientClick="return confirm('Delete medication?');">
+
+                                            Delete
+
+                                        </asp:LinkButton>
+
+                                    </td>
+
+                                </tr>
+
+                            </ItemTemplate>
+
+                        </asp:Repeater>
+
+                    </tbody>
+
+                </table>
+
+                <!-- EMPTY -->
+                <asp:Panel ID="pnlEmpty"
+                    runat="server"
+                    CssClass="mm-empty"
+                    Visible="false">
+
+                    <div class="mm-empty__icon">
+                        <i class="fa-solid fa-pills"></i>
+                    </div>
+
+                    <p class="mm-empty__text">
+                        No medications found.
+                    </p>
+
+                    <p class="mm-empty__sub">
+                        Add a medication to begin.
+                    </p>
+
+                </asp:Panel>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ADD MODAL -->
+    <asp:Panel ID="pnlAddModal"
+    runat="server"
+    CssClass="mm-modal-overlay">
+
+
+        <div class="mm-modal">
+
+            <!-- HEADER -->
+            <div class="mm-modal__header">
+
+                <div class="mm-modal__title-group">
+
+                    <div class="mm-modal__icon mm-modal__icon--blue">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+
+                    <div>
+
+                        <h3 class="mm-modal__title">
+                            Add Medication
+                        </h3>
+
+                        <p class="mm-modal__sub">
+                            Create a medication prescription
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <asp:Button ID="btnCloseModal"
+                    runat="server"
+                    Text="X"
+                    CssClass="mm-modal__close"
+                    OnClick="btnCloseModal_Click"
+                    CausesValidation="false" />
+
+            </div>
+
+            <!-- BODY -->
             <div class="mm-modal__body">
+
                 <div class="mm-form-grid">
+
+                    <!-- MEDICINE -->
                     <div class="mm-form-group mm-form-group--full">
+
                         <label class="mm-label">
-                            <i class="fa-solid fa-weight-scale"></i>
-                            Dosage <span class="mm-required">*</span>
+                            Medication
                         </label>
-                        <input type="text" id="inputDosage" class="mm-input"
-                            placeholder="e.g. 500mg, 10mg, 1 tablet" />
-                        <span class="mm-error" id="errDosage" style="display:none;">Dosage is required.</span>
+
+                        <asp:DropDownList ID="ddlMedicine"
+                            runat="server"
+                            CssClass="mm-input mm-select" />
+
                     </div>
+
+                    <!-- DOSAGE -->
                     <div class="mm-form-group">
+
                         <label class="mm-label">
-                            <i class="fa-solid fa-clock"></i>
-                            Frequency <span class="mm-required">*</span>
+                            Dosage
                         </label>
-                        <select id="inputFrequency" class="mm-input mm-select">
-                            <option value="">Select frequency...</option>
-                            <option>Once daily</option>
-                            <option>Twice daily</option>
-                            <option>Three times daily</option>
-                            <option>Every 8 hours</option>
-                            <option>Every 12 hours</option>
-                            <option>As needed (PRN)</option>
-                            <option>Weekly</option>
-                            <option>Monthly</option>
-                        </select>
-                        <span class="mm-error" id="errFrequency" style="display:none;">Frequency is required.</span>
+
+                        <asp:TextBox ID="txtDosage"
+                            runat="server"
+                            CssClass="mm-input"
+                            placeholder="e.g. 500mg" />
+
                     </div>
+
+                    <!-- FREQUENCY -->
                     <div class="mm-form-group">
+
                         <label class="mm-label">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            Duration <span class="mm-required">*</span>
+                            Frequency
                         </label>
-                        <select id="inputDuration" class="mm-input mm-select">
-                            <option value="">Select duration...</option>
-                            <option>7 days</option>
-                            <option>14 days</option>
-                            <option>30 days</option>
-                            <option>60 days</option>
-                            <option>90 days</option>
-                            <option>6 months</option>
-                            <option>1 year</option>
-                            <option>Ongoing</option>
-                        </select>
-                        <span class="mm-error" id="errDuration" style="display:none;">Duration is required.</span>
+
+                        <asp:DropDownList ID="ddlFrequency"
+                            runat="server"
+                            CssClass="mm-input mm-select">
+
+                            <asp:ListItem Value="">
+                                Select Frequency
+                            </asp:ListItem>
+
+                            <asp:ListItem>
+                                Once daily
+                            </asp:ListItem>
+
+                            <asp:ListItem>
+                                Twice daily
+                            </asp:ListItem>
+
+                            <asp:ListItem>
+                                Three times daily
+                            </asp:ListItem>
+
+                            <asp:ListItem>
+                                Every 8 hours
+                            </asp:ListItem>
+
+                            <asp:ListItem>
+                                Every 12 hours
+                            </asp:ListItem>
+
+                        </asp:DropDownList>
+
                     </div>
-                    <div class="mm-form-group mm-form-group--full">
+
+                    <!-- DURATION -->
+                    <div class="mm-form-group">
+
                         <label class="mm-label">
-                            <i class="fa-solid fa-note-sticky"></i>
-                            Doctor Notes <small>(optional)</small>
+                            Duration
                         </label>
-                        <textarea id="inputNotes" class="mm-input mm-textarea" rows="3"
-                            placeholder="Any special instructions for the patient..."></textarea>
+
+                        <asp:TextBox ID="txtDuration"
+                            runat="server"
+                            CssClass="mm-input"
+                            placeholder="e.g. 7 days" />
+
                     </div>
+
+                    <!-- STATUS -->
+                    <div class="mm-form-group">
+
+                        <label class="mm-label">
+                            Status
+                        </label>
+
+                        <asp:DropDownList ID="ddlMedicationStatus"
+                            runat="server"
+                            CssClass="mm-input mm-select">
+
+                            <asp:ListItem Value="Active">
+                                Active
+                            </asp:ListItem>
+
+                            <asp:ListItem Value="Completed">
+                                Completed
+                            </asp:ListItem>
+
+                            <asp:ListItem Value="Stopped">
+                                Stopped
+                            </asp:ListItem>
+
+                        </asp:DropDownList>
+
+                    </div>
+
+                    <!-- START DATE -->
+                    <div class="mm-form-group">
+
+                        <label class="mm-label">
+                            Start Date
+                        </label>
+
+                        <asp:TextBox ID="txtStartDate"
+                            runat="server"
+                            CssClass="mm-input"
+                            TextMode="Date" />
+
+                    </div>
+
+                    <!-- END DATE -->
+                    <div class="mm-form-group">
+
+                        <label class="mm-label">
+                            End Date
+                        </label>
+
+                        <asp:TextBox ID="txtEndDate"
+                            runat="server"
+                            CssClass="mm-input"
+                            TextMode="Date" />
+
+                    </div>
+
                 </div>
+                <asp:Label ID="lblError"
+    runat="server"
+    CssClass="mm-error"
+    Visible="false"
+    ForeColor="Red" />
             </div>
 
+            <!-- FOOTER -->
             <div class="mm-modal__footer">
-                <button class="mm-btn mm-btn--ghost" onclick="backToStep1()">
-                    <i class="fa-solid fa-arrow-left"></i> Back
-                </button>
-                <button class="mm-btn mm-btn--primary" onclick="confirmAddMedication()">
-                    <i class="fa-solid fa-check"></i> Add Medication
-                </button>
+
+                <asp:Button ID="btnCancelMedication"
+                    runat="server"
+                    Text="Cancel"
+                    CssClass="mm-btn mm-btn--ghost"
+                    OnClick="btnCloseModal_Click"
+                    CausesValidation="false" />
+
+                <asp:Button ID="btnSaveMedication"
+                    runat="server"
+                    Text="Save Medication"
+                    CssClass="mm-btn mm-btn--primary"
+                    OnClick="btnSaveMedication_Click" />
+
             </div>
+
         </div>
 
-    </div>
-</div>
+    </asp:Panel>
 
-<!-- ═══════════════════════════════════════════════════════════
-     EDIT DOSAGE MODAL
-═══════════════════════════════════════════════════════════ -->
-<div class="mm-modal-overlay" id="editDosageModal" onclick="handleOverlayClick(event,'editDosageModal')">
-    <div class="mm-modal mm-modal--sm" role="dialog" aria-modal="true" aria-label="Edit Dosage">
-        <div class="mm-modal__header">
-            <div class="mm-modal__title-group">
-                <div class="mm-modal__icon mm-modal__icon--orange">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </div>
-                <div>
-                    <h3 class="mm-modal__title">Edit Dosage</h3>
-                    <p class="mm-modal__sub" id="editModalMedName">Medication name</p>
-                </div>
-            </div>
-            <button class="mm-modal__close" onclick="closeEditModal()" aria-label="Close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="mm-modal__body">
-            <div class="mm-form-group">
-                <label class="mm-label">
-                    <i class="fa-solid fa-weight-scale"></i>
-                    New Dosage <span class="mm-required">*</span>
-                </label>
-                <input type="text" id="editDosageInput" class="mm-input"
-                    placeholder="e.g. 500mg" />
-                <span class="mm-error" id="errEditDosage" style="display:none;">Dosage is required.</span>
-            </div>
-        </div>
-        <div class="mm-modal__footer">
-            <button class="mm-btn mm-btn--ghost" onclick="closeEditModal()">Cancel</button>
-            <button class="mm-btn mm-btn--orange" onclick="confirmEditDosage()">
-                <i class="fa-solid fa-floppy-disk"></i> Save Dosage
-            </button>
-        </div>
-    </div>
-</div>
-
-</asp:Content>
-
-<asp:Content ID="PageScripts" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script src="/js/ManageMedication.js"></script>
 </asp:Content>
