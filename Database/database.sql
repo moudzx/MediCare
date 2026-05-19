@@ -173,22 +173,26 @@ CREATE TABLE [dbo].[NutritionPlans] (
     [PatientId] INT NOT NULL,
     [DoctorId] INT NULL,
 
-    [Calories] INT NULL,
-    [Protein] INT NULL,
-    [Carbs] INT NULL,
-    [Fat] INT NULL,
+    [calories] FLOAT,
+    [protein] FLOAT,
+    [total_fat] FLOAT,
+    [carbohydrate] FLOAT,
+    [sodium] FLOAT,
+    [saturated_fat] FLOAT,
+    [cholesterol] FLOAT,
+    [sugar] FLOAT,
+    [calcium] FLOAT,
+    [iron] FLOAT,
+    [potassium] FLOAT,
+    [vitamin_c] FLOAT,
+    [vitamin_e] FLOAT,
+    [vitamin_d] FLOAT,
 
-    [Goal] NVARCHAR(100) NULL,
-    [Notes] NVARCHAR(MAX) NULL,
-
-    [Status] NVARCHAR(20) NOT NULL DEFAULT 'Active',
+    [Notes] NVARCHAR(255) NULL,
 
     [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE(),
-    [UpdatedAt] DATETIME NULL,
 
     CONSTRAINT [PK_NutritionPlans] PRIMARY KEY CLUSTERED ([PlanId]),
-    CONSTRAINT [CK_NutritionPlans_Status]
-        CHECK ([Status] IN ('Active','Inactive','Completed','Replaced'))
 );
 
 
@@ -212,6 +216,28 @@ CREATE TABLE [dbo].[PatientMedications] (
     CONSTRAINT [PK_PatientMedications] PRIMARY KEY CLUSTERED ([PatientMedicationId]),
     CONSTRAINT [CK_PatientMedications_Status]
         CHECK ([Status] IN ('Active','Stopped','Completed'))
+);
+
+CREATE TABLE [dbo].[CustomFoods] (
+    [CustomFoodId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+
+    [PatientId] INT NOT NULL,
+
+    [description] NVARCHAR(255) NOT NULL,
+
+    [calories] INT NULL,
+    [protein] FLOAT NULL,
+    [total_fat] FLOAT NULL,
+    [carbohydrate] FLOAT NULL,
+    [sugar] FLOAT NULL,
+    [calcium] FLOAT NULL,
+    [iron] FLOAT NULL,
+    [potassium] FLOAT NULL,
+    [vitamin_c] FLOAT NULL,
+    [vitamin_e] FLOAT NULL,
+    [vitamin_d] FLOAT NULL,
+
+    [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE()
 );
 
 -- Indexes:

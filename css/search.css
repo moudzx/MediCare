@@ -502,3 +502,51 @@
             width: 100%;
         }
 }
+
+.sea-pager {
+    padding: 1rem;
+    text-align: center;
+}
+
+    .sea-pager table {
+        margin: auto;
+    }
+
+    .sea-pager td {
+        padding: 0 0.2rem;
+    }
+
+    .sea-pager a,
+    .sea-pager span {
+        display: inline-block;
+        min-width: 36px;
+        padding: 0.55rem 0.9rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .sea-pager a {
+        background: #f3f4f6;
+        color: #111827;
+    }
+
+    .sea-pager span {
+        background: #2563eb;
+        color: white;
+    }
+
+.sea-grid pager,
+.sea-grid .pager,
+.sea-grid table tr:last-child td {
+    text-align: center;
+}
+
+.sea-grid a {
+    text-decoration: none;
+}
+
+.sea-grid td,
+.sea-grid th {
+    vertical-align: middle;
+}
