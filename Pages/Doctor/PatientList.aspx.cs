@@ -9,292 +9,338 @@ namespace MediCare.Pages.Doctor
 {
     public partial class PatientList : System.Web.UI.Page
     {
-        private readonly string connectionString =
-            ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
-           {
-            //if (Session["UserId"] == null || Session["Role"] == null)
-            //{
-            //    Response.Redirect("~/Pages/Account/Login.aspx");
-            //    return;
-            //}
+        {
+            if (Session["UserId"] == null || Session["Role"] == null)
+            {
+                Response.Redirect("~/Pages/Account/Login.aspx");
+                return;
+            }
 
-            //    if (Session["Role"].ToString() != "Doctor")
-            //    {
-            //        Response.Redirect("~/Default.aspx");
-            //        return;
-            //}
+            if (Session["Role"].ToString() != "Doctor")
+            {
+                Response.Redirect("~/Pages/Account/Login.aspx");
+                return;
+            }
 
             if (!IsPostBack)
             {
-                LoadPatients();
-                LoadStatistics();
+                LoadStats();
+                BindPendingRequests();
+                BindPatients();
             }
         }
 
-        // =====================================================
-        // LOAD PATIENTS
-        // =====================================================
-        private void LoadPatients()
+        private int GetDoctorId(SqlConnection conn)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            int userId = Convert.ToInt32(Session["UserId"]);
+            string sql = "SELECT DoctorId FROM [dbo].[Doctors] WHERE UserId = @UserId";
+
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                string query = @"
-                    SELECT
-                        PatientId,
-                        FullName,
-                        PhoneNumber,
-                        Age,
-                        Gender,
-                        BloodType,
-                        ChronicDisease
-                    FROM Patients
-                    WHERE 1 = 1";
-
-                // SEARCH
-                if (!string.IsNullOrWhiteSpace(txtSearch.Text))
+                cmd.Parameters.AddWithValue("@UserId", userId);
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
                 {
-                    query += @"
-                        AND (
-                            FullName LIKE @Search
-                            OR ChronicDisease LIKE @Search
-                            OR PhoneNumber LIKE @Search
-                        )";
+                    return Convert.ToInt32(result);
                 }
+            }
+            return 0;
+        }
 
-                // GENDER FILTER
-                if (!string.IsNullOrWhiteSpace(ddlGender.SelectedValue))
+        private void LoadStats()
+        {
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                try
                 {
-                    query += " AND Gender = @Gender";
-                }
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+                    if (doctorId == 0) return;
 
-                query += " ORDER BY PatientId DESC";
+                    string sql = @"
+                        SELECT 
+                            COUNT(p.PatientId) as Total,
+                            SUM(CASE WHEN c.Status = 'Accepted' THEN 1 ELSE 0 END) as Active,
+                            SUM(CASE WHEN p.PhoneNumber IS NOT NULL AND p.PhoneNumber <> '' THEN 1 ELSE 0 END) as WithPhone,
+                            SUM(CASE WHEN p.ChronicDisease IS NOT NULL AND p.ChronicDisease <> '' THEN 1 ELSE 0 END) as WithChronic
+                        FROM [dbo].[PatientDoctorConnections] c
+                        INNER JOIN [dbo].[Patients] p ON c.PatientId = p.PatientId
+                        WHERE c.DoctorId = @DoctorId AND c.Status = 'Accepted'";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    if (!string.IsNullOrWhiteSpace(txtSearch.Text))
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue(
-                            "@Search",
-                            "%" + txtSearch.Text.Trim() + "%"
-                        );
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(ddlGender.SelectedValue))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@Gender",
-                            ddlGender.SelectedValue
-                        );
-                    }
-
-                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-
-                        da.Fill(dt);
-
-                        dt.Columns.Add("Initials");
-
-                        foreach (DataRow row in dt.Rows)
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
                         {
-                            row["Initials"] =
-                                GetInitials(
-                                    row["FullName"].ToString()
-                                );
+                            if (rdr.Read())
+                            {
+                                lblStatTotal.Text = rdr["Total"] != DBNull.Value ? rdr["Total"].ToString() : "0";
+                                lblStatActive.Text = rdr["Active"] != DBNull.Value ? rdr["Active"].ToString() : "0";
+                                lblStatUpcoming.Text = rdr["WithPhone"] != DBNull.Value ? rdr["WithPhone"].ToString() : "0";
+                                lblStatOnMeds.Text = rdr["WithChronic"] != DBNull.Value ? rdr["WithChronic"].ToString() : "0";
+                            }
                         }
-
-                        rptPatients.DataSource = dt;
-                        rptPatients.DataBind();
-
-                        lblResultsCount.Text =
-                            "Showing " + dt.Rows.Count + " patients";
-
-                        pnlEmptyState.Visible =
-                            dt.Rows.Count == 0;
                     }
                 }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Stats Error: " + ex.Message);
+                }
             }
         }
 
-        // =====================================================
-        // LOAD STATS
-        // =====================================================
-        private void LoadStatistics()
+        private void BindPendingRequests()
         {
-            using (SqlConnection conn =
-                new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(connString))
             {
-                conn.Open();
-
-                using (SqlCommand cmd =
-                    new SqlCommand(
-                        "SELECT COUNT(*) FROM Patients",
-                        conn))
+                try
                 {
-                    lblStatTotal.Text =
-                        cmd.ExecuteScalar().ToString();
-                }
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+                    if (doctorId == 0) return;
 
-                using (SqlCommand cmd =
-                    new SqlCommand(@"
-                        SELECT COUNT(*)
-                        FROM Patients
-                        WHERE ChronicDisease IS NOT NULL
-                        AND ChronicDisease <> ''",
-                        conn))
+                    // FIXED: Included p.BloodType and p.PhoneNumber to keep Eval parameters from blowing up!
+                    string sql = @"
+                        SELECT 
+                            p.PatientId,
+                            p.FullName,
+                            p.Age,
+                            p.Gender,
+                            p.BloodType,
+                            p.PhoneNumber,
+                            p.ChronicDisease,
+                            c.RequestedAt,
+                            LEFT(p.FullName, 2) as Initials
+                        FROM [dbo].[PatientDoctorConnections] c
+                        INNER JOIN [dbo].[Patients] p ON c.PatientId = p.PatientId
+                        WHERE c.DoctorId = @DoctorId AND c.Status = 'Pending'
+                        ORDER BY c.RequestedAt DESC";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                pnlPendingSection.Visible = true;
+                                rptPendingRequests.DataSource = dt;
+                                rptPendingRequests.DataBind();
+                            }
+                            else
+                            {
+                                pnlPendingSection.Visible = false;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
-                    lblStatOnMeds.Text =
-                        cmd.ExecuteScalar().ToString();
+                    // If your DB string data differs in case (e.g. 'PENDING'), this will show up on your screen.
+                    ShowToast("Pending Request Binding Fail: " + ex.Message);
                 }
-
-                using (SqlCommand cmd =
-                    new SqlCommand(@"
-                        SELECT COUNT(*)
-                        FROM Patients
-                        WHERE PhoneNumber IS NOT NULL
-                        AND PhoneNumber <> ''",
-                        conn))
-                {
-                    lblStatUpcoming.Text =
-                        cmd.ExecuteScalar().ToString();
-                }
-
-                lblStatActive.Text = lblStatTotal.Text;
             }
         }
 
-        // =====================================================
-        // SEARCH
-        // =====================================================
-        protected void txtSearch_TextChanged(
-            object sender,
-            EventArgs e)
+        private void BindPatients()
         {
-            LoadPatients();
+            string search = txtSearch.Text.Trim();
+            string gender = ddlGender.SelectedValue;
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                try
+                {
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+                    if (doctorId == 0) return;
+
+                    string sql = @"
+                        SELECT 
+                            p.PatientId,
+                            p.FullName,
+                            p.Age,
+                            p.Gender,
+                            p.BloodType,
+                            p.ChronicDisease,
+                            p.PhoneNumber,
+                            LEFT(p.FullName, 2) as Initials
+                        FROM [dbo].[PatientDoctorConnections] c
+                        INNER JOIN [dbo].[Patients] p ON c.PatientId = p.PatientId
+                        WHERE c.DoctorId = @DoctorId AND c.Status = 'Accepted'";
+
+                    if (!string.IsNullOrEmpty(search))
+                    {
+                        sql += " AND (p.FullName LIKE @Search OR p.ChronicDisease LIKE @Search OR p.PhoneNumber LIKE @Search)";
+                    }
+                    if (!string.IsNullOrEmpty(gender))
+                    {
+                        sql += " AND p.Gender = @Gender";
+                    }
+
+                    sql += " ORDER BY p.FullName ASC";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        if (!string.IsNullOrEmpty(search)) cmd.Parameters.AddWithValue("@Search", "%" + search + "%");
+                        if (!string.IsNullOrEmpty(gender)) cmd.Parameters.AddWithValue("@Gender", gender);
+
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            lblResultsCount.Text = $"Showing {dt.Rows.Count} patients";
+
+                            if (dt.Rows.Count == 0)
+                            {
+                                rptPatients.Visible = false;
+                                pnlEmptyState.Visible = true;
+                            }
+                            else
+                            {
+                                rptPatients.Visible = true;
+                                pnlEmptyState.Visible = false;
+                                rptPatients.DataSource = dt;
+                                rptPatients.DataBind();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Active Bind Error: " + ex.Message);
+                }
+            }
         }
 
-        protected void btnClearSearch_Click(
-            object sender,
-            EventArgs e)
+        protected void rptPendingRequests_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            txtSearch.Text = "";
+            int targetPatientId = Convert.ToInt32(e.CommandArgument);
 
-            ddlGender.SelectedIndex = 0;
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                try
+                {
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+                    if (doctorId == 0) return;
 
-            LoadPatients();
+                    if (e.CommandName == "AcceptRequest")
+                    {
+                        string sql = @"
+                            UPDATE [dbo].[PatientDoctorConnections] 
+                            SET Status = 'Accepted', RespondedAt = GETDATE()
+                            WHERE DoctorId = @DoctorId AND PatientId = @PatientId";
+
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                            cmd.Parameters.AddWithValue("@PatientId", targetPatientId);
+                            cmd.ExecuteNonQuery();
+                        }
+                        ShowToast("Connection request accepted.");
+                    }
+                    else if (e.CommandName == "RejectRequest")
+                    {
+                        string sql = @"
+                            DELETE FROM [dbo].[PatientDoctorConnections] 
+                            WHERE DoctorId = @DoctorId AND PatientId = @PatientId AND Status = 'Pending'";
+
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                            cmd.Parameters.AddWithValue("@PatientId", targetPatientId);
+                            cmd.ExecuteNonQuery();
+                        }
+                        ShowToast("Connection request declined.");
+                    }
+
+                    LoadStats();
+                    BindPendingRequests();
+                    BindPatients();
+                }
+                catch (Exception ex)
+                {
+                    ShowToast("Action Error: " + ex.Message);
+                }
+            }
         }
 
-        // =====================================================
-        // FILTER
-        // =====================================================
-        protected void ddlGender_SelectedIndexChanged(
-            object sender,
-            EventArgs e)
+        protected void rptPatients_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            LoadPatients();
-        }
+            string patientId = e.CommandArgument.ToString();
 
-        // =====================================================
-        // REPEATER ACTIONS
-        // =====================================================
-        protected void rptPatients_ItemCommand(
-            object source,
-            RepeaterCommandEventArgs e)
-        {
-            int patientId =
-                Convert.ToInt32(e.CommandArgument);
-
-            // MEDICATION PAGE
             if (e.CommandName == "OpenMedications")
             {
-                Response.Redirect(
-                    "~/Pages/Doctor/ManageMedication.aspx?PatientId="
-                    + patientId
-                );
+                Response.Redirect($"~/Pages/Doctor/ManageMedication.aspx?PatientId={patientId}");
             }
-
-            // NUTRITION PAGE
             else if (e.CommandName == "OpenNutrition")
             {
-                Response.Redirect(
-                    "~/Pages/Doctor/ManageNutrition.aspx?PatientId="
-                    + patientId
-                );
+                Response.Redirect($"~/Pages/Doctor/ManageNutrition.aspx?PatientId={patientId}");
             }
-
-            // DELETE
             else if (e.CommandName == "RequestRemove")
             {
-                DeletePatient(patientId);
-            }
-        }
+                int targetPatientId = Convert.ToInt32(patientId);
 
-        // =====================================================
-        // DELETE PATIENT
-        // =====================================================
-        private void DeletePatient(int patientId)
-        {
-            using (SqlConnection conn =
-                new SqlConnection(connectionString))
-            {
-                string query =
-                    "DELETE FROM Patients WHERE PatientId=@PatientId";
-
-                using (SqlCommand cmd =
-                    new SqlCommand(query, conn))
+                using (SqlConnection conn = new SqlConnection(connString))
                 {
-                    cmd.Parameters.AddWithValue(
-                        "@PatientId",
-                        patientId
-                    );
+                    try
+                    {
+                        conn.Open();
+                        int doctorId = GetDoctorId(conn);
+                        if (doctorId == 0) return;
 
-                    conn.Open();
+                        string sql = @"
+                            DELETE FROM [dbo].[PatientDoctorConnections] 
+                            WHERE DoctorId = @DoctorId AND PatientId = @PatientId";
 
-                    cmd.ExecuteNonQuery();
+                        using (SqlCommand cmd = new SqlCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                            cmd.Parameters.AddWithValue("@PatientId", targetPatientId);
+                            cmd.ExecuteNonQuery();
+
+                            ShowToast("Connection successfully removed.");
+                            LoadStats();
+                            BindPendingRequests();
+                            BindPatients();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowToast("Removal Error: " + ex.Message);
+                    }
                 }
             }
-
-            ShowToast("Patient removed successfully.");
-
-            LoadPatients();
-
-            LoadStatistics();
         }
 
-        // =====================================================
-        // TOAST
-        // =====================================================
-        private void ShowToast(string message)
+        protected void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            BindPatients();
+        }
+
+        protected void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Text = "";
+            BindPatients();
+        }
+
+        protected void ddlGender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindPatients();
+        }
+
+        private void ShowToast(string msg)
         {
             pnlToast.Visible = true;
-
-            lblToastMsg.Text = message;
-        }
-
-        // =====================================================
-        // INITIALS
-        // =====================================================
-        private string GetInitials(string fullName)
-        {
-            if (string.IsNullOrWhiteSpace(fullName))
-                return "?";
-
-            string[] parts =
-                fullName.Trim().Split(' ');
-
-            if (parts.Length == 1)
-            {
-                return parts[0]
-                    .Substring(0, 1)
-                    .ToUpper();
-            }
-
-            return (
-                parts[0].Substring(0, 1) +
-                parts[parts.Length - 1].Substring(0, 1)
-            ).ToUpper();
+            lblToastMsg.Text = msg;
         }
     }
 }

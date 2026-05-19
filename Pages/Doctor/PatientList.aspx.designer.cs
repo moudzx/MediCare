@@ -51,6 +51,24 @@ namespace MediCare.Pages.Doctor
         protected global::System.Web.UI.WebControls.Label lblStatOnMeds;
 
         /// <summary>
+        /// pnlPendingSection control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlPendingSection;
+
+        /// <summary>
+        /// rptPendingRequests control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptPendingRequests;
+
+        /// <summary>
         /// txtSearch control.
         /// </summary>
         /// <remarks>
