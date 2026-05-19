@@ -140,6 +140,84 @@
                     </div>
                 </section>
             </div>
+            <section class="dp-card dp-card--availability">
+
+                <div class="dp-card__header">
+                    <i class="fas fa-clock"></i>
+                    <h3>Manage Availability</h3>
+                </div>
+
+                <div class="dp-card__body">
+
+                    <div class="dp-availability-form">
+
+                        <!-- Date -->
+                        <div class="dp-form-group">
+                            <label>Date</label>
+                            <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="dp-input" />
+                        </div>
+
+                        <!-- Start Time -->
+                        <div class="dp-form-group">
+                            <label>Start Time</label>
+                            <asp:TextBox ID="txtStartTime" runat="server" TextMode="Time" CssClass="dp-input" />
+                        </div>
+
+                        <!-- End Time -->
+                        <div class="dp-form-group">
+                            <label>End Time</label>
+                            <asp:TextBox ID="txtEndTime" runat="server" TextMode="Time" CssClass="dp-input" />
+                        </div>
+
+                        <!-- Add Button -->
+                        <asp:Button ID="btnAddSlot"
+                                    runat="server"
+                                    Text="Add Availability"
+                                    CssClass="dp-btn dp-btn--primary"
+                                    OnClick="btnAddSlot_Click" />
+
+                    </div>
+
+                </div>
+            </section>
+            <section class="dp-card">
+
+                <div class="dp-card__header">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Your Availability</h3>
+                </div>
+
+                <div class="dp-card__body">
+
+                    <asp:GridView ID="gvAvailability"
+                                  runat="server"
+                                  AutoGenerateColumns="False"
+                                  CssClass="dp-grid"
+                                  OnRowCommand="gvAvailability_RowCommand">
+
+                        <Columns>
+
+                            <asp:BoundField DataField="StartTime" HeaderText="Start" />
+                            <asp:BoundField DataField="EndTime" HeaderText="End" />
+
+                            <asp:TemplateField HeaderText="Action">
+                                <ItemTemplate>
+                                    <asp:Button ID="btnDelete"
+                                                runat="server"
+                                                Text="Delete"
+                                                CommandName="DeleteSlot"
+                                                CommandArgument='<%# Eval("AvailabilityId") %>'
+                                                CssClass="dp-btn dp-btn--danger" />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+                        </Columns>
+
+                    </asp:GridView>
+
+                </div>
+
+            </section>
         </main>
 
     </div>

@@ -60,6 +60,42 @@ namespace MediCare.MasterPage
         protected global::System.Web.UI.WebControls.Literal litPageSub;
 
         /// <summary>
+        /// litNotifCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litNotifCount;
+
+        /// <summary>
+        /// btnMarkAllRead control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnMarkAllRead;
+
+        /// <summary>
+        /// rptNotifications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptNotifications;
+
+        /// <summary>
+        /// pnlNoNotifications control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoNotifications;
+
+        /// <summary>
         /// litTopbarInitials control.
         /// </summary>
         /// <remarks>

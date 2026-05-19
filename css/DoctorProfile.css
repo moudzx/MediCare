@@ -32,6 +32,74 @@
     box-sizing: border-box;
 }
 
+/* MAIN WRAPPER FIX */
+.dp-root {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* MAIN LAYOUT (fix centering + spacing) */
+.dp-main {
+    display: flex;
+    justify-content: center;
+}
+
+/* NEW GRID FOR MAIN CONTENT */
+.dp-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* AVAILABILITY FORM */
+.dp-availability-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    align-items: end;
+}
+
+/* INPUT STYLE */
+.dp-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* GRID VIEW */
+.dp-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .dp-grid th {
+        background: #f3f4f6;
+        padding: 10px;
+    }
+
+    .dp-grid td {
+        padding: 10px;
+        border-top: 1px solid #eee;
+    }
+
+/* DANGER BUTTON */
+.dp-btn--danger {
+    background: #dc2626;
+    color: white;
+    border-radius: 20px;
+    padding: 6px 14px;
+}
+
+    .dp-btn--danger:hover {
+        background: #b91c1c;
+    }
+
+
 html, body {
     margin: 0;
     padding: 0;

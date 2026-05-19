@@ -126,12 +126,111 @@
 
                     <div class="ds-topbar__actions">
 
+                       <!-- Notifications -->
+                    <div class="ds-notification" id="notifDropdown">
+
+                        <!-- Bell Button -->
                         <button type="button"
                                 class="ds-icon-btn"
+                                onclick="toggleNotifications(event)"
                                 aria-label="Notifications">
+
                             <i class="fa-solid fa-bell"></i>
+
+                            <!-- red unread dot -->
                             <span class="ds-notif-dot"></span>
+
+                            <!-- unread count -->
+                            <span class="ds-notif-count">
+                                <asp:Literal ID="litNotifCount"
+                                             runat="server"
+                                             Text="3" />
+                            </span>
                         </button>
+
+                        <!-- Dropdown -->
+                        <div class="ds-notif-dropdown"
+                             id="notifMenu">
+
+                            <!-- Header -->
+                            <div class="ds-notif-header">
+                                <h4>Notifications</h4>
+
+                                <asp:LinkButton ID="btnMarkAllRead"
+                                                runat="server"
+                                                CssClass="ds-notif-clear">
+                                    Mark all as read
+                                </asp:LinkButton>
+                            </div>
+
+                            <!-- Notifications List -->
+                            <div class="ds-notif-list">
+
+                                <asp:Repeater ID="rptNotifications"
+                                              runat="server"
+                                              OnItemCommand="rptNotifications_ItemCommand">
+
+                                    <ItemTemplate>
+
+                                        <div class="ds-notif-item">
+
+                                            <!-- Avatar -->
+                                            <div class="ds-notif-avatar">
+                                                <%# Eval("Initials") %>
+                                            </div>
+
+                                            <!-- Content -->
+                                            <div class="ds-notif-content">
+
+                                                <div class="ds-notif-title">
+                                                    <%# Eval("Title") %>
+                                                </div>
+
+                                                <div class="ds-notif-message">
+                                                    <%# Eval("Message") %>
+                                                </div>
+
+
+                                                <!-- Actions -->
+                                                <div class="ds-notif-actions">
+
+                                                    <asp:LinkButton ID="btnAccept"
+                                                                    runat="server"
+                                                                    CssClass="ds-notif-btn ds-notif-btn--accept"
+                                                                    Text="Accept"
+                                                                    CommandName="AcceptConnection"
+                                                                    CommandArgument='<%# Eval("ConnectionId") %>' />
+
+                                                    <asp:LinkButton ID="btnReject"
+                                                                    runat="server"
+                                                                    CssClass="ds-notif-btn ds-notif-btn--reject"
+                                                                    Text="Reject"
+                                                                    CommandName="RejectConnection"
+                                                                    CommandArgument='<%# Eval("ConnectionId") %>' />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </ItemTemplate>
+
+                                </asp:Repeater>
+
+                            </div>
+
+                            <!-- Empty State -->
+                            <asp:Panel ID="pnlNoNotifications"
+                                       runat="server"
+                                       Visible="false"
+                                       CssClass="ds-notif-empty">
+
+                                <i class="fa-regular fa-bell-slash"></i>
+
+                                <span>No notifications</span>
+                            </asp:Panel>
+
+                        </div>
+                    </div>
 
 
                         <!-- Profile Dropdown -->
@@ -221,16 +320,26 @@
 
     <!-- Dropdown Script -->
     <script>
-        function toggleSidebar() {
+        function toggleNotifications(e){
+            e.stopPropagation();
+            var menu = document.getElementById('notifMenu');
+            menu.classList.toggle('ds-notif-dropdown--open');
+        }
 
+        document.addEventListener('click', function (e){
+            var notifMenu = document.getElementById('notifMenu');
+            if (notifMenu && !e.target.closest('.ds-notification')) {
+                notifMenu.classList.remove(
+                    'ds-notif-dropdown--open'
+                );
+            }
+        });
+        
+        function toggleSidebar(){
             var shell = document.getElementById('appShell');
-
             shell.classList.toggle('ds-shell--collapsed');
-
             var icon = document.getElementById('toggleIcon');
-
             if (icon) {
-
                 if (shell.classList.contains('ds-shell--collapsed')) {
                     icon.className = 'fa-solid fa-chevron-right';
                 }
@@ -241,18 +350,12 @@
         }
 
         function toggleProfileDropdown(e) {
-
             e.stopPropagation();
-
             var menu = document.getElementById('profileMenu');
-
             menu.classList.toggle('ds-profile-dropdown--open');
         }
-
         document.addEventListener('click', function (e) {
-
             var menu = document.getElementById('profileMenu');
-
             if (menu && !e.target.closest('.ds-topbar__profile')) {
                 menu.classList.remove('ds-profile-dropdown--open');
             }

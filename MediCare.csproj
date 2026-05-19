@@ -291,7 +291,6 @@
     <Content Include="Database\lebanses_drugs_reference.py" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="js\DcSearch.js" />
     <Content Include="js\def.js" />
     <Content Include="js\default.js" />
     <Content Include="js\ManageMedication.js" />

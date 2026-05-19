@@ -59,5 +59,14 @@ namespace MediCare.Pages.Account
         protected void btnSave_Click(object sender, EventArgs e)
         {
         }
+        protected void btnAddSlot_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void gvAvailability_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+
+        }
     }
 }
