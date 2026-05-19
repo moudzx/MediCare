@@ -288,6 +288,7 @@
     <Content Include="Database\lebanese_food_database.csv" />
     <Content Include="Database\lebanese_food_reference.pdf" />
     <Content Include="Database\lebanon_drugs_database.csv" />
+    <Content Include="Database\lebanses_drugs_reference.py" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="js\DcSearch.js" />
