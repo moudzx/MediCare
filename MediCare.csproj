@@ -294,7 +294,6 @@
     <Content Include="js\def.js" />
     <Content Include="js\default.js" />
     <Content Include="js\DoctorProfile.js" />
-    <Content Include="js\ForgetPassword.js" />
     <Content Include="js\ManageMedication.js" />
     <Content Include="js\ManageNutrition.js" />
     <Content Include="js\mealCalculator.js" />
