@@ -100,7 +100,6 @@ namespace MediCare.Patient
             WHERE PatientId = @PatientId";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 cmd.Parameters.AddWithValue("@PatientId", patientId);
 
                 conn.Open();
@@ -109,114 +108,49 @@ namespace MediCare.Patient
 
                 if (reader.Read())
                 {
-                    lblPatientName.Text =
-                        reader["FullName"].ToString();
+                    lblPatientName.Text = reader["FullName"].ToString();
 
                     txtAge.Text =
-                        reader["Age"].ToString();
+                        reader["Age"] == DBNull.Value ? "-" : reader["Age"].ToString();
 
                     txtHeight.Text =
                         reader["Height"] == DBNull.Value
-                            ? ""
+                            ? "-"
                             : Convert.ToDouble(reader["Height"]).ToString("0");
 
                     txtWeight.Text =
                         reader["Weight"] == DBNull.Value
-                            ? ""
+                            ? "-"
                             : Convert.ToDouble(reader["Weight"]).ToString("0");
 
-                    ddlBloodType.SelectedValue =
+                    ddlBloodType.Text =
                         reader["BloodType"] == DBNull.Value
-                            ? "O+"
+                            ? "-"
                             : reader["BloodType"].ToString();
 
-                    ddlGender.SelectedValue =
+                    ddlGender.Text =
                         reader["Gender"] == DBNull.Value
-                            ? "Male"
+                            ? "-"
                             : reader["Gender"].ToString();
 
                     txtDisease.Text =
-                        reader["ChronicDisease"].ToString();
+                        reader["ChronicDisease"] == DBNull.Value
+                            ? "-"
+                            : reader["ChronicDisease"].ToString();
 
                     txtDisability.Text =
-                        reader["Disability"].ToString();
+                        reader["Disability"] == DBNull.Value
+                            ? "-"
+                            : reader["Disability"].ToString();
 
                     txtFamilyHistory.Text =
-                        reader["FamilyHistory"].ToString();
+                        reader["FamilyHistory"] == DBNull.Value
+                            ? "-"
+                            : reader["FamilyHistory"].ToString();
 
                     lblPatientStatus.Text = "Active";
                 }
             }
-        }
-
-        protected void btnSaveHealth_Click(object sender, EventArgs e)
-        {
-            int patientId = GetPatientId();
-
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                string query = @"
-            UPDATE Patients
-            SET
-                Age = @Age,
-                Height = @Height,
-                Weight = @Weight,
-                BloodType = @BloodType,
-                Gender = @Gender,
-                ChronicDisease = @Disease,
-                Disability = @Disability,
-                FamilyHistory = @FamilyHistory
-            WHERE PatientId = @PatientId";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                cmd.Parameters.AddWithValue("@PatientId", patientId);
-
-                cmd.Parameters.AddWithValue("@Age",
-                    string.IsNullOrWhiteSpace(txtAge.Text)
-                        ? (object)DBNull.Value
-                        : Convert.ToInt32(txtAge.Text));
-
-                cmd.Parameters.AddWithValue("@Height",
-                    string.IsNullOrWhiteSpace(txtHeight.Text)
-                        ? (object)DBNull.Value
-                        : Convert.ToDouble(txtHeight.Text));
-
-                cmd.Parameters.AddWithValue("@Weight",
-                    string.IsNullOrWhiteSpace(txtWeight.Text)
-                        ? (object)DBNull.Value
-                        : Convert.ToDouble(txtWeight.Text));
-
-                cmd.Parameters.AddWithValue("@BloodType",
-                    ddlBloodType.SelectedValue);
-
-                cmd.Parameters.AddWithValue("@Gender",
-                    ddlGender.SelectedValue);
-
-                cmd.Parameters.AddWithValue("@Disease",
-                    string.IsNullOrWhiteSpace(txtDisease.Text)
-                        ? (object)DBNull.Value
-                        : txtDisease.Text);
-
-                cmd.Parameters.AddWithValue("@Disability",
-                    string.IsNullOrWhiteSpace(txtDisability.Text)
-                        ? (object)DBNull.Value
-                        : txtDisability.Text);
-
-                cmd.Parameters.AddWithValue("@FamilyHistory",
-                    string.IsNullOrWhiteSpace(txtFamilyHistory.Text)
-                        ? (object)DBNull.Value
-                        : txtFamilyHistory.Text);
-
-                conn.Open();
-
-                cmd.ExecuteNonQuery();
-            }
-
-            lblHealthMessage.Text = "Health information updated successfully.";
-            lblHealthMessage.Visible = true;
-
-            LoadPatientInfo();
         }
 
         private void LoadTodayDoses()

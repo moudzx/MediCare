@@ -51,22 +51,13 @@ namespace MediCare.Patient
         protected global::System.Web.UI.WebControls.Label lblPatientStatus;
 
         /// <summary>
-        /// btnSaveHealth control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSaveHealth;
-
-        /// <summary>
         /// txtHeight control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtHeight;
+        protected global::System.Web.UI.WebControls.Label txtHeight;
 
         /// <summary>
         /// txtWeight control.
@@ -75,7 +66,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtWeight;
+        protected global::System.Web.UI.WebControls.Label txtWeight;
 
         /// <summary>
         /// ddlGender control.
@@ -84,7 +75,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlGender;
+        protected global::System.Web.UI.WebControls.Label ddlGender;
 
         /// <summary>
         /// ddlBloodType control.
@@ -93,7 +84,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlBloodType;
+        protected global::System.Web.UI.WebControls.Label ddlBloodType;
 
         /// <summary>
         /// txtAge control.
@@ -102,7 +93,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAge;
+        protected global::System.Web.UI.WebControls.Label txtAge;
 
         /// <summary>
         /// txtDisease control.
@@ -111,7 +102,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDisease;
+        protected global::System.Web.UI.WebControls.Label txtDisease;
 
         /// <summary>
         /// txtDisability control.
@@ -120,7 +111,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDisability;
+        protected global::System.Web.UI.WebControls.Label txtDisability;
 
         /// <summary>
         /// txtFamilyHistory control.
@@ -129,7 +120,7 @@ namespace MediCare.Patient
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFamilyHistory;
+        protected global::System.Web.UI.WebControls.Label txtFamilyHistory;
 
         /// <summary>
         /// lblHealthMessage control.

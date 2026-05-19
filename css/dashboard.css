@@ -5,7 +5,38 @@
    NOTE: This file extends Medicare.css — do NOT replace it.
          Both files are linked: Medicare.css first, then Dashboard.css
    ═══════════════════════════════════════════════════════════════════ */
+.pd-hv-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 16px;
+    background: var(--mc-gray-50);
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-lg);
+    transition: all var(--mc-dur-fast) var(--mc-ease);
+}
 
+    .pd-hv-item:hover {
+        background: var(--mc-green-50);
+        border-color: var(--mc-green-200);
+    }
+
+.pd-hv-item--wide {
+    grid-column: 1 / -1;
+}
+
+.pd-hv-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--mc-gray-900);
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.pd-hv-value--multiline {
+    white-space: pre-wrap;
+}
 /* ── 1. Dashboard Root Layout ───────────────────────────────────── */
 .pd-root {
     min-height: calc(100vh - var(--mc-nav-h));
