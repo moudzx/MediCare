@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MediCare.Pages.Doctor;
 
 namespace MediCare.MasterPage
 {
@@ -29,10 +30,7 @@ namespace MediCare.MasterPage
         {
             if (Session["UserId"] == null || Session["Role"] == null)
             {
-                litNotifCount.Text = "0";
-                pnlNoNotifications.Visible = true;
-                rptNotifications.DataSource = null;
-                rptNotifications.DataBind();
+                ResetNotificationUI();
                 return;
             }
 
@@ -41,109 +39,179 @@ namespace MediCare.MasterPage
 
             if (doctorId == 0)
             {
-                litNotifCount.Text = "0";
-                pnlNoNotifications.Visible = true;
-                rptNotifications.DataSource = null;
-                rptNotifications.DataBind();
+                ResetNotificationUI();
                 return;
             }
 
+            DataTable displayTable = new DataTable();
+            displayTable.Columns.Add("SourceId", typeof(int));
+            displayTable.Columns.Add("ItemType", typeof(string)); // "Connection" or "Appointment"
+            displayTable.Columns.Add("FullName", typeof(string));
+            displayTable.Columns.Add("Initials", typeof(string));
+            displayTable.Columns.Add("Title", typeof(string));
+            displayTable.Columns.Add("Message", typeof(string));
+            displayTable.Columns.Add("IconClass", typeof(string));
+            displayTable.Columns.Add("TimeStamp", typeof(DateTime));
+            displayTable.Columns.Add("TimeAgo", typeof(string));
+
             using (SqlConnection conn = GetConnection())
             {
-                conn.Open();
-
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"
-                                    SELECT 
-                                        c.ConnectionId,
-                                        p.FullName,
-                                        p.Gender,
-                                        p.Age,
-                                        c.RequestedAt
-                                    FROM PatientDoctorConnections c
-                                    INNER JOIN Patients p ON c.PatientId = p.PatientId
-                                    WHERE c.DoctorId = @DoctorId
-                                    AND c.Status = 'Pending'
-                                    ORDER BY c.RequestedAt DESC";
-
-                cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-
-                dt.Columns.Add("Initials");
-                dt.Columns.Add("Title");
-                dt.Columns.Add("Message");
-                dt.Columns.Add("TimeAgo");
-
-                foreach (DataRow row in dt.Rows)
+                try
                 {
-                    row["Initials"] = GetInitials(row["FullName"].ToString());
-                    row["Title"] = "Connection request";
-                    row["Message"] = row["FullName"].ToString() + " sent you a connection request.";
-                    row["TimeAgo"] = GetTimeAgo(Convert.ToDateTime(row["RequestedAt"]));
+                    conn.Open();
+
+                    // Pipeline 1: Fetch Pending Connection Requests
+                    string connectionSql = @"
+                        SELECT c.ConnectionId, p.FullName, c.RequestedAt
+                        FROM PatientDoctorConnections c
+                        INNER JOIN Patients p ON c.PatientId = p.PatientId
+                        WHERE c.DoctorId = @DoctorId AND c.Status = 'Pending'";
+
+                    using (SqlCommand cmd = new SqlCommand(connectionSql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                DataRow row = displayTable.NewRow();
+                                row["SourceId"] = reader["ConnectionId"];
+                                row["ItemType"] = "Connection";
+                                string name = reader["FullName"].ToString();
+                                row["FullName"] = name;
+                                row["Initials"] = GetInitials(name);
+                                row["Title"] = "Connection Request";
+                                row["Message"] = $"{name} sent you a patient connection request.";
+                                row["IconClass"] = "fa-solid fa-user-plus text-primary";
+                                DateTime reqDate = Convert.ToDateTime(reader["RequestedAt"]);
+                                row["TimeStamp"] = reqDate;
+                                row["TimeAgo"] = GetTimeAgo(reqDate);
+                                displayTable.Rows.Add(row);
+                            }
+                        }
+                    }
+
+                    // Pipeline 2: Fetch Pending Appointment Bookings
+                    string appointmentSql = @"
+                        SELECT a.AppointmentId, p.FullName, a.AppointmentDate
+                        FROM Appointments a
+                        INNER JOIN Patients p ON a.PatientId = p.PatientId
+                        WHERE a.DoctorId = @DoctorId AND a.Status = 'Pending'";
+
+                    using (SqlCommand cmd = new SqlCommand(appointmentSql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                DataRow row = displayTable.NewRow();
+                                row["SourceId"] = reader["AppointmentId"];
+                                row["ItemType"] = "Appointment";
+                                string name = reader["FullName"].ToString();
+                                row["FullName"] = name;
+                                row["Initials"] = GetInitials(name);
+                                row["Title"] = "Appointment Query";
+                                DateTime appDate = Convert.ToDateTime(reader["AppointmentDate"]);
+                                row["Message"] = $"{name} requested a booking slot for {appDate:yyyy-MM-dd HH:mm}.";
+                                row["IconClass"] = "fa-solid fa-calendar-days text-warning";
+                                row["TimeStamp"] = appDate; // Using app booking request datetime metric
+                                row["TimeAgo"] = "Pending review";
+                                displayTable.Rows.Add(row);
+                            }
+                        }
+                    }
                 }
-
-                rptNotifications.DataSource = dt;
-                rptNotifications.DataBind();
-
-                litNotifCount.Text = dt.Rows.Count.ToString();
-
-                if (dt.Rows.Count == 0)
+                catch (Exception)
                 {
-                    pnlNoNotifications.Visible = true;
+                    // Handle query errors cleanly without crashing UI shells
                 }
-                else
-                {
-                    pnlNoNotifications.Visible = false;
-                }
-
-                cmd.Dispose();
-                conn.Close();
             }
+
+            // Sort data chronologically to align merged items cleanly
+            DataView view = displayTable.DefaultView;
+            view.Sort = "TimeStamp DESC";
+            DataTable sortedTable = view.ToTable();
+
+            rptNotifications.DataSource = sortedTable;
+            rptNotifications.DataBind();
+
+            litNotifCount.Text = sortedTable.Rows.Count.ToString();
+            pnlNoNotifications.Visible = (sortedTable.Rows.Count == 0);
+        }
+
+        private void ResetNotificationUI()
+        {
+            litNotifCount.Text = "0";
+            pnlNoNotifications.Visible = true;
+            rptNotifications.DataSource = null;
+            rptNotifications.DataBind();
         }
 
         protected void rptNotifications_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            int connectionId = Convert.ToInt32(e.CommandArgument);
+            int targetId = Convert.ToInt32(e.CommandArgument);
+            string command = e.CommandName;
 
-            if (e.CommandName == "AcceptConnection")
+            // Direct Context Actions routing split
+            if (command == "AcceptConnection")
             {
-                UpdateRequestStatus(connectionId, "Accepted");
-                Response.Write("<script>alert('Connection accepted successfully')</script>");
+                UpdateConnectionStatus(targetId, "Accepted");
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Connection accepted successfully.');", true);
             }
-            else if (e.CommandName == "RejectConnection")
+            else if (command == "RejectConnection")
             {
-                UpdateRequestStatus(connectionId, "Rejected");
-                Response.Write("<script>alert('Connection rejected successfully')</script>");
+                UpdateConnectionStatus(targetId, "Rejected");
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Connection request declined.');", true);
+            }
+            else if (command == "AcceptAppointment")
+            {
+                UpdateAppointmentStatus(targetId, "Accepted");
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Appointment accepted successfully.');", true);
+            }
+            else if (command == "RejectAppointment")
+            {
+                UpdateAppointmentStatus(targetId, "Rejected");
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "alert('Appointment query declined.');", true);
             }
 
             DispNotifications();
+
+            // Optional: If you want content dashboard pages inside the shell to refresh data arrays concurrently
+            if (Page is DoctorDashboard dashboardPage)
+            {
+                // Requires making RefreshDashboardDataPipelines() public or calling via custom page interface
+                dashboardPage.Response.Redirect(Request.RawUrl);
+            }
         }
 
-        private void UpdateRequestStatus(int connectionId, string status)
+        private void UpdateConnectionStatus(int connectionId, string status)
         {
             using (SqlConnection conn = GetConnection())
             {
-                conn.Open();
+                string sql = "UPDATE PatientDoctorConnections SET Status = @Status, RespondedAt = GETDATE() WHERE ConnectionId = @Id";
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@Id", connectionId);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = @"
-                                    UPDATE PatientDoctorConnections
-                                    SET Status = @Status,
-                                        RespondedAt = GETDATE()
-                                    WHERE ConnectionId = @ConnectionId";
-
-                cmd.Parameters.AddWithValue("@Status", status);
-                cmd.Parameters.AddWithValue("@ConnectionId", connectionId);
-
-                cmd.ExecuteNonQuery();
-
-                cmd.Dispose();
-                conn.Close();
+        private void UpdateAppointmentStatus(int appointmentId, string status)
+        {
+            using (SqlConnection conn = GetConnection())
+            {
+                string sql = "UPDATE Appointments SET Status = @Status WHERE AppointmentId = @Id";
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@Id", appointmentId);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
         }
 
@@ -151,21 +219,13 @@ namespace MediCare.MasterPage
         {
             using (SqlConnection conn = GetConnection())
             {
-                conn.Open();
-
-                SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandText = "SELECT DoctorId FROM Doctors WHERE UserId = @UserId";
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                object result = cmd.ExecuteScalar();
-
-                cmd.Dispose();
-                conn.Close();
-
-                if (result != null && result != DBNull.Value)
+                string sql = "SELECT DoctorId FROM Doctors WHERE UserId = @UserId";
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
-                    return Convert.ToInt32(result);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value) return Convert.ToInt32(result);
                 }
             }
             return 0;
@@ -173,48 +233,20 @@ namespace MediCare.MasterPage
 
         private string GetInitials(string fullName)
         {
-            if (string.IsNullOrWhiteSpace(fullName))
-            {
-                return "?";
-            }
-
+            if (string.IsNullOrWhiteSpace(fullName)) return "?";
             string[] parts = fullName.Trim().Split(' ');
-
-            if (parts.Length == 1)
-            {
-                return parts[0].Substring(0, 1).ToUpper();
-            }
-
-            return (
-                parts[0].Substring(0, 1) +
-                parts[parts.Length - 1].Substring(0, 1)
-            ).ToUpper();
+            if (parts.Length == 1) return parts[0].Substring(0, 1).ToUpper();
+            return (parts[0].Substring(0, 1) + parts[parts.Length - 1].Substring(0, 1)).ToUpper();
         }
 
         private string GetTimeAgo(DateTime dateTime)
         {
             TimeSpan span = DateTime.Now - dateTime;
-
-            if (span.TotalMinutes < 1)
-            {
-                return "Just now";
-            }
-            else if (span.TotalMinutes < 60)
-            {
-                return Convert.ToInt32(span.TotalMinutes) + " min ago";
-            }
-            else if (span.TotalHours < 24)
-            {
-                return Convert.ToInt32(span.TotalHours) + " h ago";
-            }
-            else if (span.TotalDays < 7)
-            {
-                return Convert.ToInt32(span.TotalDays) + " day(s) ago";
-            }
-            else
-            {
-                return dateTime.ToString("dd MMM yyyy");
-            }
+            if (span.TotalMinutes < 1) return "Just now";
+            if (span.TotalMinutes < 60) return Convert.ToInt32(span.TotalMinutes) + " min ago";
+            if (span.TotalHours < 24) return Convert.ToInt32(span.TotalHours) + " h ago";
+            if (span.TotalDays < 7) return Convert.ToInt32(span.TotalDays) + " day(s) ago";
+            return dateTime.ToString("dd MMM yyyy");
         }
 
         protected void btnLogout_Click(object sender, EventArgs e)

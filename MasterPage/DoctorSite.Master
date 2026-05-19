@@ -6,13 +6,11 @@
     <meta charset="UTF-8" />
     <title><%= Page.Title %></title>
 
-    <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
           integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
           crossorigin="anonymous" />
 
-    <!-- Master layout CSS -->
     <link rel="stylesheet" href="/css/DrMaster.css" />
 
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
@@ -20,10 +18,8 @@
 <body>
     <form id="form1" runat="server">
 
-        <!-- ═══════════ App Shell ═══════════ -->
         <div class="ds-shell" id="appShell">
 
-            <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
             <aside class="ds-sidebar" id="sidebar">
 
                 <button type="button"
@@ -33,7 +29,6 @@
                     <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
                 </button>
 
-                <!-- Logo -->
                 <div class="ds-sidebar__logo">
                     <div class="ds-logo-icon">
                         <svg viewBox="0 0 24 24"
@@ -54,42 +49,35 @@
                 </div>
                 
 
-                <!-- Navigation -->
-                <nav class="ds-sidebar__nav">
+                <nav class="ds-sidebar__nav" id="sidebarNav">
 
                     <div class="ds-nav-section-label">MAIN</div>
 
-                    <a href="/Pages/Doctor/Dashboard.aspx"
-                       class="ds-nav-link ds-nav-link--active">
+                    <a href="/Pages/Doctor/Dashboard.aspx" class="ds-nav-link">
                         Dashboard
                     </a>
 
-                    <a href="/Pages/Doctor/Search.aspx"
-                       class="ds-nav-link">
+                    <a href="/Pages/Doctor/Search.aspx" class="ds-nav-link">
                         Search
                     </a>
 
-                    <a href="/Pages/Doctor/PatientList.aspx"
-                       class="ds-nav-link">
+                    <a href="/Pages/Doctor/PatientList.aspx" class="ds-nav-link">
                         Patients
                     </a>
 
                     <div class="ds-nav-section-label">MANAGEMENT</div>
 
-                    <a href="/Pages/Doctor/Requests.aspx"
-                       class="ds-nav-link">
+                    <a href="/Pages/Doctor/PatientList.aspx" class="ds-nav-link">
                         Requests
                     </a>
 
                     <div class="ds-nav-section-label">SETTINGS</div>
 
-                    <a href="/Pages/Doctor/DoctorProfile.aspx"
-                       class="ds-nav-link">
+                    <a href="/Pages/Doctor/DoctorProfile.aspx" class="ds-nav-link">
                         Profile
                     </a>
                 </nav>
 
-                <!-- Logout -->
                 <div class="ds-sidebar__footer">
 
                     <asp:LinkButton ID="btnLogout"
@@ -104,10 +92,8 @@
                 </div>
             </aside>
 
-            <!-- ═══════════════════════ MAIN AREA ═══════════════════════ -->
             <div class="ds-main" id="mainPanel">
 
-                <!-- Top Bar -->
                 <header class="ds-topbar">
 
                     <div class="ds-topbar__page-title">
@@ -126,10 +112,8 @@
 
                     <div class="ds-topbar__actions">
 
-                       <!-- Notifications -->
-                    <div class="ds-notification" id="notifDropdown">
+                       <div class="ds-notification" id="notifDropdown">
 
-                        <!-- Bell Button -->
                         <button type="button"
                                 class="ds-icon-btn"
                                 onclick="toggleNotifications(event)"
@@ -137,33 +121,28 @@
 
                             <i class="fa-solid fa-bell"></i>
 
-                            <!-- red unread dot -->
                             <span class="ds-notif-dot"></span>
 
-                            <!-- unread count -->
                             <span class="ds-notif-count">
                                 <asp:Literal ID="litNotifCount"
                                              runat="server"
-                                             Text="3" />
+                                             Text="0" />
                             </span>
                         </button>
 
-                        <!-- Dropdown -->
                         <div class="ds-notif-dropdown"
-                             id="notifMenu">
+                             id="notifMenu" style="width: 340px; max-height: 450px; overflow-y: auto;">
 
-                            <!-- Header -->
                             <div class="ds-notif-header">
                                 <h4>Notifications</h4>
 
                                 <asp:LinkButton ID="btnMarkAllRead"
                                                 runat="server"
-                                                CssClass="ds-notif-clear">
+                                                CssClass="ds-notif-clear" Visible="false">
                                     Mark all as read
                                 </asp:LinkButton>
                             </div>
 
-                            <!-- Notifications List -->
                             <div class="ds-notif-list">
 
                                 <asp:Repeater ID="rptNotifications"
@@ -172,41 +151,43 @@
 
                                     <ItemTemplate>
 
-                                        <div class="ds-notif-item">
+                                        <div class="ds-notif-item" style="padding: 12px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 10px;">
 
-                                            <!-- Avatar -->
-                                            <div class="ds-notif-avatar">
+                                            <div class="ds-notif-avatar" style="width: 36px; height: 36px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; flex-shrink: 0;">
                                                 <%# Eval("Initials") %>
                                             </div>
 
-                                            <!-- Content -->
-                                            <div class="ds-notif-content">
+                                            <div class="ds-notif-content" style="flex-grow: 1;">
 
-                                                <div class="ds-notif-title">
-                                                    <%# Eval("Title") %>
+                                                <div class="ds-notif-title" style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">
+                                                    <i class='<%# Eval("IconClass") %>' style="margin-right: 4px;"></i> <%# Eval("Title") %>
                                                 </div>
 
-                                                <div class="ds-notif-message">
+                                                <div class="ds-notif-message" style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">
                                                     <%# Eval("Message") %>
                                                 </div>
+                                                
+                                                <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 2px;">
+                                                    <%# Eval("TimeAgo") %>
+                                                </div>
 
-
-                                                <!-- Actions -->
-                                                <div class="ds-notif-actions">
+                                                <div class="ds-notif-actions" style="margin-top: 8px; display: flex; gap: 6px;">
 
                                                     <asp:LinkButton ID="btnAccept"
                                                                     runat="server"
                                                                     CssClass="ds-notif-btn ds-notif-btn--accept"
+                                                                    style="font-size: 0.75rem; padding: 4px 8px; background: #d1fae5; color: #065f46; border-radius: 4px; text-decoration:none;"
                                                                     Text="Accept"
-                                                                    CommandName="AcceptConnection"
-                                                                    CommandArgument='<%# Eval("ConnectionId") %>' />
+                                                                    CommandName='<%# "Accept" + Eval("ItemType") %>'
+                                                                    CommandArgument='<%# Eval("SourceId") %>' />
 
                                                     <asp:LinkButton ID="btnReject"
                                                                     runat="server"
                                                                     CssClass="ds-notif-btn ds-notif-btn--reject"
+                                                                    style="font-size: 0.75rem; padding: 4px 8px; background: #fee2e2; color: #991b1b; border-radius: 4px; text-decoration:none;"
                                                                     Text="Reject"
-                                                                    CommandName="RejectConnection"
-                                                                    CommandArgument='<%# Eval("ConnectionId") %>' />
+                                                                    CommandName='<%# "Reject" + Eval("ItemType") %>'
+                                                                    CommandArgument='<%# Eval("SourceId") %>' />
 
                                                 </div>
                                             </div>
@@ -218,22 +199,20 @@
 
                             </div>
 
-                            <!-- Empty State -->
                             <asp:Panel ID="pnlNoNotifications"
                                        runat="server"
                                        Visible="false"
-                                       CssClass="ds-notif-empty">
+                                       CssClass="ds-notif-empty" style="text-align: center; padding: 20px; color: #94a3b8;">
 
-                                <i class="fa-regular fa-bell-slash"></i>
+                                <i class="fa-regular fa-bell-slash" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
 
-                                <span>No notifications</span>
+                                <span>No pending requests</span>
                             </asp:Panel>
 
                         </div>
                     </div>
 
 
-                        <!-- Profile Dropdown -->
                         <div class="ds-topbar__profile" id="profileDropdown">
 
                             <button type="button"
@@ -294,13 +273,11 @@
                     </div>
                 </header>
 
-                <!-- Page Content -->
                 <main class="ds-page-content">
                     <asp:ContentPlaceHolder ID="MainContent"
                                             runat="server" />
                 </main>
 
-                <!-- Footer -->
                 <footer class="ds-footer">
 
                     <p>
@@ -318,49 +295,77 @@
         </div>
     </form>
 
-    <!-- Dropdown Script -->
     <script>
-        function toggleNotifications(e){
-            e.stopPropagation();
-            var menu = document.getElementById('notifMenu');
-            menu.classList.toggle('ds-notif-dropdown--open');
-        }
+// 1. Dynamic Menu Highlighter (Error-Resistant Pattern)
+document.addEventListener("DOMContentLoaded", function () {
+    var currentPath = window.location.pathname.toLowerCase();
+    var navLinks = document.querySelectorAll("#sidebarNav .ds-nav-link");
 
-        document.addEventListener('click', function (e){
-            var notifMenu = document.getElementById('notifMenu');
-            if (notifMenu && !e.target.closest('.ds-notification')) {
-                notifMenu.classList.remove(
-                    'ds-notif-dropdown--open'
-                );
-            }
-        });
-        
-        function toggleSidebar(){
-            var shell = document.getElementById('appShell');
-            shell.classList.toggle('ds-shell--collapsed');
-            var icon = document.getElementById('toggleIcon');
-            if (icon) {
-                if (shell.classList.contains('ds-shell--collapsed')) {
-                    icon.className = 'fa-solid fa-chevron-right';
-                }
-                else {
-                    icon.className = 'fa-solid fa-chevron-left';
+    if (navLinks.length > 0) {
+        navLinks.forEach(function (link) {
+            var hrefAttr = link.getAttribute("href");
+            if (hrefAttr) {
+                var linkPath = hrefAttr.toLowerCase();
+
+                // Highlights perfectly matching page or matching aliases (like Patients + Requests link)
+                if (currentPath === linkPath || currentPath.endsWith(linkPath)) {
+                    link.classList.add("ds-nav-link--active");
+                } else {
+                    link.classList.remove("ds-nav-link--active");
                 }
             }
-        }
-
-        function toggleProfileDropdown(e) {
-            e.stopPropagation();
-            var menu = document.getElementById('profileMenu');
-            menu.classList.toggle('ds-profile-dropdown--open');
-        }
-        document.addEventListener('click', function (e) {
-            var menu = document.getElementById('profileMenu');
-            if (menu && !e.target.closest('.ds-topbar__profile')) {
-                menu.classList.remove('ds-profile-dropdown--open');
-            }
         });
-    </script>
+    }
+});
+
+// 2. Toggle Notification Dropdown Box
+function toggleNotifications(e) {
+    if (e) e.stopPropagation();
+    var menu = document.getElementById('notifMenu');
+    if (menu) {
+        menu.classList.toggle('ds-notif-dropdown--open');
+    }
+}
+
+// 3. Toggle Profile Settings Menu
+function toggleProfileDropdown(e) {
+    if (e) e.stopPropagation();
+    var menu = document.getElementById('profileMenu');
+    if (menu) {
+        menu.classList.toggle('ds-profile-dropdown--open');
+    }
+}
+
+// 4. Global Dropdown Outside-Click Closer
+document.addEventListener('click', function (e) {
+    var notifMenu = document.getElementById('notifMenu');
+    if (notifMenu && !e.target.closest('.ds-notification')) {
+        notifMenu.classList.remove('ds-notif-dropdown--open');
+    }
+
+    var profileMenu = document.getElementById('profileMenu');
+    if (profileMenu && !e.target.closest('.ds-topbar__profile')) {
+        profileMenu.classList.remove('ds-profile-dropdown--open');
+    }
+});
+
+// 5. Sidebar Layout Collapse Trigger
+function toggleSidebar() {
+    var shell = document.getElementById('appShell');
+    var icon = document.getElementById('toggleIcon');
+
+    if (shell) {
+        shell.classList.toggle('ds-shell--collapsed');
+        if (icon) {
+            if (shell.classList.contains('ds-shell--collapsed')) {
+                icon.className = 'fa-solid fa-chevron-right';
+            } else {
+                icon.className = 'fa-solid fa-chevron-left';
+            }
+        }
+    }
+}
+</script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
 </body>
