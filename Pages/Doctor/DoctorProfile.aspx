@@ -1,230 +1,139 @@
-﻿<%@ Page Title="Doctor Profile" Language="C#" MasterPageFile="~/MasterPage/DoctorSite.Master" AutoEventWireup="true" CodeBehind="DoctorProfile.aspx.cs" Inherits="MediCare.Pages.Account.DoctorProfile" %>
+﻿<%@ Page Title="My Profile – MediCare"
+    Language="C#"
+    MasterPageFile="~/MasterPage/DoctorSite.Master"
+    AutoEventWireup="true"
+    CodeBehind="DoctorProfile.aspx.cs"
+    Inherits="MediCare.Pages.Doctor.DoctorProfile" %>
 
-<asp:Content ID="HeadContent" ContentPlaceHolderID="HeadContent" runat="server">
-    <link rel="stylesheet" href="/css/DoctorProfile.css" />
+<asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        .prof-container { max-width: 900px; margin: 30px auto; padding: 0 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .prof-card { background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #eef2f5; overflow: hidden; }
+        .prof-header { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 40px 30px; color: #fff; display: flex; align-items: center; gap: 25px; }
+        .prof-avatar-circle { width: 90px; height: 90px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 3px solid rgba(255,255,255,0.4); }
+        .prof-header-info h1 { margin: 0 0 5px 0; font-size: 1.8rem; font-weight: 600; }
+        .prof-header-info p { margin: 0; opacity: 0.9; font-size: 1rem; }
+        .prof-badge { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-top: 8px; }
+        
+        .prof-stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: center; padding: 15px 0; }
+        .prof-stat-item { border-right: 1px solid #e2e8f0; }
+        .prof-stat-item:last-child { border-right: none; }
+        .prof-stat-num { block: text; font-size: 1.4rem; font-weight: bold; color: #1e293b; }
+        .prof-stat-lbl { font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .prof-body { padding: 30px; }
+        .prof-section-title { font-size: 1.1rem; color: #334155; margin: 0 0 20px 0; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: center; gap: 10px; font-weight: 600; }
+        
+        .prof-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
+        .prof-grid--full { grid-template-columns: 1fr; }
+        .prof-group { display: flex; flex-direction: column; gap: 6px; }
+        .prof-label { font-size: 0.85rem; color: #475569; font-weight: 500; }
+        .prof-input { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; color: #334155; transition: border 0.2s; background-color: #fff; }
+        .prof-input:focus { border-color: #0284c7; outline: none; box-shadow: 0 0 0 3px rgba(2,132,199,0.1); }
+        .prof-input--readonly { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        
+        .prof-actions { display: flex; justify-content: flex-end; gap: 12px; padding-top: 20px; border-top: 1px solid #f1f5f9; }
+        .prof-btn { padding: 10px 24px; border-radius: 6px; font-size: 0.95rem; font-weight: 500; cursor: pointer; border: none; transition: background 0.2s; }
+        .prof-btn--primary { background: #0284c7; color: #fff; }
+        .prof-btn--primary:hover { background: #0369a1; }
+        
+        .prof-alert { padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        .prof-alert--success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .prof-alert--error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    </style>
 </asp:Content>
 
-<asp:Content ID="MainContent" ContentPlaceHolderID="MainContent" runat="server">
+<asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
+<div class="prof-container">
 
-    <div class="dp-root" id="dpRoot">
+    <asp:Panel ID="pnlAlert" runat="server" Visible="false">
+        <i id="alertIcon" runat="server" class="fa-solid"></i>
+        <asp:Label ID="lblAlertMessage" runat="server" />
+    </asp:Panel>
 
-        <!-- Profile Banner -->
-        <div class="dp-banner">
-            <div class="dp-banner__bg"></div>
-
-            <div class="dp-banner__content">
-                <div class="dp-avatar-wrap">
-                    <div class="dp-avatar" id="dpAvatar">
-                        <span class="dp-avatar__initials">
-                            <asp:Label ID="lblInitials" runat="server" Text="--" />
-                        </span>
-                    </div>
-
-                    <div class="dp-avatar__availability" id="dpAvailabilityDot" title="Available" runat="server"></div>
-                </div>
-
-                <div class="dp-banner__info">
-                    <div class="dp-banner__specialty-tag">
-                        <i class="fas fa-stethoscope"></i>
-                        <asp:TextBox ID="txtSpecialty" runat="server" CssClass="dp-specialty-input" ReadOnly="true" />
-                    </div>
-
-                    <h1 class="dp-banner__name">
-                        <asp:Label ID="lblFullName" runat="server" Text="Dr Name" />
-                    </h1>
-
-                    <div class="dp-banner__meta">
-                        <span class="dp-meta-chip">
-                            <i class="fas fa-award"></i>
-                            <asp:TextBox ID="txtExperience" runat="server" CssClass="dp-chip-input" ReadOnly="true" />
-                            <span> yrs experience</span>
-                        </span>
-
-                        <span class="dp-meta-chip">
-                            <i class="fas fa-hospital"></i>
-                            <asp:TextBox ID="txtDepartment" runat="server" CssClass="dp-chip-input" ReadOnly="true" />
-                        </span>
-
-                        <span class="dp-meta-chip">
-                            <i class="fas fa-id-badge"></i>
-                            <asp:TextBox ID="txtLicense" runat="server" CssClass="dp-chip-input" ReadOnly="true" />
-                        </span>
-                    </div>
-                </div>
-
-                <div class="dp-banner__actions">
-                    <asp:Button ID="btnEdit" runat="server" Text="Edit Profile" CssClass="dp-btn dp-btn--outline" OnClick="btnEdit_Click" />
-                    <asp:Button ID="btnSave" runat="server" Text="Save" CssClass="dp-btn dp-btn--primary" Visible="false" OnClick="btnSave_Click" />
-                    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="dp-btn dp-btn--ghost" Visible="false" OnClick="btnCancel_Click" />
-                </div>
+    <div class="prof-card">
+        <div class="prof-header">
+            <div class="prof-avatar-circle">
+                <i class="fa-solid fa-user-md"></i>
+            </div>
+            <div class="prof-header-info">
+                <h1><asp:Label ID="lblHeaderName" runat="server" Text="Doctor Name" /></h1>
+                <p><asp:Label ID="lblHeaderSpeciality" runat="server" Text="General Practice" /></p>
+                <span class="prof-badge"><i class="fa-solid fa-id-card"></i> Verified Practitioner</span>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <main class="dp-main">
-
-            <div class="dp-main-grid">
-                <!-- Contact Details -->
-                <section class="dp-card dp-card--contact">
-                    <div class="dp-card__header">
-                        <i class="fas fa-address-card"></i>
-                        <h3>Contact Details</h3>
-                    </div>
-
-                    <div class="dp-card__body">
-                        <div class="dp-info-row dp-info-row--highlight">
-                            <i class="fas fa-phone-alt"></i>
-                            <div class="dp-field">
-                                <span class="dp-info-row__label">Phone Number</span>
-                                <asp:TextBox ID="txtPhone" runat="server" CssClass="dp-info-row__value" ReadOnly="true" />
-                            </div>
-                        </div>
-
-                        <div class="dp-info-row">
-                            <i class="fas fa-envelope"></i>
-                            <div class="dp-field">
-                                <span class="dp-info-row__label">Email Address</span>
-                                <asp:TextBox ID="txtEmail" runat="server" CssClass="dp-info-row__value" ReadOnly="true" />
-                            </div>
-                        </div>
-
-                        <div class="dp-info-row">
-                            <i class="fas fa-building"></i>
-                            <div class="dp-field">
-                                <span class="dp-info-row__label">Clinic Address</span>
-                                <asp:TextBox ID="txtClinicAddress" runat="server" CssClass="dp-info-row__value" ReadOnly="true" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Professional Details -->
-                <section class="dp-card">
-                    <div class="dp-card__header">
-                        <i class="fas fa-briefcase-medical"></i>
-                        <h3>Professional Details</h3>
-                    </div>
-
-                    <div class="dp-card__body">
-                        <div class="dp-info-grid">
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">Sub-Specialty</span>
-                                <asp:TextBox ID="txtSubSpecialty" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">Department</span>
-                                <asp:TextBox ID="txtDepartmentProf" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">Languages</span>
-                                <asp:TextBox ID="txtLanguages" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">Years of Experience</span>
-                                <asp:TextBox ID="txtYearsExperience" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">Consultation Fee</span>
-                                <asp:TextBox ID="txtConsultationFee" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-
-                            <div class="dp-info-cell">
-                                <span class="dp-info-cell__label">License No.</span>
-                                <asp:TextBox ID="txtLicenseProf" runat="server" CssClass="dp-info-cell__val" ReadOnly="true" />
-                            </div>
-                        </div>
-                    </div>
-                </section>
+        <div class="prof-stats-bar">
+            <div class="prof-stat-item">
+                <span class="prof-stat-num"><asp:Label ID="lblStatPatients" runat="server" Text="0" /></span>
+                <span class="prof-stat-lbl">Active Patients</span>
             </div>
-            <section class="dp-card dp-card--availability">
+            <div class="prof-stat-item">
+                <span class="prof-stat-num"><asp:Label ID="lblStatAppointments" runat="server" Text="0" /></span>
+                <span class="prof-stat-lbl">Appointments</span>
+            </div>
+            <div class="prof-stat-item">
+                <span class="prof-stat-num"><asp:Label ID="lblStatAge" runat="server" Text="--" /></span>
+                <span class="prof-stat-lbl">Age</span>
+            </div>
+        </div>
 
-                <div class="dp-card__header">
-                    <i class="fas fa-clock"></i>
-                    <h3>Manage Availability</h3>
+        <div class="prof-body">
+            
+            <div class="prof-section-title">
+                <i class="fa-solid fa-lock"></i> Account Credentials
+            </div>
+            <div class="prof-grid">
+                <div class="prof-group">
+                    <label class="prof-label">Account Email (Username)</label>
+                    <asp:TextBox ID="txtEmail" runat="server" CssClass="prof-input prof-input--readonly" ReadOnly="true" />
                 </div>
-
-                <div class="dp-card__body">
-
-                    <div class="dp-availability-form">
-
-                        <!-- Date -->
-                        <div class="dp-form-group">
-                            <label>Date</label>
-                            <asp:TextBox ID="txtDate" runat="server" TextMode="Date" CssClass="dp-input" />
-                        </div>
-
-                        <!-- Start Time -->
-                        <div class="dp-form-group">
-                            <label>Start Time</label>
-                            <asp:TextBox ID="txtStartTime" runat="server" TextMode="Time" CssClass="dp-input" />
-                        </div>
-
-                        <!-- End Time -->
-                        <div class="dp-form-group">
-                            <label>End Time</label>
-                            <asp:TextBox ID="txtEndTime" runat="server" TextMode="Time" CssClass="dp-input" />
-                        </div>
-
-                        <!-- Add Button -->
-                        <asp:Button ID="btnAddSlot"
-                                    runat="server"
-                                    Text="Add Availability"
-                                    CssClass="dp-btn dp-btn--primary"
-                                    OnClick="btnAddSlot_Click" />
-
-                    </div>
-
+                <div class="prof-group">
+                    <label class="prof-label">Gender Role Context</label>
+                    <asp:TextBox ID="txtGender" runat="server" CssClass="prof-input prof-input--readonly" ReadOnly="true" />
                 </div>
-            </section>
-            <section class="dp-card">
+            </div>
 
-                <div class="dp-card__header">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3>Your Availability</h3>
+            <div class="prof-section-title">
+                <i class="fa-solid fa-user-gear"></i> Clinical Practice Details
+            </div>
+            
+            <div class="prof-grid">
+                <div class="prof-group">
+                    <label class="prof-label">Full Name *</label>
+                    <asp:TextBox ID="txtFullName" runat="server" CssClass="prof-input" placeholder="Dr. John Doe" />
                 </div>
-
-                <div class="dp-card__body">
-
-                    <asp:GridView ID="gvAvailability"
-                                  runat="server"
-                                  AutoGenerateColumns="False"
-                                  CssClass="dp-grid"
-                                  OnRowCommand="gvAvailability_RowCommand">
-
-                        <Columns>
-
-                            <asp:BoundField DataField="StartTime" HeaderText="Start" />
-                            <asp:BoundField DataField="EndTime" HeaderText="End" />
-
-                            <asp:TemplateField HeaderText="Action">
-                                <ItemTemplate>
-                                    <asp:Button ID="btnDelete"
-                                                runat="server"
-                                                Text="Delete"
-                                                CommandName="DeleteSlot"
-                                                CommandArgument='<%# Eval("AvailabilityId") %>'
-                                                CssClass="dp-btn dp-btn--danger" />
-                                </ItemTemplate>
-                            </asp:TemplateField>
-
-                        </Columns>
-
-                    </asp:GridView>
-
+                <div class="prof-group">
+                    <label class="prof-label">Contact Phone Number</label>
+                    <asp:TextBox ID="txtPhone" runat="server" CssClass="prof-input" placeholder="+1 (555) 000-0000" />
                 </div>
+                <div class="prof-group">
+                    <label class="prof-label">Medical Speciality Area</label>
+                    <asp:TextBox ID="txtSpeciality" runat="server" CssClass="prof-input" placeholder="e.g., Cardiology, Pediatrics" />
+                </div>
+                <div class="prof-group">
+                    <label class="prof-label">Practitioner Age *</label>
+                    <asp:TextBox ID="txtAge" runat="server" TextMode="Number" CssClass="prof-input" placeholder="35" />
+                </div>
+            </div>
 
-            </section>
-        </main>
+            <div class="prof-grid prof-grid--full">
+                <div class="prof-group">
+                    <label class="prof-label">Clinic / Hospital Practice Address</label>
+                    <asp:TextBox ID="txtClinicAddress" runat="server" CssClass="prof-input" placeholder="Suite 404, Medical Building, Healthcare Ave." />
+                </div>
+                <div class="prof-group">
+                    <label class="prof-label">Medical Certification File Reference</label>
+                    <asp:TextBox ID="txtCertificatePath" runat="server" CssClass="prof-input prof-input--readonly" ReadOnly="true" />
+                </div>
+            </div>
 
+            <div class="prof-actions">
+                <asp:Button ID="btnSaveProfile" runat="server" OnClick="btnSaveProfile_Click" CssClass="prof-btn prof-btn--primary" Text="Update Profile Details" />
+            </div>
+
+        </div>
     </div>
-
-    <div class="dp-toast" id="dpToast" runat="server" visible="false">
-        <i class="fas fa-check-circle"></i>
-        <span><asp:Literal ID="litToastMsg" runat="server" Text="Profile updated." /></span>
-    </div>
-
+</div>
 </asp:Content>
