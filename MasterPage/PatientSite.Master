@@ -303,20 +303,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
             <!-- Right side -->
             <div class="mc-navbar__actions">
-                <!-- Chat Button -->
-                <a href="Chat.aspx"
-                   class="pn-chat-btn"
-                   title="Open Chat">
-
-                    <i class="fa-solid fa-comments"></i>
-
-                    <!-- Optional unread count -->
-                   <asp:Label ID="lblUnreadChats"
-                       runat="server"
-                       CssClass="pn-chat-btn__badge"
-                       Text="0" />
-                </a>
-
+                
                 <!-- Notifications -->
                 <div class="pn-notification">
                     <button type="button"

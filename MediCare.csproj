@@ -257,13 +257,6 @@
     <Compile Include="Pages\Patient\Search.aspx.designer.cs">
       <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Shared\Chatbot.aspx.cs">
-      <DependentUpon>Chatbot.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Pages\Shared\Chatbot.aspx.designer.cs">
-      <DependentUpon>Chatbot.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +317,6 @@
     <Content Include="Pages\Patient\Nutritions.aspx" />
     <Content Include="Pages\Patient\PatientProfile.aspx" />
     <Content Include="Pages\Patient\Search.aspx" />
-    <Content Include="Pages\Shared\Chatbot.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage\DoctorSite.Master" />

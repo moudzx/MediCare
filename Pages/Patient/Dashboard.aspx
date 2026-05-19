@@ -92,6 +92,8 @@
                     <asp:Label ID="lblHealthMessage" runat="server" CssClass="pd-success-msg" Visible="false" />
                 </div>
             </div>
+                        <!-- MY APPOINTMENTS -->
+            
         </div>
 
         <!-- RIGHT -->
@@ -178,8 +180,14 @@
                                         <i class="fa-solid fa-user-doctor"></i>
                                     </div>
                                     <div class="pd-doctor-info">
-                                        <div class="pd-doctor-name"><%# Eval("DoctorName") %></div>
-                                        <div class="pd-doctor-specialty"><%# Eval("Specialty") %></div>
+                                        <div class="pd-doctor-name">
+                                            <asp:HyperLink ID="hypDoctorProfile" runat="server" 
+                                                NavigateUrl='<%# "~/Pages/Patient/DoctorProfile.aspx?id=" + Eval("DoctorId") %>' 
+                                                Text='<%# Eval("DoctorName") %>' 
+                                                style="text-decoration:none; color:inherit;">
+                                            </asp:HyperLink>
+                                        </div>
+                                    <div class="pd-doctor-specialty"><%# Eval("Specialty") %></div>
                                     </div>
                                     <asp:Label ID="lblStatus" runat="server" CssClass="pd-doctor-status-badge"
                                         Text='<%# Eval("Status") %>' />
@@ -194,7 +202,37 @@
                 </div>
             </div>
         </div>
+
     </div>
+    <div class="pd-card pd-card--appointments">
+    <div class="pd-card__header">
+        <h2 class="pd-card__title">My Appointments</h2>
+        <p class="pd-card__subtitle">Upcoming and past bookings</p>
+    </div>
+
+    <div class="pd-table-wrap">
+
+        <asp:GridView ID="gvAppointments"
+            runat="server"
+            AutoGenerateColumns="False"
+            GridLines="None"
+            ShowHeader="True"
+            EmptyDataText="No appointments found."
+            CssClass="pd-dose-grid">
+
+            <Columns>
+
+                <asp:BoundField DataField="DoctorName" HeaderText="Doctor" />
+                <asp:BoundField DataField="AppointmentDate" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
+                <asp:BoundField DataField="Status" HeaderText="Status" />
+                <asp:BoundField DataField="Reason" HeaderText="Reason" />
+
+            </Columns>
+
+        </asp:GridView>
+
+    </div>
+</div>
 </div>
 
 <script>

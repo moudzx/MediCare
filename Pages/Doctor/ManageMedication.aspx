@@ -244,37 +244,25 @@
                             <ItemTemplate>
 
                                 <tr>
-
                                     <td>
-
                                         <strong>
-                                            <%# Eval("MedicineName") %>
+                                            <%# Eval("MedicineId") %>
                                         </strong>
-
                                     </td>
-
                                     <td>
                                         <%# Eval("Dosage") %>
                                     </td>
-
                                     <td>
                                         <%# Eval("Frequency") %>
                                     </td>
-
                                     <td>
                                         <%# Eval("Duration") %>
                                     </td>
-
                                     <td>
-
                                         <span class='mm-status mm-status--<%# Eval("Status").ToString().ToLower() %>'>
-
                                             <%# Eval("Status") %>
-
                                         </span>
-
                                     </td>
-
                                     <td class="mm-actions">
 
                                         <asp:LinkButton ID="btnComplete"

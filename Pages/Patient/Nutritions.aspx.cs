@@ -51,101 +51,111 @@ namespace MediCare.Pages.Patient
 
         protected void btnSearchFoods_Click(object sender, EventArgs e)
         {
-            int patientId = GetPatientId();
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
-                // FIX: Added 'NULL AS...' for ALL the columns that do not exist in the CustomFoods table
-                string sql = @"
-                SELECT *
-                FROM
-                (
-                    SELECT
-                        description AS Name,
-                        calories, protein, total_fat, carbohydrate,
-                        sodium, saturated_fat, cholesterol, sugar,
-                        calcium, iron, potassium, vitamin_c, vitamin_e, vitamin_d
-                    FROM Food
+                int patientId = GetPatientId();
 
-                    UNION ALL
-
-                    SELECT
-                        description AS Name,
-                        calories, 
-                        protein, 
-                        NULL AS total_fat,      -- Missing in CustomFoods
-                        NULL AS carbohydrate,   -- Missing in CustomFoods
-                        NULL AS sodium,         -- Missing in CustomFoods
-                        NULL AS saturated_fat,  -- Missing in CustomFoods
-                        NULL AS cholesterol,    -- Missing in CustomFoods
-                        NULL AS sugar,          -- Missing in CustomFoods
-                        NULL AS calcium,        -- Missing in CustomFoods
-                        NULL AS iron,           -- Missing in CustomFoods
-                        NULL AS potassium,      -- Missing in CustomFoods
-                        NULL AS vitamin_c,      -- Missing in CustomFoods
-                        NULL AS vitamin_e,      -- Missing in CustomFoods
-                        NULL AS vitamin_d       -- Missing in CustomFoods
-                    FROM CustomFoods
-                    WHERE PatientId = @PatientId
-                ) x
-                WHERE
-                    (@Calories = 0 OR calories BETWEEN @Calories - 5 AND @Calories + 5)
-                    AND (@Protein = 0 OR protein BETWEEN @Protein - 5 AND @Protein + 5)
-                    AND (@Fat = 0 OR total_fat BETWEEN @Fat - 5 AND @Fat + 5)
-                    AND (@Carbs = 0 OR carbohydrate BETWEEN @Carbs - 5 AND @Carbs + 5)
-                    AND (@Sodium = 0 OR sodium BETWEEN @Sodium - 5 AND @Sodium + 5)
-                    AND (@SaturatedFat = 0 OR saturated_fat BETWEEN @SaturatedFat - 5 AND @SaturatedFat + 5)
-                    AND (@Cholesterol = 0 OR cholesterol BETWEEN @Cholesterol - 5 AND @Cholesterol + 5)
-                    AND (@Sugar = 0 OR sugar BETWEEN @Sugar - 5 AND @Sugar + 5)
-                    AND (@Calcium = 0 OR calcium BETWEEN @Calcium - 5 AND @Calcium + 5)
-                    AND (@Iron = 0 OR iron BETWEEN @Iron - 5 AND @Iron + 5)
-                    AND (@Potassium = 0 OR potassium BETWEEN @Potassium - 5 AND @Potassium + 5)
-                    AND (@VitaminC = 0 OR vitamin_c BETWEEN @VitaminC - 5 AND @VitaminC + 5)
-                    AND (@VitaminE = 0 OR vitamin_e BETWEEN @VitaminE - 5 AND @VitaminE + 5)
-                    AND (@VitaminD = 0 OR vitamin_d BETWEEN @VitaminD - 5 AND @VitaminD + 5)
-                ORDER BY calories";
-
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    cmd.Parameters.AddWithValue("@PatientId", patientId);
+                    // 1. Added TOP 100 to prevent page timeouts if all fields are left blank.
+                    // 2. Removed 'AS Name' so the GridView can find the 'description' column.
+                    string sql = @"
+            SELECT TOP 100 *
+            FROM
+            (
+                SELECT
+                    description,
+                    calories, protein, total_fat, carbohydrate,
+                    sodium, saturated_fat, cholesterol, sugar,
+                    calcium, iron, potassium, vitamin_c, vitamin_e, vitamin_d
+                FROM Food
 
-                    cmd.Parameters.AddWithValue("@Calories", ParseDouble(txtCalories.Text));
-                    cmd.Parameters.AddWithValue("@Protein", ParseDouble(txtProtein.Text));
-                    cmd.Parameters.AddWithValue("@Fat", ParseDouble(txtFat.Text));
-                    cmd.Parameters.AddWithValue("@Carbs", ParseDouble(txtCarbs.Text));
+                UNION ALL
 
-                    cmd.Parameters.AddWithValue("@Sodium", ParseDouble(txtSodium.Text));
-                    cmd.Parameters.AddWithValue("@SaturatedFat", ParseDouble(txtSaturatedFat.Text));
-                    cmd.Parameters.AddWithValue("@Cholesterol", ParseDouble(txtCholesterol.Text));
-                    cmd.Parameters.AddWithValue("@Sugar", ParseDouble(txtSugar.Text));
+                SELECT
+                    description,  -- Note: If your CustomFoods table uses 'Name' or 'FoodName', change this here.
+                    calories, 
+                    protein, 
+                    total_fat,              
+                    carbohydrate,           
+                    NULL AS sodium,         
+                    NULL AS saturated_fat,  
+                    NULL AS cholesterol,    
+                    sugar,                  
+                    calcium,                
+                    iron,                   
+                    potassium,              
+                    vitamin_c,              
+                    vitamin_e,              
+                    vitamin_d               
+                FROM CustomFoods
+                WHERE PatientId = @PatientId
+            ) x
+            WHERE
+                (@Calories = 0 OR calories BETWEEN @Calories - 5 AND @Calories + 5)
+                AND (@Protein = 0 OR protein BETWEEN @Protein - 5 AND @Protein + 5)
+                AND (@Fat = 0 OR total_fat BETWEEN @Fat - 5 AND @Fat + 5)
+                AND (@Carbs = 0 OR carbohydrate BETWEEN @Carbs - 5 AND @Carbs + 5)
+                AND (@Sodium = 0 OR sodium BETWEEN @Sodium - 5 AND @Sodium + 5)
+                AND (@SaturatedFat = 0 OR saturated_fat BETWEEN @SaturatedFat - 5 AND @SaturatedFat + 5)
+                AND (@Cholesterol = 0 OR cholesterol BETWEEN @Cholesterol - 5 AND @Cholesterol + 5)
+                AND (@Sugar = 0 OR sugar BETWEEN @Sugar - 5 AND @Sugar + 5)
+                AND (@Calcium = 0 OR calcium BETWEEN @Calcium - 5 AND @Calcium + 5)
+                AND (@Iron = 0 OR iron BETWEEN @Iron - 5 AND @Iron + 5)
+                AND (@Potassium = 0 OR potassium BETWEEN @Potassium - 5 AND @Potassium + 5)
+                AND (@VitaminC = 0 OR vitamin_c BETWEEN @VitaminC - 5 AND @VitaminC + 5)
+                AND (@VitaminE = 0 OR vitamin_e BETWEEN @VitaminE - 5 AND @VitaminE + 5)
+                AND (@VitaminD = 0 OR vitamin_d BETWEEN @VitaminD - 5 AND @VitaminD + 5)
+            ORDER BY calories";
 
-                    cmd.Parameters.AddWithValue("@Calcium", ParseDouble(txtCalcium.Text));
-                    cmd.Parameters.AddWithValue("@Iron", ParseDouble(txtIron.Text));
-                    cmd.Parameters.AddWithValue("@Potassium", ParseDouble(txtPotassium.Text));
-
-                    cmd.Parameters.AddWithValue("@VitaminC", ParseDouble(txtVitaminC.Text));
-                    cmd.Parameters.AddWithValue("@VitaminE", ParseDouble(txtVitaminE.Text));
-                    cmd.Parameters.AddWithValue("@VitaminD", ParseDouble(txtVitaminD.Text));
-
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-
-                    gvSearchResults.DataSource = dt;
-                    gvSearchResults.DataBind();
-
-                    // Show a message if no records are found
-                    if (dt.Rows.Count == 0)
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        lblSearchMsg.Visible = true;
-                        lblSearchMsg.Text = "No foods matched your criteria.";
-                        lblSearchMsg.ForeColor = System.Drawing.Color.Red;
-                    }
-                    else
-                    {
-                        lblSearchMsg.Visible = false;
+                        cmd.Parameters.AddWithValue("@PatientId", patientId);
+
+                        cmd.Parameters.AddWithValue("@Calories", ParseDouble(txtCalories.Text));
+                        cmd.Parameters.AddWithValue("@Protein", ParseDouble(txtProtein.Text));
+                        cmd.Parameters.AddWithValue("@Fat", ParseDouble(txtFat.Text));
+                        cmd.Parameters.AddWithValue("@Carbs", ParseDouble(txtCarbs.Text));
+
+                        cmd.Parameters.AddWithValue("@Sodium", ParseDouble(txtSodium.Text));
+                        cmd.Parameters.AddWithValue("@SaturatedFat", ParseDouble(txtSaturatedFat.Text));
+                        cmd.Parameters.AddWithValue("@Cholesterol", ParseDouble(txtCholesterol.Text));
+                        cmd.Parameters.AddWithValue("@Sugar", ParseDouble(txtSugar.Text));
+
+                        cmd.Parameters.AddWithValue("@Calcium", ParseDouble(txtCalcium.Text));
+                        cmd.Parameters.AddWithValue("@Iron", ParseDouble(txtIron.Text));
+                        cmd.Parameters.AddWithValue("@Potassium", ParseDouble(txtPotassium.Text));
+
+                        cmd.Parameters.AddWithValue("@VitaminC", ParseDouble(txtVitaminC.Text));
+                        cmd.Parameters.AddWithValue("@VitaminE", ParseDouble(txtVitaminE.Text));
+                        cmd.Parameters.AddWithValue("@VitaminD", ParseDouble(txtVitaminD.Text));
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        gvSearchResults.DataSource = dt;
+                        gvSearchResults.DataBind();
+
+                        if (dt.Rows.Count == 0)
+                        {
+                            lblSearchMsg.Visible = true;
+                            lblSearchMsg.Text = "No foods matched your criteria.";
+                            lblSearchMsg.ForeColor = System.Drawing.Color.Red;
+                        }
+                        else
+                        {
+                            lblSearchMsg.Visible = false;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                // 3. This will immediately display exactly what went wrong on the page.
+                lblSearchMsg.Visible = true;
+                lblSearchMsg.Text = "Database Error: " + ex.Message;
+                lblSearchMsg.ForeColor = System.Drawing.Color.Red;
             }
         }
 
