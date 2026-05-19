@@ -123,6 +123,15 @@ namespace MediCare.Pages.Admin
         protected global::System.Web.UI.WebControls.TextBox txtTotalFat;
 
         /// <summary>
+        /// txtCarbohydrate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCarbohydrate;
+
+        /// <summary>
         /// txtSodium control.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace MediCare.Pages.Admin
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtSodium;
+
+        /// <summary>
+        /// txtSaturatedFat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSaturatedFat;
 
         /// <summary>
         /// txtCholesterol control.
