@@ -6,11 +6,10 @@ namespace MediCare.Pages.Patient
 {
     public partial class AddMedicine : System.Web.UI.Page
     {
-        private int medicineId;
+        private string medicineId;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Check if user is logged in
             if (Session["UserId"] == null || Session["Role"] == null)
             {
                 Response.Redirect("~/Pages/Account/Login.aspx");
@@ -19,36 +18,38 @@ namespace MediCare.Pages.Patient
 
             if (!IsPostBack)
             {
-                // Get medicine ID from query string
-                if (!int.TryParse(Request.QueryString["medicineId"], out medicineId))
+                medicineId = Request.QueryString["medicineId"];
+
+                if (string.IsNullOrWhiteSpace(medicineId))
                 {
                     Response.Redirect("~/Pages/Patient/Search.aspx");
                     return;
                 }
 
-                // Load medicine name
-                string medicineName = GetMedicineNameById(medicineId);
-
-                lblMedicineName.Text = medicineName;
-
-                // Store medicine ID in ViewState
                 ViewState["MedicineId"] = medicineId;
+
+                string medicineName = GetMedicineNameById(medicineId);
+                lblMedicineName.Text = medicineName;
             }
             else
             {
-                // Retrieve medicine ID from ViewState on postback
                 if (ViewState["MedicineId"] != null)
                 {
-                    medicineId = Convert.ToInt32(ViewState["MedicineId"]);
+                    medicineId = ViewState["MedicineId"].ToString();
                 }
             }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            // Validate inputs
-            if (string.IsNullOrEmpty(txtStartDate.Text) ||
-                string.IsNullOrEmpty(txtEndDate.Text))
+            if (Session["UserId"] == null)
+            {
+                Response.Redirect("~/Pages/Account/Login.aspx");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtStartDate.Text) ||
+                string.IsNullOrWhiteSpace(txtEndDate.Text))
             {
                 lblMessage.Text = "Please fill start and end dates.";
                 lblMessage.CssClass = "sea-inline-msg sea-inline-msg--error";
@@ -56,29 +57,78 @@ namespace MediCare.Pages.Patient
                 return;
             }
 
-            // Retrieve medicine ID
-            if (ViewState["MedicineId"] != null)
-            {
-                medicineId = Convert.ToInt32(ViewState["MedicineId"]);
-            }
-            else
+            if (ViewState["MedicineId"] == null)
             {
                 Response.Redirect("~/Pages/Patient/Search.aspx");
                 return;
             }
 
-            // Collect data
-            string startDate = txtStartDate.Text;
-            string endDate = txtEndDate.Text;
-            string frequency = ddlFrequency.SelectedValue;
+            string medicineId = ViewState["MedicineId"].ToString();
+
+            int userId = Convert.ToInt32(Session["UserId"]);
+            int patientId = GetPatientId();
+
+            if (patientId == 0)
+            {
+                lblMessage.Text = "Patient not found.";
+                lblMessage.CssClass = "sea-inline-msg sea-inline-msg--error";
+                lblMessage.Visible = true;
+                return;
+            }
+
+            string frequencyText = ddlFrequency.SelectedItem.Text;
             string pillsCount = txtPillsCount.Text;
             string time = txtTime.Text;
             string mealRelation = ddlMealRelation.SelectedValue;
             bool reminder = chkReminder.Checked;
 
-            // TODO: Save to database here
+            DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
+            DateTime endDate = Convert.ToDateTime(txtEndDate.Text);
 
-            // Success message / redirect
+            using (SqlConnection conn = new SqlConnection(
+                ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                string query = @"
+                            INSERT INTO PatientMedications
+                            (
+                                PatientId,
+                                DoctorId,
+                                MedicineId,
+                                Dosage,
+                                Frequency,
+                                Duration,
+                                StartDate,
+                                EndDate,
+                                Status
+                            )
+                            VALUES
+                            (
+                                @PatientId,
+                                NULL,
+                                @MedicineId,
+                                @Dosage,
+                                @Frequency,
+                                @Duration,
+                                @StartDate,
+                                @EndDate,
+                                'Active'
+                            )";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@PatientId", patientId);
+                    cmd.Parameters.AddWithValue("@MedicineId", medicineId);
+                    cmd.Parameters.AddWithValue("@Dosage", pillsCount ?? "");
+                    cmd.Parameters.AddWithValue("@Frequency", frequencyText);
+                    cmd.Parameters.AddWithValue("@Duration", mealRelation);
+                    cmd.Parameters.AddWithValue("@StartDate", startDate);
+                    cmd.Parameters.AddWithValue("@EndDate", endDate);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             Response.Redirect("~/Pages/Patient/Search.aspx?msg=Medicine+added+successfully");
         }
 
@@ -87,16 +137,16 @@ namespace MediCare.Pages.Patient
             Response.Redirect("~/Pages/Patient/Search.aspx");
         }
 
-        private string GetMedicineNameById(int id)
+        private string GetMedicineNameById(string id)
         {
             string connectionString =
-                ConfigurationManager.ConnectionStrings["MediCareConnection"].ConnectionString;
+                ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
             string medicineName = "Unknown Medicine";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT name FROM Medicine WHERE id = @id";
+                string query = "SELECT name FROM Medicine WHERE atc = @id";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -114,6 +164,36 @@ namespace MediCare.Pages.Patient
             }
 
             return medicineName;
+        }
+        private int GetPatientId()
+        {
+            if (Session["UserId"] == null)
+                return 0;
+
+            int userId = Convert.ToInt32(Session["UserId"]);
+
+            using (SqlConnection conn = new SqlConnection(
+                ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                string query = @"
+            SELECT PatientId
+            FROM Patients
+            WHERE UserId = @UserId";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+
+                    conn.Open();
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                        return Convert.ToInt32(result);
+                }
+            }
+
+            return 0;
         }
     }
 }
