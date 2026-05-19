@@ -298,7 +298,6 @@
     <Content Include="js\ManageMedication.js" />
     <Content Include="js\ManageNutrition.js" />
     <Content Include="js\mealCalculator.js" />
-    <Content Include="js\NewPassword.js" />
     <Content Include="js\PatientList.js" />
     <Content Include="js\profile.js" />
     <Content Include="MasterPage\PatientSite.Master" />

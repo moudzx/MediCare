@@ -104,7 +104,6 @@
                     <button type="button"
                         class="np-eye-btn"
                         id="eyeNew"
-                        onclick="toggleEye('txtNewPassword', 'eyeNew')"
                         aria-label="Toggle password visibility">
                         <svg class="np-eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -141,7 +140,6 @@
                     <button type="button"
                         class="np-eye-btn"
                         id="eyeConfirm"
-                        onclick="toggleEye('txtConfirmPassword', 'eyeConfirm')"
                         aria-label="Toggle password visibility">
                         <svg class="np-eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
@@ -167,13 +165,13 @@
                 </div>
             </div>
 
-            <!-- Save button -->
+            <!-- Save button (no client‑side handler now) -->
             <asp:Button
                 ID="btnSavePassword"
                 runat="server"
                 Text="Save New Password"
                 CssClass="fp-btn fp-btn--primary np-save-btn"
-                OnClientClick="handleSavePassword(event); return false;" />
+                OnClick="btnSavePassword_Click" />
 
         </div>
 
@@ -211,8 +209,4 @@
     </div>
 </div>
 
-</asp:Content>
-
-<asp:Content ID="PageScripts" ContentPlaceHolderID="ScriptContent" runat="server">
-    <script src="/js/NewPassword.js"></script>
 </asp:Content>
