@@ -11,7 +11,7 @@ namespace MediCare.Pages.Doctor
 {
 
 
-    public partial class DoctorDashboard
+    public partial class Dashboard
     {
 
         /// <summary>

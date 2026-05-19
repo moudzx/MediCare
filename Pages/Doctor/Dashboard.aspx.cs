@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace MediCare.Pages.Doctor
 {
-    public partial class DoctorDashboard : System.Web.UI.Page
+    public partial class Dashboard : System.Web.UI.Page
     {
         private readonly string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
