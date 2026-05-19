@@ -79,15 +79,15 @@ CREATE TABLE [dbo].[Food] (
 
 
 CREATE TABLE [dbo].[Medicine] (
-    [atc] NVARCHAR(20) PRIMARY KEY,
-    [name] NVARCHAR(255),
-    [b_g] NVARCHAR(10),
-    [ingredients] NVARCHAR(MAX),
-    [dosage] NVARCHAR(100),
-    [form] NVARCHAR(255),
-    [price] NVARCHAR(50)
+    [id] INT PRIMARY KEY,
+    [atc] NVARCHAR(20) NOT NULL,
+    [name] NVARCHAR(255) NULL,
+    [b_g] NVARCHAR(10) NULL,
+    [ingredients] NVARCHAR(MAX) NULL,
+    [dosage] NVARCHAR(100) NULL,
+    [form] NVARCHAR(255) NULL,
+    [price] NVARCHAR(50) NULL
 );
-
 
 CREATE TABLE [dbo].[PatientDoctorConnections] (
     [ConnectionId] INT IDENTITY(1,1) NOT NULL,
@@ -275,39 +275,23 @@ ON [dbo].[PatientMedications] ([PatientId], [Status]);
 
 -- Insert CSV
 
-BULK INSERT [dbo].[Medicine]
-FROM '~\lebanon_drugs_database.csv'
-WITH (
+BULK INSERT dbo.Medicine
+FROM 'C:\Users\10User\source\repos\MediCare\Database\lebanon_drugs_database.csv'
+WITH
+(
     FIRSTROW = 2,
-    FIELDTERMINATOR = ',',
-    ROWTERMINATOR = '\n',
-    FORMAT = 'CSV'
+    FIELDTERMINATOR = '|',
+    ROWTERMINATOR = '0x0a',
+    CODEPAGE = '65001',
+    TABLOCK
 );
 
 BULK INSERT [dbo].[Food]
-FROM '~\lebanese_food_database.csv'
+FROM 'C:\Users\10User\source\repos\MediCare\Database\lebanese_food_database.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
     FORMAT = 'CSV'
 );
-
--- Alternative for Food using OPENROWSET
-INSERT INTO [dbo].[Food] ([id], [description], [calories], [protein], [total_fat], [carbohydrate], [sodium], [saturated_fat], [cholesterol], [sugar], [calcium], [iron], [potassium], [vitamin_c], [vitamin_e], [vitamin_d])
-SELECT *
-FROM OPENROWSET(
-    BULK '~\lebanese_food_database.csv',
-    FORMATFILE = '~\food_format.xml',
-    FIRSTROW = 2
-) AS csv;
-
--- Alternative for Medicine using OPENROWSET
-INSERT INTO [dbo].[Medicine] ([atc], [name], [b_g], [ingredients], [dosage], [form], [price])
-SELECT *
-FROM OPENROWSET(
-    BULK '~\lebanon_drugs_database.csv',
-    FORMATFILE = '~\medicine_format.xml',
-    FIRSTROW = 2
-) AS csv;
 
