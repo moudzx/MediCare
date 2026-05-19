@@ -109,7 +109,7 @@ namespace MediCare
                         Session["Role"] = "Patient";
                         Session["FullName"] = txtPatientName.Text.Trim();
 
-                        Response.Redirect("~/Pages/Patient/PatientProfile.aspx", false);
+                        Response.Redirect("~/Pages/Patient/Dashboard.aspx", false);
                         Context.ApplicationInstance.CompleteRequest();
                     }
                     catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
@@ -207,7 +207,7 @@ namespace MediCare
                         Session["Role"] = "Doctor";
                         Session["FullName"] = txtDoctorName.Text.Trim();
 
-                        Response.Redirect("~/Pages/Doctor/DoctorProfile.aspx", false);
+                        Response.Redirect("~/Pages/Doctor/Dashboard.aspx", false);
                         Context.ApplicationInstance.CompleteRequest();
                     }
                     catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
