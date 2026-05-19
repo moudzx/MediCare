@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="/css/def.css" />
     <link rel="stylesheet" href="/css/admin.css" />
+
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
@@ -38,35 +39,21 @@
             <li><a href="/Pages/Admin/MedicineCatalog.aspx">Medicine</a></li>
         </ul>
 
-        <div class="mc-navbar__actions">
-
-            <asp:Button ID="btnHamburger"
-                runat="server"
-                Text="☰"
-                CssClass="mc-navbar__hamburger"
-                OnClick="btnHamburger_Click" />
-
-        </div>
-
     </nav>
 
     <!-- HEADER -->
     <div class="mc-page-header">
 
         <div>
-            <h1>Food & Nutrition</h1>
+            <h1>Food Catalog</h1>
             <p>Manage food database</p>
         </div>
 
-        <div>
-
-            <asp:Button ID="btnOpenAddModal"
-                runat="server"
-                Text="Add Food Item"
-                CssClass="mc-btn mc-btn--primary"
-                OnClick="btnOpenAddModal_Click" />
-
-        </div>
+        <asp:Button ID="btnOpenAddModal"
+            runat="server"
+            Text="Add New Item"
+            CssClass="mc-btn mc-btn--primary"
+            OnClick="btnOpenAddModal_Click" />
 
     </div>
 
@@ -78,16 +65,12 @@
     <!-- TOOLBAR -->
     <div class="mc-toolbar">
 
-        <div class="mc-input-wrap">
-
-            <asp:TextBox ID="txtSearchFood"
-                runat="server"
-                CssClass="mc-input"
-                AutoPostBack="true"
-                OnTextChanged="txtSearchFood_TextChanged"
-                placeholder="Search food..." />
-
-        </div>
+        <asp:TextBox ID="txtSearchFood"
+            runat="server"
+            CssClass="mc-input"
+            AutoPostBack="true"
+            OnTextChanged="txtSearchFood_TextChanged"
+            placeholder="Search food..." />
 
         <asp:DropDownList ID="ddlSortFood"
             runat="server"
@@ -104,16 +87,14 @@
 
     </div>
 
-    <!-- GRID -->
+    <!-- TABLE -->
     <div class="mc-table-wrap">
 
         <asp:GridView ID="gvFood"
             runat="server"
             AutoGenerateColumns="False"
             CssClass="mc-table"
-            GridLines="None"
-            DataKeyNames="id"
-            OnRowCommand="gvFood_RowCommand">
+            GridLines="None">
 
             <Columns>
 
@@ -121,6 +102,18 @@
                 <asp:BoundField DataField="description" HeaderText="Description" />
                 <asp:BoundField DataField="calories" HeaderText="Calories" />
                 <asp:BoundField DataField="protein" HeaderText="Protein" />
+                <asp:BoundField DataField="total_fat" HeaderText="Total Fat" />
+                <asp:BoundField DataField="carbohydrate" HeaderText="Carbohydrate" />
+                <asp:BoundField DataField="sodium" HeaderText="Sodium" />
+                <asp:BoundField DataField="saturated_fat" HeaderText="Saturated Fat" />
+                <asp:BoundField DataField="cholesterol" HeaderText="Cholesterol" />
+                <asp:BoundField DataField="sugar" HeaderText="Sugar" />
+                <asp:BoundField DataField="calcium" HeaderText="Calcium" />
+                <asp:BoundField DataField="iron" HeaderText="Iron" />
+                <asp:BoundField DataField="potassium" HeaderText="Potassium" />
+                <asp:BoundField DataField="vitamin_c" HeaderText="Vitamin C" />
+                <asp:BoundField DataField="vitamin_e" HeaderText="Vitamin E" />
+                <asp:BoundField DataField="vitamin_d" HeaderText="Vitamin D" />
 
                 <asp:TemplateField HeaderText="Actions">
 
@@ -132,7 +125,6 @@
                                 runat="server"
                                 Text="Edit"
                                 CssClass="mc-btn mc-btn--success mc-btn--sm"
-                                CommandName="EditFood"
                                 CommandArgument='<%# Eval("id") %>'
                                 OnClick="btnEdit_Click" />
 
@@ -140,9 +132,9 @@
                                 runat="server"
                                 Text="Delete"
                                 CssClass="mc-btn mc-btn--danger mc-btn--sm"
-                                CommandName="DeleteFood"
                                 CommandArgument='<%# Eval("id") %>'
-                                OnClick="btnDelete_Click" />
+                                OnClick="btnDelete_Click"
+                                OnClientClick="return confirm('Delete this item?');" />
 
                         </div>
 
@@ -156,14 +148,22 @@
 
     </div>
 
-    <!-- MODAL -->
-    <div class="mc-modal-overlay">
+    <!-- FORM -->
+    <asp:Panel ID="pnlForm"
+        runat="server"
+        Visible="false"
+        CssClass="mc-card"
+        Style="margin-top:2rem;">
 
-        <div class="mc-modal">
+        <div class="mc-card-header">
+            <h3>
+                <asp:Label ID="lblFormTitle"
+                    runat="server"
+                    Text="Add Food Item" />
+            </h3>
+        </div>
 
-            <div class="mc-modal__header">
-                <h4>Add Food Item</h4>
-            </div>
+        <div class="mc-form-grid">
 
             <div class="mc-form-row">
                 <label>ID</label>
@@ -245,28 +245,40 @@
                 <asp:TextBox ID="txtVitaminD" runat="server" CssClass="mc-input" />
             </div>
 
-            <!-- BUTTONS -->
-            <div class="mc-form-actions">
+        </div>
 
-                <asp:Button ID="btnCancelModal"
-                    runat="server"
-                    Text="Cancel"
-                    CssClass="mc-btn mc-btn--outline"
-                    OnClick="btnCancelModal_Click" />
+        <div class="mc-form-actions">
 
-                <asp:Button ID="btnAddFood"
-                    runat="server"
-                    Text="Add Item"
-                    CssClass="mc-btn mc-btn--primary"
-                    OnClick="btnAddFood_Click" />
+            <asp:Button ID="btnCancel"
+                runat="server"
+                Text="Cancel"
+                CssClass="mc-btn mc-btn--outline"
+                OnClick="btnCancel_Click" />
 
-            </div>
+            <asp:Button ID="btnSave"
+                runat="server"
+                Text="Save Item"
+                CssClass="mc-btn mc-btn--primary"
+                OnClick="btnSave_Click" />
 
         </div>
 
-    </div>
+    </asp:Panel>
 
 </form>
+
+<script>
+    function scrollToForm() {
+        const form = document.getElementById('<%= pnlForm.ClientID %>');
+
+        if (form) {
+            form.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+</script>
 
 </body>
 </html>
