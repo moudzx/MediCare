@@ -241,13 +241,13 @@ namespace MediCare.Pages.Patient
                         return;
                     }
 
-                    if (e.CommandName == "ConnectDoctor")
-                    {
-                        string checkSql = @"
-                            SELECT COUNT(*)
-                            FROM PatientDoctorConnections
-                            WHERE PatientId = @PatientId
-                            AND DoctorId = @DoctorId";
+                if (e.CommandName == "ConnectDoctor")
+                {
+                    string checkSql = @"
+                                    SELECT COUNT(*)
+                                    FROM PatientDoctorConnections
+                                    WHERE PatientId = @PatientId
+                                    AND DoctorId = @DoctorId";
 
                         using (SqlCommand checkCmd = new SqlCommand(checkSql, conn))
                         {
@@ -255,14 +255,21 @@ namespace MediCare.Pages.Patient
                             checkCmd.Parameters.AddWithValue("@DoctorId", doctorId);
                             int exists = Convert.ToInt32(checkCmd.ExecuteScalar());
 
-                            if (exists == 0)
-                            {
-                                // FIXED: Track connection timestamp values explicitly
-                                string insertSql = @"
-                                    INSERT INTO PatientDoctorConnections
-                                    (PatientId, DoctorId, Status, RequestedAt)
-                                    VALUES
-                                    (@PatientId, @DoctorId, 'Pending', GETDATE())";
+                    if (exists == 0)
+                    {
+                        string insertSql = @"
+                INSERT INTO PatientDoctorConnections
+                (
+                    PatientId,
+                    DoctorId,
+                    Status
+                )
+                VALUES
+                (
+                    @PatientId,
+                    @DoctorId,
+                    'Pending'
+                )";
 
                                 using (SqlCommand insertCmd = new SqlCommand(insertSql, conn))
                                 {

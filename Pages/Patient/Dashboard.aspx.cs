@@ -26,7 +26,6 @@ namespace MediCare.Patient
                 SetGreeting();
                 LoadPatientInfo();
                 LoadTodayDoses();
-                LoadInventory();
                 LoadDoctors();
             }
         }
@@ -34,119 +33,56 @@ namespace MediCare.Patient
         private int GetPatientId()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
-
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                string query = @"
-                    SELECT PatientId
-                    FROM Patients
-                    WHERE UserId = @UserId";
-
+                string query = @"SELECT PatientId FROM Patients WHERE UserId = @UserId";
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 cmd.Parameters.AddWithValue("@UserId", userId);
-
                 conn.Open();
-
                 object result = cmd.ExecuteScalar();
-
-                if (result != null)
-                {
-                    return Convert.ToInt32(result);
-                }
+                if (result != null) return Convert.ToInt32(result);
             }
-
             return 0;
         }
 
         private void SetGreeting()
         {
             int hour = DateTime.Now.Hour;
-
-            if (hour < 12)
-            {
-                lblGreeting.Text = "Good Morning";
-            }
-            else if (hour < 18)
-            {
-                lblGreeting.Text = "Good Afternoon";
-            }
-            else
-            {
-                lblGreeting.Text = "Good Evening";
-            }
-
-            lblCurrentDate.Text =
-                DateTime.Now.ToString("dddd, MMMM dd yyyy");
+            if (hour < 12) lblGreeting.Text = "Good Morning";
+            else if (hour < 18) lblGreeting.Text = "Good Afternoon";
+            else lblGreeting.Text = "Good Evening";
+            lblCurrentDate.Text = DateTime.Now.ToString("dddd, MMMM dd yyyy");
         }
+
         private void LoadPatientInfo()
         {
             int patientId = GetPatientId();
-
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                string query = @"
-            SELECT TOP 1
-                FullName,
-                Age,
-                Height,
-                Weight,
-                BloodType,
-                Gender,
-                ChronicDisease,
-                Disability,
-                FamilyHistory
-            FROM Patients
-            WHERE PatientId = @PatientId";
-
+                string query = @"SELECT TOP 1 FullName, Age, Height, Weight, BloodType, Gender,
+                                        ChronicDisease, Disability, FamilyHistory
+                                 FROM Patients WHERE PatientId = @PatientId";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@PatientId", patientId);
-
                 conn.Open();
-
                 SqlDataReader reader = cmd.ExecuteReader();
-
                 if (reader.Read())
                 {
                     lblPatientName.Text = reader["FullName"].ToString();
 
-                    txtAge.Text =
-                        reader["Age"] == DBNull.Value ? "-" : reader["Age"].ToString();
-
-                    txtHeight.Text =
-                        reader["Height"] == DBNull.Value
-                            ? "-"
-                            : Convert.ToDouble(reader["Height"]).ToString("0");
-
-                    txtWeight.Text =
-                        reader["Weight"] == DBNull.Value
-                            ? "-"
-                            : Convert.ToDouble(reader["Weight"]).ToString("0");
-
-                    ddlBloodType.Text =
-                        reader["BloodType"] == DBNull.Value
-                            ? "-"
-                            : reader["BloodType"].ToString();
-
-                    ddlGender.Text =
-                        reader["Gender"] == DBNull.Value
-                            ? "-"
-                            : reader["Gender"].ToString();
-
-                    txtDisease.Text =
-                        reader["ChronicDisease"] == DBNull.Value
-                            ? "-"
-                            : reader["ChronicDisease"].ToString();
-
-                    txtDisability.Text =
-                        reader["Disability"] == DBNull.Value
-                            ? "-"
-                            : reader["Disability"].ToString();
-
-                    txtFamilyHistory.Text =
-                        reader["FamilyHistory"] == DBNull.Value
-                            ? "-"
-                            : reader["FamilyHistory"].ToString();
+                    lblAge.Text = reader["Age"] == DBNull.Value ? "-" : reader["Age"].ToString();
+                    lblHeight.Text = reader["Height"] == DBNull.Value ? "-"
+                        : Convert.ToDouble(reader["Height"]).ToString("0");
+                    lblWeight.Text = reader["Weight"] == DBNull.Value ? "-"
+                        : Convert.ToDouble(reader["Weight"]).ToString("0");
+                    lblBloodType.Text = reader["BloodType"] == DBNull.Value ? "-" : reader["BloodType"].ToString();
+                    lblGender.Text = reader["Gender"] == DBNull.Value ? "-" : reader["Gender"].ToString();
+                    lblDisease.Text = reader["ChronicDisease"] == DBNull.Value ? "-"
+                        : reader["ChronicDisease"].ToString();
+                    lblDisability.Text = reader["Disability"] == DBNull.Value ? "-"
+                        : reader["Disability"].ToString();
+                    lblFamilyHistory.Text = reader["FamilyHistory"] == DBNull.Value ? "-"
+                        : reader["FamilyHistory"].ToString();
 
                     lblPatientStatus.Text = "Active";
                 }
@@ -156,194 +92,165 @@ namespace MediCare.Patient
         private void LoadTodayDoses()
         {
             int patientId = GetPatientId();
+            DateTime today = DateTime.Today;
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-                    SELECT
-                        pm.PatientMedicationId AS DoseId,
-                        m.name AS MedicineName,
-                        pm.Dosage,
-                        pm.Frequency AS Instructions,
-                        ISNULL(pm.Frequency, '-') AS Time,
-                        CAST(0 AS BIT) AS IsTaken
-                    FROM PatientMedications pm
-                    INNER JOIN Medicine m
-                        ON m.id = TRY_CAST(pm.MedicineId AS INT)
-                    WHERE pm.PatientId = @PatientId
-                    AND pm.Status = 'Active'
-                    ORDER BY m.name ASC";
+            SELECT
+                pm.PatientMedicationId AS DoseId,
+                ISNULL(m.name, pm.MedicineId) AS MedicineName,
+                pm.Dosage,
+                pm.Frequency AS Instructions,
+                pm.StartDate,
+                pm.EndDate,
+                CAST(0 AS BIT) AS IsTaken
+            FROM PatientMedications pm
+            LEFT JOIN Medicine m
+                ON m.id = TRY_CAST(pm.MedicineId AS INT)
+            WHERE pm.PatientId = @PatientId
+              AND pm.Status = 'Active'
+            ORDER BY ISNULL(m.name, pm.MedicineId) ASC";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 cmd.Parameters.AddWithValue("@PatientId", patientId);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-
                 DataTable dt = new DataTable();
-
                 da.Fill(dt);
 
-                gvDoses.DataSource = dt;
-                gvDoses.DataBind();
-
-                int total = dt.Rows.Count;
-                int taken = 0;
+                DataTable filtered = dt.Clone();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    bool isTaken =
-                        Convert.ToBoolean(row["IsTaken"]);
+                    if (IsDoseDueToday(row, today))
+                    {
+                        filtered.ImportRow(row);
+                    }
+                }
 
-                    if (isTaken)
+                // add a Time column for the GridView if it expects it
+                if (!filtered.Columns.Contains("Time"))
+                {
+                    filtered.Columns.Add("Time", typeof(string));
+                }
+
+                foreach (DataRow row in filtered.Rows)
+                {
+                    row["Time"] = row["Instructions"] == DBNull.Value
+                        ? "-"
+                        : row["Instructions"].ToString();
+                }
+
+                gvDoses.DataSource = filtered;
+                gvDoses.DataBind();
+
+                int total = filtered.Rows.Count;
+                int taken = 0;
+
+                foreach (DataRow row in filtered.Rows)
+                {
+                    if (Convert.ToBoolean(row["IsTaken"]))
                     {
                         taken++;
                     }
                 }
 
                 int percentage = 0;
-
                 if (total > 0)
                 {
-                    percentage =
-                        (int)Math.Round(
-                            (double)taken / total * 100);
+                    percentage = (int)Math.Round((double)taken / total * 100);
                 }
 
                 lblDoseCount.Text = total.ToString();
-                lblDosePct.Text = percentage + "%";
-
-                lblDoseSummary.Text =
-                    taken + " of " + total + " doses completed";
-
-                dpmArc.Attributes["stroke-dasharray"] =
-                    percentage + " 100";
             }
         }
 
-        private void LoadInventory()
-        {
-            int patientId = GetPatientId();
 
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                string query = @"
-                    SELECT TOP 6
-                        m.name AS Name,
-                        20 AS Remaining,
-                        30 AS Total,
-                        66 AS Percentage
-                    FROM PatientMedications pm
-                    INNER JOIN Medicine m
-                        ON m.id = TRY_CAST(pm.MedicineId AS INT)
-                    WHERE pm.PatientId = @PatientId
-                    AND pm.Status = 'Active'";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                cmd.Parameters.AddWithValue("@PatientId", patientId);
-
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                DataTable dt = new DataTable();
-
-                da.Fill(dt);
-
-                gvInventory.DataSource = dt;
-                gvInventory.DataBind();
-            }
-        }
 
         private void LoadDoctors()
         {
             int patientId = GetPatientId();
-
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-                    SELECT
-                        d.DoctorId,
-                        d.FullName AS DoctorName,
-                        d.Speciality AS Specialty,
-                        c.Status
+                    SELECT d.DoctorId, d.FullName AS DoctorName, d.Speciality AS Specialty, c.Status
                     FROM PatientDoctorConnections c
-                    INNER JOIN Doctors d
-                        ON d.DoctorId = c.DoctorId
+                    INNER JOIN Doctors d ON d.DoctorId = c.DoctorId
                     WHERE c.PatientId = @PatientId
                     ORDER BY d.FullName ASC";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 cmd.Parameters.AddWithValue("@PatientId", patientId);
-
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-
                 DataTable dt = new DataTable();
-
                 da.Fill(dt);
-
                 gvDoctors.DataSource = dt;
                 gvDoctors.DataBind();
             }
         }
 
-        protected void chkTaken_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox chk = (CheckBox)sender;
 
-            GridViewRow row =
-                (GridViewRow)chk.NamingContainer;
 
-            int doseId =
-                Convert.ToInt32(
-                    gvDoses.DataKeys[row.RowIndex].Value);
-
-            LoadTodayDoses();
-        }
-
-        protected void gvDoses_RowDataBound(
-            object sender,
-            GridViewRowEventArgs e)
+        protected void gvDoctors_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                CheckBox chk =
-                    (CheckBox)e.Row.FindControl("chkTaken");
-
-                if (chk.Checked)
-                {
-                    e.Row.CssClass += " pd-dose-completed";
-                }
-            }
-        }
-
-        protected void gvDoctors_RowDataBound(
-            object sender,
-            GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                Label lbl =
-                    (Label)e.Row.FindControl("lblStatus");
-
+                Label lbl = (Label)e.Row.FindControl("lblStatus");
                 string status = lbl.Text.ToLower();
-
-                if (status == "accepted")
-                {
-                    lbl.CssClass +=
-                        " pd-doctor-status--accepted";
-                }
-                else if (status == "pending")
-                {
-                    lbl.CssClass +=
-                        " pd-doctor-status--pending";
-                }
-                else if (status == "rejected")
-                {
-                    lbl.CssClass +=
-                        " pd-doctor-status--rejected";
-                }
+                if (status == "accepted") lbl.CssClass += " pd-doctor-status--accepted";
+                else if (status == "pending") lbl.CssClass += " pd-doctor-status--pending";
+                else if (status == "rejected") lbl.CssClass += " pd-doctor-status--rejected";
             }
+        }
+        private bool IsDoseDueToday(DataRow row, DateTime today)
+        {
+            string frequency = row["Instructions"] == DBNull.Value
+                ? ""
+                : row["Instructions"].ToString().Trim().ToLowerInvariant();
+
+            DateTime? startDate = row["StartDate"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(row["StartDate"]).Date;
+
+            DateTime? endDate = row["EndDate"] == DBNull.Value
+                ? (DateTime?)null
+                : Convert.ToDateTime(row["EndDate"]).Date;
+
+            // Not started yet
+            if (startDate.HasValue && today < startDate.Value)
+            {
+                return false;
+            }
+
+            // Already ended
+            if (endDate.HasValue && today > endDate.Value)
+            {
+                return false;
+            }
+
+            // Weekly: show only once every 7 days starting from StartDate
+            if (frequency.Contains("weekly"))
+            {
+                if (!startDate.HasValue)
+                {
+                    return true;
+                }
+
+                int daysSinceStart = (today - startDate.Value).Days;
+                return daysSinceStart >= 0 && daysSinceStart % 7 == 0;
+            }
+
+            // Daily schedules: show every day in range
+            if (frequency.Contains("once daily") ||
+                frequency.Contains("twice daily") ||
+                frequency.Contains("every 8 hours"))
+            {
+                return true;
+            }
+
+            // Fallback for unknown frequency
+            return true;
         }
     }
 }
