@@ -174,16 +174,10 @@
                                     </small>
                                 </div>
 
-                                <a href="/Pages/Doctor/Profile.aspx"
+                                <a href="/Pages/Doctor/DoctorProfile.aspx"
                                    class="ds-dropdown-item">
                                     <i class="fa-solid fa-user-pen"></i>
-                                    Edit Profile
-                                </a>
-
-                                <a href="/Pages/Doctor/Settings.aspx"
-                                   class="ds-dropdown-item">
-                                    <i class="fa-solid fa-gear"></i>
-                                    Settings
+                                    Profile
                                 </a>
 
                                 <div class="ds-dropdown-divider"></div>
