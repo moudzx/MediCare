@@ -206,3 +206,105 @@
     border-radius: 99px;
     transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
 }
+
+/* ============================================================
+   FOOD TABLE FIXES
+============================================================ */
+
+.mc-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-radius: var(--radius-md);
+    background: white;
+}
+
+.mc-table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+}
+
+    .mc-table th,
+    .mc-table td {
+        white-space: nowrap;
+        padding: 0.85rem 1rem;
+        vertical-align: middle;
+    }
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.mc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1.5rem;
+}
+
+.mc-modal {
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+}
+
+.mc-modal__header {
+    margin-bottom: 1rem;
+}
+
+    .mc-modal__header h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+.mc-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+    .mc-form-row label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+.mc-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.mc-alert {
+    display: block;
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.mc-alert--success {
+    background: #ECFDF3;
+    color: #027A48;
+    border: 1px solid #ABEFC6;
+}
+
+.mc-alert--danger {
+    background: #FEF3F2;
+    color: #B42318;
+    border: 1px solid #FECDCA;
+}
