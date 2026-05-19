@@ -116,9 +116,9 @@
       <div class="mc-form-row"><label>Calories</label>     <asp:TextBox ID="txtCalories"    runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Protein</label>      <asp:TextBox ID="txtProtein"     runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Total Fat</label>    <asp:TextBox ID="txtTotalFat"    runat="server" CssClass="mc-input" /></div>
-      <div class="mc-form-row"><label>Carbohydrate</label> <asp:TextBox ID="txtCarbohydrate"runat="server" CssClass="mc-input" /></div>
+      <div class="mc-form-row"><label>Carbohydrate</label> <asp:TextBox ID="txtCarbohydrate" runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Sodium</label>       <asp:TextBox ID="txtSodium"      runat="server" CssClass="mc-input" /></div>
-      <div class="mc-form-row"><label>Saturated Fat</label><asp:TextBox ID="txtSaturatedFat"runat="server" CssClass="mc-input" /></div>
+      <div class="mc-form-row"><label>Saturated Fat</label><asp:TextBox ID="txtSaturatedFat" runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Cholesterol</label>  <asp:TextBox ID="txtCholesterol" runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Sugar</label>        <asp:TextBox ID="txtSugar"       runat="server" CssClass="mc-input" /></div>
       <div class="mc-form-row"><label>Calcium</label>      <asp:TextBox ID="txtCalcium"     runat="server" CssClass="mc-input" /></div>
