@@ -28,6 +28,8 @@ CREATE TABLE [dbo].[Patients] (
     [Disability] NVARCHAR(255) NULL,
     [ChronicDisease] NVARCHAR(255) NULL,
     [FamilyHistory] NVARCHAR(MAX) NULL,
+    [BloodType] NVARCHAR(5) NULL,
+    [Gender] NVARCHAR(10) NULL,
 
     CONSTRAINT [PK_Patients] PRIMARY KEY CLUSTERED ([PatientId]),
     CONSTRAINT [CK_Patients_Age] CHECK ([Age] > 0 AND [Age] <= 150)
@@ -43,6 +45,7 @@ CREATE TABLE [dbo].[Doctors] (
     [ClinicAddress] NVARCHAR(255) NULL,
     [CertificatePath] NVARCHAR(500) NOT NULL,
     [Speciality] NVARCHAR(255) NULL,
+    [Gender] NVARCHAR(10) NULL,
 
     CONSTRAINT [PK_Doctors] PRIMARY KEY CLUSTERED ([DoctorId]),
     CONSTRAINT [CK_Doctors_Age] CHECK ([Age] > 0 AND [Age] <= 150)
