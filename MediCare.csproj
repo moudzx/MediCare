@@ -103,12 +103,12 @@
     <Compile Include="MasterPage\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Admin\AdminProfile.aspx.cs">
-      <DependentUpon>AdminProfile.aspx</DependentUpon>
+    <Compile Include="MasterPage\AdminSite.Master.cs">
+      <DependentUpon>AdminSite.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Pages\Admin\AdminProfile.aspx.designer.cs">
-      <DependentUpon>AdminProfile.aspx</DependentUpon>
+    <Compile Include="MasterPage\AdminSite.Master.designer.cs">
+      <DependentUpon>AdminSite.Master</DependentUpon>
     </Compile>
     <Compile Include="Pages\Doctor\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
@@ -327,6 +327,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage\DoctorSite.Master" />
+    <Content Include="MasterPage\AdminSite.Master" />
     <None Include="packages.config" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config">
