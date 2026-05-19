@@ -1,25 +1,20 @@
 ﻿using System;
 
-namespace MediCare
+namespace MediCare.MasterPage
 {
-    public partial class DoctorSiteMaster : System.Web.UI.MasterPage
+    public partial class DoctorSite : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblDoctorName.Text = "Dr. " + Session["Name"];
-            //lblSpecialty.Text = Session["Specialty"].ToString();
-            //lblTopName.Text = Session["Name"].ToString();
-            //lblEmail.Text = Session["Email"].ToString();
-            lblRoleBadge.Text = "Doctor";
-            lblFooter.Text = "© MediCare " + DateTime.Now.Year;
-
+            // You can load doctor info here later if you want
         }
+
         protected void btnLogout_Click(object sender, EventArgs e)
         {
-            Session.Clear();
+            // Clear session and redirect to login
             Session.Abandon();
-
-            Response.Redirect("~/Default.aspx");
+            Response.Redirect("/Default.aspx");
         }
     }
+    
 }

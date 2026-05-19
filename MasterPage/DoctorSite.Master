@@ -1,233 +1,264 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true"
-    CodeBehind="DoctorSite.Master.cs"
-    Inherits="MediCare.DoctorSiteMaster" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="DoctorSite.Master.cs" Inherits="MediCare.MasterPage.DoctorSite" %>
 
 <!DOCTYPE html>
 <html lang="en">
 <head runat="server">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+    <meta charset="UTF-8" />
+    <title><%= Page.Title %></title>
 
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" />
+
+    <!-- Master layout CSS -->
     <link rel="stylesheet" href="/css/DrMaster.css" />
 
     <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
-
 <body>
-<form id="form1" runat="server">
+    <form id="form1" runat="server">
 
-<div class="ds-shell">
+        <!-- ═══════════ App Shell ═══════════ -->
+        <div class="ds-shell" id="appShell">
 
-    <!-- OVERLAY -->
-    <asp:Panel runat="server" ID="pnlOverlay" CssClass="ds-overlay" />
+            <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+            <aside class="ds-sidebar" id="sidebar">
 
-    <!-- SIDEBAR -->
-    <aside class="ds-sidebar">
+                <button type="button"
+                        class="ds-sidebar-toggle"
+                        onclick="toggleSidebar()"
+                        aria-label="Toggle sidebar">
+                    <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
+                </button>
 
-        <!-- Logo -->
-        <div class="ds-sidebar__logo">
-            <span class="ds-logo-text">Medi<strong>Care</strong></span>
-            <asp:Label runat="server" ID="lblRoleBadge" CssClass="ds-logo-badge" />
-        </div>
+                <!-- Logo -->
+                <div class="ds-sidebar__logo">
+                    <div class="ds-logo-icon">
+                        <svg viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="#fff"
+                             stroke-width="2.5"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                    </div>
 
-        <!-- PROFILE -->
-        <div class="ds-sidebar__profile">
-            <div class="ds-profile-avatar">
-                <asp:Label runat="server" ID="lblAvatar" Text="D" />
-            </div>
+                    <span class="ds-logo-text">
+                        Medi<strong>Care</strong>
+                    </span>
 
-            <div class="ds-profile-info">
-                <asp:Label runat="server" ID="lblDoctorName" CssClass="ds-profile-name" />
-                <asp:Label runat="server" ID="lblSpecialty" CssClass="ds-profile-role" />
-            </div>
-        </div>
-
-        <!-- NAVIGATION (dynamic-ready) -->
-        <nav class="ds-sidebar__nav">
-
-            <!-- Main -->
-            <div class="ds-nav-section-label">Main</div>
-
-            <a href="/Pages/Doctor/Dashboard.aspx" class="ds-nav-link" id="navDashboard">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-gauge-high"></i>
-                </span>
-                Dashboard
-                <span class="ds-nav-link__badge">Today</span>
-            </a>
-
-            <a href="/Pages/Doctor/PatientList.aspx" class="ds-nav-link" id="navPatients">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-users"></i>
-                </span>
-                Patient List
-                <span class="ds-nav-link__badge">24</span>
-            </a>
-
-            <a href="/Pages/Doctor/Search.aspx" class="ds-nav-link" id="navSearch">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                Search
-            </a>
-
-            <!-- Management -->
-            <div class="ds-nav-section-label">Management</div>
-
-            <a href="/Pages/Doctor/Appointments.aspx" class="ds-nav-link" id="navAppointments">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-calendar-check"></i>
-                </span>
-                Appointments
-            </a>
-
-            <a href="/Pages/Doctor/Prescriptions.aspx" class="ds-nav-link" id="navPrescriptions">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-prescription-bottle-medical"></i>
-                </span>
-                Prescriptions
-            </a>
-
-            <a href="/Pages/Doctor/Reports.aspx" class="ds-nav-link" id="navReports">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-chart-line"></i>
-                </span>
-                Reports
-            </a>
-
-            <!-- Account -->
-            <div class="ds-nav-section-label">Account</div>
-
-            <a href="/Pages/Doctor/Profile.aspx" class="ds-nav-link" id="navProfile">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-user-doctor"></i>
-                </span>
-                My Profile
-            </a>
-
-            <a href="/Pages/Doctor/Settings.aspx" class="ds-nav-link" id="navSettings">
-                <span class="ds-nav-link__icon">
-                    <i class="fa-solid fa-gear"></i>
-                </span>
-                Settings
-            </a>
-
-        </nav>
-
-        <!-- LOGOUT -->
-        <div class="ds-sidebar__footer">
-            <asp:Button 
-                runat="server"
-                ID="btnLogout"
-                Text="Sign Out"
-                CssClass="ds-logout-btn"
-                OnClick="btnLogout_Click" />
-        </div>
-
-    </aside>
-
-    <!-- MAIN -->
-    <div class="ds-main">
-
-        <!-- TOPBAR -->
-        <header class="ds-topbar">
-
-            <button type="button" class="ds-mobile-menu-btn"
-                onclick="toggleMobileSidebar()">
-                ☰
-            </button>
-
-            <div class="ds-topbar__page-title">
-                <asp:Label runat="server" ID="lblPageTitle" />
-                <asp:Label runat="server" ID="lblBreadcrumb" />
-            </div>
-
-            <!-- SEARCH (no JS, server optional later) -->
-            <asp:TextBox runat="server"
-                ID="txtSearch"
-                CssClass="ds-topbar__search-input"
-                placeholder="Search..." />
-
-            <!-- ACTIONS -->
-            <div class="ds-topbar__actions">
-
-                <asp:LinkButton runat="server" CssClass="ds-icon-btn">
-                    <i class="fa fa-bell"></i>
-                    <asp:Label runat="server" ID="lblNotifCount" CssClass="ds-notif-dot" />
-                </asp:LinkButton>
-
-                <!-- PROFILE -->
-                <div class="ds-topbar__profile">
-
-                    <asp:LinkButton runat="server"
-                        ID="btnProfile"
-                        CssClass="ds-topbar__profile-btn"
-                        OnClientClick="toggleProfile(); return false;">
-
-                        <div class="ds-topbar-avatar">
-                            <asp:Label runat="server" ID="lblTopAvatar" />
-                        </div>
-
-                        <asp:Label runat="server" ID="lblTopName" />
-                    </asp:LinkButton>
-
-                    <asp:Panel runat="server" ID="pnlProfileDropdown"
-                        CssClass="ds-profile-dropdown">
-
-                        <asp:Label runat="server" ID="lblEmail" CssClass="ds-dropdown-header" />
-
-                        <asp:HyperLink runat="server"
-                            NavigateUrl="/Pages/Doctor/Profile.aspx"
-                            Text="My Profile"
-                            CssClass="ds-dropdown-item" />
-
-                        <asp:HyperLink runat="server"
-                            NavigateUrl="/Pages/Doctor/Settings.aspx"
-                            Text="Settings"
-                            CssClass="ds-dropdown-item" />
-
-                        <asp:Button runat="server"
-                            Text="Sign Out"
-                            CssClass="ds-dropdown-item ds-dropdown-item--danger"
-                            OnClick="btnLogout_Click" />
-
-                    </asp:Panel>
-
+                    <span class="ds-logo-badge">DOCTOR</span>
                 </div>
+                
 
+                <!-- Navigation -->
+                <nav class="ds-sidebar__nav">
+
+                    <div class="ds-nav-section-label">MAIN</div>
+
+                    <a href="/Pages/Doctor/Dashboard.aspx"
+                       class="ds-nav-link ds-nav-link--active">
+                        Dashboard
+                    </a>
+
+                    <a href="/Pages/Doctor/Search.aspx"
+                       class="ds-nav-link">
+                        Search
+                    </a>
+
+                    <a href="/Pages/Doctor/PatientList.aspx"
+                       class="ds-nav-link">
+                        Patients
+                    </a>
+
+                    <div class="ds-nav-section-label">MANAGEMENT</div>
+
+                    <a href="/Pages/Doctor/Requests.aspx"
+                       class="ds-nav-link">
+                        Requests
+                    </a>
+
+                    <div class="ds-nav-section-label">SETTINGS</div>
+
+                    <a href="/Pages/Doctor/DoctorProfile.aspx"
+                       class="ds-nav-link">
+                        Profile
+                    </a>
+                </nav>
+
+                <!-- Logout -->
+                <div class="ds-sidebar__footer">
+
+                    <asp:LinkButton ID="btnLogout"
+                                    runat="server"
+                                    CssClass="ds-logout-btn"
+                                    OnClick="btnLogout_Click">
+
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                        <span>Logout</span>
+                    </asp:LinkButton>
+                </div>
+            </aside>
+
+            <!-- ═══════════════════════ MAIN AREA ═══════════════════════ -->
+            <div class="ds-main" id="mainPanel">
+
+                <!-- Top Bar -->
+                <header class="ds-topbar">
+
+                    <div class="ds-topbar__page-title">
+
+                        <asp:Literal ID="litPageTitle"
+                                     runat="server"
+                                     Text="Dashboard" />
+
+                        <span>
+                            <asp:Literal ID="litPageSub"
+                                         runat="server"
+                                         Text="Overview" />
+                        </span>
+                    </div>
+
+
+                    <div class="ds-topbar__actions">
+
+                        <button type="button"
+                                class="ds-icon-btn"
+                                aria-label="Notifications">
+                            <i class="fa-solid fa-bell"></i>
+                            <span class="ds-notif-dot"></span>
+                        </button>
+
+
+                        <!-- Profile Dropdown -->
+                        <div class="ds-topbar__profile" id="profileDropdown">
+
+                            <button type="button"
+                                    class="ds-topbar__profile-btn"
+                                    onclick="toggleProfileDropdown(event)">
+
+                                <div class="ds-topbar-avatar">
+                                    <asp:Literal ID="litTopbarInitials"
+                                                 runat="server"
+                                                 Text="DR" />
+                                </div>
+
+                                <span class="ds-topbar__profile-name">
+                                    <asp:Literal ID="litTopbarName"
+                                                 runat="server"
+                                                 Text="Doctor" />
+                                </span>
+
+                                <i class="fa-solid fa-chevron-down"
+                                   style="font-size:10px;"></i>
+                            </button>
+
+                            <div class="ds-profile-dropdown" id="profileMenu">
+
+                                <div class="ds-dropdown-header">
+
+                                    <strong>
+                                        <asp:Literal ID="litDropName"
+                                                     runat="server"
+                                                     Text="Doctor Name" />
+                                    </strong>
+
+                                    <small>
+                                        <asp:Literal ID="litDropRole"
+                                                     runat="server"
+                                                     Text="Specialty" />
+                                    </small>
+                                </div>
+
+                                <a href="/Pages/Doctor/DoctorProfile.aspx"
+                                   class="ds-dropdown-item">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                    Profile
+                                </a>
+
+                                <div class="ds-dropdown-divider"></div>
+
+                                <asp:LinkButton ID="btnDropLogout"
+                                                runat="server"
+                                                CssClass="ds-dropdown-item ds-dropdown-item--danger"
+                                                OnClick="btnLogout_Click">
+
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    Logout
+                                </asp:LinkButton>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Page Content -->
+                <main class="ds-page-content">
+                    <asp:ContentPlaceHolder ID="MainContent"
+                                            runat="server" />
+                </main>
+
+                <!-- Footer -->
+                <footer class="ds-footer">
+
+                    <p>
+                        &copy; <%= DateTime.Now.Year %>
+                        MediCare. All rights reserved.
+                    </p>
+
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Help</a>
+                    </div>
+                </footer>
             </div>
-        </header>
+        </div>
+    </form>
 
-        <!-- PAGE CONTENT -->
-        <main class="ds-page-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
-        </main>
+    <!-- Dropdown Script -->
+    <script>
+        function toggleSidebar() {
 
-        <!-- FOOTER -->
-        <footer class="ds-footer">
-            <asp:Label runat="server" ID="lblFooter" />
-        </footer>
+            var shell = document.getElementById('appShell');
 
-    </div>
-</div>
+            shell.classList.toggle('ds-shell--collapsed');
 
-<!-- ONLY MINIMAL JS (UI ONLY) -->
-<script>
-    function toggleProfile() {
-        var p = document.getElementById('<%= pnlProfileDropdown.ClientID %>');
-        if (!p) return;
-        p.style.display = (p.style.display === 'block') ? 'none' : 'block';
-    }
+            var icon = document.getElementById('toggleIcon');
 
-    function toggleMobileSidebar() {
-        document.querySelector('.ds-sidebar')
-            .classList.toggle('open');
-    }
-</script>
+            if (icon) {
 
-<asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
+                if (shell.classList.contains('ds-shell--collapsed')) {
+                    icon.className = 'fa-solid fa-chevron-right';
+                }
+                else {
+                    icon.className = 'fa-solid fa-chevron-left';
+                }
+            }
+        }
 
-</form>
+        function toggleProfileDropdown(e) {
+
+            e.stopPropagation();
+
+            var menu = document.getElementById('profileMenu');
+
+            menu.classList.toggle('ds-profile-dropdown--open');
+        }
+
+        document.addEventListener('click', function (e) {
+
+            var menu = document.getElementById('profileMenu');
+
+            if (menu && !e.target.closest('.ds-topbar__profile')) {
+                menu.classList.remove('ds-profile-dropdown--open');
+            }
+        });
+    </script>
+
+    <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
 </body>
 </html>
