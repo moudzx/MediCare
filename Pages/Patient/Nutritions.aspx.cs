@@ -7,8 +7,7 @@ namespace MediCare.Pages.Patient
 {
     public partial class Nutritions : System.Web.UI.Page
     {
-        private readonly string connectionString =
-            ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -33,29 +32,20 @@ namespace MediCare.Pages.Patient
         private int GetPatientId()
         {
             int userId = Convert.ToInt32(Session["UserId"]);
-
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string sql = @"
-                    SELECT PatientId
-                    FROM Patients
-                    WHERE UserId = @UserId";
-
+                string sql = @"SELECT PatientId FROM Patients WHERE UserId = @UserId";
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserId", userId);
-
                     conn.Open();
-
                     object result = cmd.ExecuteScalar();
-
                     if (result != null)
                     {
                         return Convert.ToInt32(result);
                     }
                 }
             }
-
             return 0;
         }
 
@@ -65,51 +55,39 @@ namespace MediCare.Pages.Patient
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                // FIX: Added 'NULL AS...' for ALL the columns that do not exist in the CustomFoods table
                 string sql = @"
-
                 SELECT *
                 FROM
                 (
                     SELECT
                         description AS Name,
-                        calories,
-                        protein,
-                        total_fat,
-                        carbohydrate,
-                        sodium,
-                        saturated_fat,
-                        cholesterol,
-                        sugar,
-                        calcium,
-                        iron,
-                        potassium,
-                        vitamin_c,
-                        vitamin_e,
-                        vitamin_d
+                        calories, protein, total_fat, carbohydrate,
+                        sodium, saturated_fat, cholesterol, sugar,
+                        calcium, iron, potassium, vitamin_c, vitamin_e, vitamin_d
                     FROM Food
 
                     UNION ALL
 
                     SELECT
                         description AS Name,
-                        calories,
-                        protein,
-                        total_fat,
-                        carbohydrate,
-                        sodium,
-                        saturated_fat,
-                        cholesterol,
-                        sugar,
-                        calcium,
-                        iron,
-                        potassium,
-                        vitamin_c,
-                        vitamin_e,
-                        vitamin_d
+                        calories, 
+                        protein, 
+                        NULL AS total_fat,      -- Missing in CustomFoods
+                        NULL AS carbohydrate,   -- Missing in CustomFoods
+                        NULL AS sodium,         -- Missing in CustomFoods
+                        NULL AS saturated_fat,  -- Missing in CustomFoods
+                        NULL AS cholesterol,    -- Missing in CustomFoods
+                        NULL AS sugar,          -- Missing in CustomFoods
+                        NULL AS calcium,        -- Missing in CustomFoods
+                        NULL AS iron,           -- Missing in CustomFoods
+                        NULL AS potassium,      -- Missing in CustomFoods
+                        NULL AS vitamin_c,      -- Missing in CustomFoods
+                        NULL AS vitamin_e,      -- Missing in CustomFoods
+                        NULL AS vitamin_d       -- Missing in CustomFoods
                     FROM CustomFoods
                     WHERE PatientId = @PatientId
                 ) x
-
                 WHERE
                     (@Calories = 0 OR calories BETWEEN @Calories - 5 AND @Calories + 5)
                     AND (@Protein = 0 OR protein BETWEEN @Protein - 5 AND @Protein + 5)
@@ -125,7 +103,6 @@ namespace MediCare.Pages.Patient
                     AND (@VitaminC = 0 OR vitamin_c BETWEEN @VitaminC - 5 AND @VitaminC + 5)
                     AND (@VitaminE = 0 OR vitamin_e BETWEEN @VitaminE - 5 AND @VitaminE + 5)
                     AND (@VitaminD = 0 OR vitamin_d BETWEEN @VitaminD - 5 AND @VitaminD + 5)
-
                 ORDER BY calories";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -151,13 +128,23 @@ namespace MediCare.Pages.Patient
                     cmd.Parameters.AddWithValue("@VitaminD", ParseDouble(txtVitaminD.Text));
 
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
-
                     DataTable dt = new DataTable();
-
                     da.Fill(dt);
 
                     gvSearchResults.DataSource = dt;
                     gvSearchResults.DataBind();
+
+                    // Show a message if no records are found
+                    if (dt.Rows.Count == 0)
+                    {
+                        lblSearchMsg.Visible = true;
+                        lblSearchMsg.Text = "No foods matched your criteria.";
+                        lblSearchMsg.ForeColor = System.Drawing.Color.Red;
+                    }
+                    else
+                    {
+                        lblSearchMsg.Visible = false;
+                    }
                 }
             }
         }
@@ -171,28 +158,13 @@ namespace MediCare.Pages.Patient
                 string sql = @"
                     SELECT
                         CASE
-                            WHEN DoctorId IS NULL
-                                THEN 'My Plan'
+                            WHEN DoctorId IS NULL THEN 'My Plan'
                             ELSE 'Doctor Plan'
                         END AS Source,
-
-                        calories,
-                        protein,
-                        total_fat,
-                        carbohydrate,
-                        sodium,
-                        saturated_fat,
-                        cholesterol,
-                        sugar,
-                        calcium,
-                        iron,
-                        potassium,
-                        vitamin_c,
-                        vitamin_e,
-                        vitamin_d,
-                        Notes,
-                        CreatedAt
-
+                        calories, protein, total_fat, carbohydrate,
+                        sodium, saturated_fat, cholesterol, sugar,
+                        calcium, iron, potassium, vitamin_c, vitamin_e, vitamin_d,
+                        Notes, CreatedAt
                     FROM NutritionPlans
                     WHERE PatientId = @PatientId
                     ORDER BY CreatedAt DESC";
@@ -200,11 +172,8 @@ namespace MediCare.Pages.Patient
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@PatientId", patientId);
-
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
-
                     DataTable dt = new DataTable();
-
                     da.Fill(dt);
 
                     gvNutritionPlan.DataSource = dt;
@@ -220,51 +189,17 @@ namespace MediCare.Pages.Patient
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 string sql = @"
-
                     INSERT INTO NutritionPlans
                     (
-                        PatientId,
-                        DoctorId,
-
-                        calories,
-                        protein,
-                        total_fat,
-                        carbohydrate,
-                        sodium,
-                        saturated_fat,
-                        cholesterol,
-                        sugar,
-                        calcium,
-                        iron,
-                        potassium,
-                        vitamin_c,
-                        vitamin_e,
-                        vitamin_d,
-
-                        Notes
+                        PatientId, DoctorId, calories, protein, total_fat, carbohydrate,
+                        sodium, saturated_fat, cholesterol, sugar, calcium, iron,
+                        potassium, vitamin_c, vitamin_e, vitamin_d, Notes
                     )
-
                     VALUES
                     (
-                        @PatientId,
-                        NULL,
-
-                        @Calories,
-                        @Protein,
-                        @Fat,
-                        @Carbs,
-                        @Sodium,
-                        @SaturatedFat,
-                        @Cholesterol,
-                        @Sugar,
-                        @Calcium,
-                        @Iron,
-                        @Potassium,
-                        @VitaminC,
-                        @VitaminE,
-                        @VitaminD,
-
-                        ''
+                        @PatientId, NULL, @Calories, @Protein, @Fat, @Carbs,
+                        @Sodium, @SaturatedFat, @Cholesterol, @Sugar, @Calcium, @Iron,
+                        @Potassium, @VitaminC, @VitaminE, @VitaminD, ''
                     )";
 
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -290,23 +225,20 @@ namespace MediCare.Pages.Patient
                     cmd.Parameters.AddWithValue("@VitaminD", ParseDouble(txtMyVitaminD.Text));
 
                     conn.Open();
-
                     cmd.ExecuteNonQuery();
                 }
             }
 
+            // Refresh the grid to show the newly saved plan
             LoadNutritionPlans();
         }
 
         private double ParseDouble(string value)
         {
-            double result;
-
-            if (double.TryParse(value, out result))
+            if (double.TryParse(value, out double result))
             {
                 return result;
             }
-
             return 0;
         }
     }
