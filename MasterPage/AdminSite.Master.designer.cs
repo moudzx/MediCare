@@ -11,61 +11,70 @@ namespace MediCare.Pages.Admin
 {
 
 
-    public partial class Dashboard
+    public partial class AdminMaster
     {
 
         /// <summary>
-        /// lblMessage control.
+        /// HeadContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMessage;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
 
         /// <summary>
-        /// lblDoctors control.
+        /// adminForm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDoctors;
+        protected global::System.Web.UI.HtmlControls.HtmlForm adminForm;
 
         /// <summary>
-        /// lblPatients control.
+        /// lbLogout control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblPatients;
+        protected global::System.Web.UI.WebControls.LinkButton lbLogout;
 
         /// <summary>
-        /// lblFoods control.
+        /// lbLogoutBtn control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFoods;
+        protected global::System.Web.UI.WebControls.LinkButton lbLogoutBtn;
 
         /// <summary>
-        /// lblMedicines control.
+        /// lbLogoutMobile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMedicines;
+        protected global::System.Web.UI.WebControls.LinkButton lbLogoutMobile;
 
         /// <summary>
-        /// gvPatients control.
+        /// MainContent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvPatients;
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+
+        /// <summary>
+        /// ScriptContent control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder ScriptContent;
     }
 }

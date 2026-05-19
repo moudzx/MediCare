@@ -1,44 +1,21 @@
-﻿<%@ Page Title="Admin Dashboard – MediCare"
+﻿<%@ Page Title="Dashboard — MediCare Admin"
     Language="C#"
+    MasterPageFile="~/MasterPage/AdminSite.Master"
     AutoEventWireup="true"
     CodeBehind="Dashboard.aspx.cs"
     Inherits="MediCare.Pages.Admin.Dashboard" %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — MediCare Admin</title>
-  <link rel="stylesheet" href="/css/admin.css" />
-  <link rel="stylesheet" href="/css/def.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231A9E5C'/%3E%3Ctext x='6' y='23' font-size='20'%3E%E2%9A%95%3C/text%3E%3C/svg%3E" />
-</head>
+<asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
+</asp:Content>
 
-<body class="mc-admin-body">
-<form id="form1" runat="server">
-
-<!-- NAVBAR -->
-<nav class="mc-navbar">
-  <a class="mc-navbar__logo" href="Dashboard.aspx">
-    <div class="mc-navbar__logo-icon"><i class="fa-solid fa-staff-snake"></i></div>
-    MediCare
-  </a>
-  <ul class="mc-navbar__links">
-    <li><a href="/Pages/Admin/Dashboard.aspx">Dashboard</a></li>
-    <li><a href="/Pages/Admin/DoctorManagement.aspx">Doctors</a></li>
-    <li><a href="/Pages/Admin/PatientManagement.aspx">Patients</a></li>
-    <li><a href="/Pages/Admin/FoodCatalog.aspx">Food</a></li>
-    <li><a href="/Pages/Admin/MedicineCatalog.aspx">Medicine</a></li>
-  </ul>
-</nav>
-
-<main class="mc-admin-main">
+<asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
 
   <!-- HEADER -->
   <div class="mc-page-header">
-    <h1>Dashboard</h1>
+    <div>
+      <div class="mc-breadcrumb"><i class="fa-solid fa-staff-snake"></i> MediCare <span>/ Dashboard</span></div>
+      <h1>Dashboard</h1>
+    </div>
   </div>
 
   <!-- MESSAGE LABEL -->
@@ -113,8 +90,4 @@
     </div>
   </div>
 
-</main>
-</form>
-<script src="/js/def.js"></script>
-</body>
-</html>
+</asp:Content>

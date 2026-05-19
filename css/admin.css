@@ -308,3 +308,85 @@
     color: #B42318;
     border: 1px solid #FECDCA;
 }
+
+/* ═══════════════════════════════════════════════════
+   NAVBAR — Logout button & active link
+   Append these rules to your existing admin.css
+═══════════════════════════════════════════════════ */
+
+/* Active nav link */
+.mc-navbar__links a.mc-nav-active {
+    color: var(--primary, #1A9E5C);
+    font-weight: 700;
+    border-bottom: 2px solid var(--primary, #1A9E5C);
+}
+
+/* Standalone logout button next to the profile dropdown */
+.mc-btn--logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #DC2626;
+    background: transparent;
+    border: 1.5px solid #DC2626;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+    .mc-btn--logout:hover {
+        background: #DC2626;
+        color: #fff;
+    }
+
+/* Logout inside the dropdown menu */
+.mc-dropdown-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #DC2626;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+    .mc-dropdown-logout:hover {
+        background: #FEF2F2;
+    }
+
+/* Divider inside dropdown */
+.mc-dropdown-divider {
+    height: 1px;
+    background: var(--border, #E5E7EB);
+    margin: 0.25rem 0;
+}
+
+/* Logout in mobile nav */
+.mc-mobile-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #DC2626;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--border, #E5E7EB);
+    cursor: pointer;
+    text-decoration: none;
+    width: 100%;
+    margin-top: 0.25rem;
+}

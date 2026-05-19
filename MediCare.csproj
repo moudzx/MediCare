@@ -103,6 +103,13 @@
     <Compile Include="MasterPage\Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
+    <Compile Include="MasterPage\AdminSite.Master.cs">
+      <DependentUpon>AdminSite.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPage\AdminSite.Master.designer.cs">
+      <DependentUpon>AdminSite.Master</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Doctor\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -319,6 +326,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage\DoctorSite.Master" />
+    <Content Include="MasterPage\AdminSite.Master" />
     <None Include="packages.config" />
     <Content Include="Uploads\Certificates\8aad8f38-f207-4e7b-afc4-57cc7c49fa1e.jpg" />
     <Content Include="Web.config" />

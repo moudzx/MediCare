@@ -1,0 +1,94 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMaster.Master.cs" Inherits="MediCare.Pages.Admin.AdminMaster" %>
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediCare Admin</title>
+
+  <link rel="stylesheet" href="/css/def.css" />
+  <link rel="stylesheet" href="/css/admin.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231A9E5C'/%3E%3Ctext x='6' y='23' font-size='20'%3E%E2%9A%95%3C/text%3E%3C/svg%3E" />
+
+  <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+
+<body class="mc-admin-body">
+<form id="adminForm" runat="server">
+
+  <!-- ═══════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════ -->
+  <nav class="mc-navbar">
+
+    <a class="mc-navbar__logo" href="/Pages/Admin/Dashboard.aspx">
+      <div class="mc-navbar__logo-icon"><i class="fa-solid fa-staff-snake"></i></div>
+      MediCare
+    </a>
+
+    <ul class="mc-navbar__links">
+      <li><a href="/Pages/Admin/Dashboard.aspx"        class='<%= ActiveLink("Dashboard")        %>'>Dashboard</a></li>
+      <li><a href="/Pages/Admin/DoctorManagement.aspx" class='<%= ActiveLink("DoctorManagement") %>'>Doctors</a></li>
+      <li><a href="/Pages/Admin/PatientManagement.aspx"class='<%= ActiveLink("PatientManagement")%>'>Patients</a></li>
+      <li><a href="/Pages/Admin/FoodCatalog.aspx"      class='<%= ActiveLink("FoodCatalog")      %>'>Food</a></li>
+      <li><a href="/Pages/Admin/MedicineCatalog.aspx"  class='<%= ActiveLink("MedicineCatalog")  %>'>Medicine</a></li>
+    </ul>
+
+    <div class="mc-navbar__actions">
+
+      <!-- Profile dropdown -->
+      <div class="mc-profile-dropdown">
+        <div class="mc-profile-trigger">
+          <div class="mc-avatar" style="background:linear-gradient(135deg,#34C679,#1A9E5C);width:30px;height:30px;font-size:0.75rem">AD</div>
+          <span>Admin</span>
+          <i class="fa-solid fa-chevron-down" style="color:var(--text-muted);font-size:0.75rem"></i>
+        </div>
+        <div class="mc-dropdown-menu">
+          <a href="/Pages/Account/AdminProfile.aspx"><i class="fa-solid fa-user"></i> My Profile</a>
+          <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+          <div class="mc-dropdown-divider"></div>
+          <asp:LinkButton ID="lbLogout" runat="server" CssClass="mc-dropdown-logout" OnClick="lbLogout_Click">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </asp:LinkButton>
+        </div>
+      </div>
+
+      <!-- Standalone logout button (always visible alongside dropdown) -->
+      <asp:LinkButton ID="lbLogoutBtn" runat="server" CssClass="mc-btn mc-btn--logout" OnClick="lbLogout_Click">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </asp:LinkButton>
+
+      <!-- Hamburger -->
+      <button type="button" class="mc-navbar__hamburger" id="hamburgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile nav -->
+  <div class="mc-navbar__mobile" id="mobileNav">
+    <a href="/Pages/Admin/Dashboard.aspx">Dashboard</a>
+    <a href="/Pages/Admin/DoctorManagement.aspx">Doctors</a>
+    <a href="/Pages/Admin/PatientManagement.aspx">Patients</a>
+    <a href="/Pages/Admin/FoodCatalog.aspx">Food</a>
+    <a href="/Pages/Admin/MedicineCatalog.aspx">Medicine</a>
+    <asp:LinkButton ID="lbLogoutMobile" runat="server" CssClass="mc-mobile-logout" OnClick="lbLogout_Click">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </asp:LinkButton>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PAGE CONTENT
+  ═══════════════════════════════════════ -->
+  <main class="mc-admin-main">
+    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+  </main>
+
+</form>
+
+<script src="/js/def.js"></script>
+<asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
+</body>
+</html>
