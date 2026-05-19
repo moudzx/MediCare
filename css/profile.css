@@ -1,134 +1,458 @@
-﻿.pro-root {
+﻿.prp-root {
     padding: 30px;
     background: #f4f7f5;
     min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-/* HEADER */
-.pro-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 24px;
-    border-radius: 16px;
-    background: linear-gradient(135deg,#16a34a,#22c55e);
-    color: white;
+/* =========================
+   BANNER
+========================= */
+.prp-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(22, 163, 74, .18);
+    margin-bottom: 22px;
 }
 
-.pro-header__left {
+.prp-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(255,255,255,.14), transparent 32%), radial-gradient(circle at bottom left, rgba(255,255,255,.08), transparent 28%);
+    pointer-events: none;
+}
+
+.prp-banner__body {
+    position: relative;
+    z-index: 1;
+    padding: 24px 28px;
     display: flex;
-    gap: 14px;
     align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-.pro-avatar {
-    width: 50px;
-    height: 50px;
-    background: rgba(255,255,255,.2);
-    border-radius: 12px;
+.prp-banner__left {
     display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+}
+
+.prp-avatar-ring {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+}
+
+.prp-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.prp-avatar--lg {
+    width: 92px;
+    height: 92px;
+    border-radius: 26px;
+}
+
+.prp-avatar__initials {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    color: #fff;
+}
+
+.prp-avatar--lg .prp-avatar__initials {
+    font-size: 28px;
+}
+
+.prp-online-dot {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #86efac;
+    border: 3px solid #16a34a;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.18);
+}
+
+.prp-banner__info {
+    min-width: 0;
+}
+
+.prp-banner__name {
+    margin: 0;
+    font-size: clamp(24px, 2.8vw, 34px);
+    line-height: 1.1;
+    font-weight: 800;
+    color: #fff;
+}
+
+.prp-banner__role {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,.9);
+}
+
+.prp-banner__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.prp-btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    text-decoration: none;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-/* GRID */
-.pro-grid {
-    margin-top: 20px;
+    .prp-btn:hover {
+        transform: translateY(-1px);
+    }
+
+.prp-btn--primary {
+    background: #fff;
+    color: #15803d;
+    box-shadow: 0 10px 20px rgba(255,255,255,.12);
+}
+
+.prp-btn--outline {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.75);
+}
+
+.prp-btn--ghost {
+    background: rgba(255,255,255,.16);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+/* =========================
+   BODY GRID
+========================= */
+.prp-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.prp-col {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 
-/* CARD */
-.pro-card {
-    background: white;
-    border-radius: 14px;
+/* =========================
+   CARDS
+========================= */
+.prp-card {
+    background: #fff;
     border: 1px solid #e5e7eb;
+    border-radius: 18px;
     overflow: hidden;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .04);
 }
 
-.pro-card__header {
-    padding: 14px;
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
-    font-weight: 700;
+.prp-card__header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #eef2f7;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.pro-card__body {
-    padding: 18px;
+.prp-card__header--simple {
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
-/* FIELDS */
-.pro-field {
-    margin-bottom: 14px;
+.prp-card__header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+.prp-card__header-icon--blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.prp-card__header-icon--green {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.prp-card__title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.prp-card__sub {
+    margin: 3px 0 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.prp-card__body {
+    padding: 20px;
+}
+
+/* =========================
+   LEFT PROFILE CARD
+========================= */
+.prp-card--profile {
+    padding: 28px 20px;
+}
+
+.prp-card__avatar-area {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-}
-
-.pro-input {
-    padding: 10px;
-    border-radius: 10px;
-    border: 1.5px solid #e5e7eb;
-    outline: none;
-    transition: .2s;
-    background: white;
-}
-
-    .pro-input:focus {
-        border-color: #22c55e;
-        box-shadow: 0 0 0 3px rgba(34,197,94,.15);
-    }
-
-/* LOCKED MODE */
-.is-locked {
-    background: #f3f4f6;
-    cursor: not-allowed;
-}
-
-/* TEXTAREA */
-.pro-textarea {
-    min-height: 90px;
-    resize: vertical;
-}
-
-/* ACTIONS */
-.pro-actions {
-    margin-top: 20px;
-    display: none;
-    justify-content: center;
+    align-items: center;
+    text-align: center;
     gap: 12px;
 }
 
-/* BUTTONS */
-.pro-btn {
-    padding: 10px 18px;
+.prp-card__name {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.prp-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
     border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
+    background: #f0fdf4;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #dcfce7;
 }
 
-.pro-btn--primary {
-    background: linear-gradient(135deg,#16a34a,#22c55e);
-    color: white;
+/* =========================
+   SUMMARY BLOCK
+========================= */
+.prp-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
 }
 
-.pro-btn--gray {
-    background: #e5e7eb;
+.prp-summary-item {
+    padding: 14px;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    background: #fafafa;
 }
 
-/* EDIT BUTTON */
-.pro-btn--outline-light {
-    border: 1px solid white;
-    background: transparent;
-    color: white;
-    padding: 8px 14px;
-    border-radius: 999px;
+.prp-summary-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 5px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .pro-grid {
+.prp-summary-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    word-break: break-word;
+}
+
+/* =========================
+   FORM-LIKE FIELDS IN READ-ONLY MODE
+========================= */
+.prp-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.prp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 14px;
+    border: 1px solid #eef2f7;
+    border-radius: 14px;
+    background: #fafafa;
+}
+
+.prp-field--full {
+    grid-column: 1 / -1;
+}
+
+.prp-field__label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prp-input,
+.prp-select {
+    width: 100%;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #fff;
+    color: #111827;
+    font-size: 14px;
+    padding: 11px 13px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+    .prp-input:focus,
+    .prp-select:focus {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34,197,94,.14);
+    }
+
+    .prp-input[readonly],
+    .prp-select:disabled {
+        background: #fff !important;
+        color: #111827;
+        cursor: default;
+        opacity: 1;
+    }
+
+    .prp-input[readonly] {
+        border-color: #e5e7eb;
+    }
+
+.prp-input--phone {
+    flex: 1;
+    min-width: 0;
+}
+
+.prp-phone-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+    .prp-phone-wrap .prp-select {
+        width: 110px;
+        flex-shrink: 0;
+    }
+
+/* textarea look */
+.prp-textarea {
+    min-height: 100px;
+    resize: none;
+    line-height: 1.5;
+}
+
+    .prp-textarea[readonly] {
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
+
+/* =========================
+   LOCKED LOOK
+========================= */
+.prp-input[readonly],
+.prp-select:disabled {
+    background: linear-gradient(180deg, #fff, #fcfcfd) !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 980px) {
+    .prp-body {
         grid-template-columns: 1fr;
+    }
+
+    .prp-summary-grid,
+    .prp-fields-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prp-root {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .prp-banner__body {
+        padding: 20px;
+    }
+
+    .prp-banner__left {
+        width: 100%;
+    }
+
+    .prp-banner__actions {
+        width: 100%;
+    }
+
+    .prp-btn {
+        width: 100%;
+    }
+
+    .prp-phone-wrap {
+        flex-direction: column;
+    }
+
+        .prp-phone-wrap .prp-select {
+            width: 100%;
+        }
+
+    .prp-card__body,
+    .prp-card__header {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

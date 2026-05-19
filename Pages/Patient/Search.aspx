@@ -15,7 +15,6 @@
 
 <div class="sea-root">
 
-    <!-- HEADER -->
     <div class="sea-page-header">
         <div class="sea-page-header__left">
             <div class="sea-page-header__icon">
@@ -24,7 +23,6 @@
 
             <div>
                 <h1 class="sea-page-header__title">Search</h1>
-
                 <p class="sea-page-header__sub">
                     Search across doctors, medicines, and foods
                 </p>
@@ -32,16 +30,11 @@
         </div>
     </div>
 
-    <!-- SEARCH -->
     <div class="sea-toolbar">
-
         <div class="sea-search-panel">
 
             <div class="sea-search-field">
-
-                <label class="sea-label">
-                    Search scope
-                </label>
+                <label class="sea-label">Search scope</label>
 
                 <asp:DropDownList ID="ddlSearchScope"
                     runat="server"
@@ -55,17 +48,12 @@
                     <asp:ListItem Value="foods">Foods</asp:ListItem>
 
                 </asp:DropDownList>
-
             </div>
 
             <div class="sea-search-field sea-search-field--grow">
-
-                <label class="sea-label">
-                    Search text
-                </label>
+                <label class="sea-label">Search text</label>
 
                 <div class="sea-search-input-wrap">
-
                     <i class="fa-solid fa-magnifying-glass sea-search-icon"></i>
 
                     <asp:TextBox ID="txtSearchQuery"
@@ -73,30 +61,22 @@
                         CssClass="sea-search-input"
                         placeholder="Type a name, specialization, description...">
                     </asp:TextBox>
-
                 </div>
-
             </div>
 
             <div class="sea-search-field sea-search-field--btn">
-
-                <label class="sea-label sea-label--ghost">
-                    &nbsp;
-                </label>
+                <label class="sea-label sea-label--ghost">&nbsp;</label>
 
                 <asp:Button ID="btnSearch"
                     runat="server"
                     Text="Search"
                     CssClass="sea-btn sea-btn--primary"
                     OnClick="btnSearch_Click" />
-
             </div>
 
         </div>
-
     </div>
 
-    <!-- MESSAGE -->
     <asp:Label ID="lblSearchMsg"
         runat="server"
         CssClass="sea-inline-msg"
@@ -104,25 +84,15 @@
 
     <div class="sea-results-grid">
 
-        <!-- DOCTORS -->
         <div class="sea-card" id="cardDoctors" runat="server">
-
             <div class="sea-card__header">
-
                 <div>
-                    <h2 class="sea-card__title">
-                        Doctors
-                    </h2>
-
-                    <p class="sea-card__subtitle">
-                        Find doctors by name or specialization
-                    </p>
+                    <h2 class="sea-card__title">Doctors</h2>
+                    <p class="sea-card__subtitle">Find doctors by name or specialization</p>
                 </div>
-
             </div>
 
             <div class="sea-table-wrap">
-
                 <asp:GridView ID="gvDoctors"
                     runat="server"
                     CssClass="sea-grid"
@@ -136,64 +106,36 @@
                     DataKeyNames="DoctorId">
 
                     <Columns>
-
-                        <asp:BoundField DataField="Name"
-                            HeaderText="Name" />
-
-                        <asp:BoundField DataField="Specialization"
-                            HeaderText="Specialization" />
-
-                        <asp:BoundField DataField="ConnectionStatus"
-                            HeaderText="Status" />
+                        <asp:BoundField DataField="Name" HeaderText="Name" />
+                        <asp:BoundField DataField="Specialization" HeaderText="Specialization" />
+                        <asp:BoundField DataField="ConnectionStatus" HeaderText="Status" />
 
                         <asp:TemplateField HeaderText="Actions">
-
                             <ItemTemplate>
-
                                 <div class="sea-actions-cell">
-
-<asp:Button ID="btnConnect"
-    runat="server"
-    Text="Connect"
-    CssClass="sea-btn sea-btn--small sea-btn--blue"
-    CommandName='<%# Eval("ConnectionStatus").ToString() == "Pending" ? "UndoConnect" : "ConnectDoctor" %>'
-    CommandArgument='<%# Eval("DoctorId") %>' />
-
+                                    <asp:Button ID="btnConnect"
+                                        runat="server"
+                                        Text="Connect"
+                                        CssClass="sea-btn sea-btn--small sea-btn--blue"
+                                        CommandName='<%# Eval("ConnectionStatus").ToString() == "Pending" ? "UndoConnect" : "ConnectDoctor" %>'
+                                        CommandArgument='<%# Eval("DoctorId") %>' />
                                 </div>
-
                             </ItemTemplate>
-
                         </asp:TemplateField>
-
                     </Columns>
-
                 </asp:GridView>
-
             </div>
-
         </div>
 
-        <!-- MEDICINES -->
         <div class="sea-card" id="cardMedicines" runat="server">
-
             <div class="sea-card__header">
-
                 <div>
-
-                    <h2 class="sea-card__title">
-                        Medicines
-                    </h2>
-
-                    <p class="sea-card__subtitle">
-                        Find medicine names and descriptions
-                    </p>
-
+                    <h2 class="sea-card__title">Medicines</h2>
+                    <p class="sea-card__subtitle">Find medicine names and descriptions</p>
                 </div>
-
             </div>
 
             <div class="sea-table-wrap">
-
                 <asp:GridView ID="gvMedicines"
                     runat="server"
                     CssClass="sea-grid"
@@ -205,55 +147,32 @@
                     OnPageIndexChanging="gvMedicines_PageIndexChanging">
 
                     <Columns>
-
-                        <asp:BoundField DataField="Name"
-                            HeaderText="Name" />
-
-                        <asp:BoundField DataField="Description"
-                            HeaderText="Description" />
+                        <asp:BoundField DataField="Name" HeaderText="Name" />
+                        <asp:BoundField DataField="Description" HeaderText="Description" />
 
                         <asp:TemplateField HeaderText="">
-
                             <ItemTemplate>
-
-                                <a href='AddMedicine.aspx?medicineId=<%# Eval("Id") %>'
-                                   class="sea-btn sea-btn--small sea-btn--green">
-                                    Add
-                                </a>
-
+                                <asp:HyperLink
+                                    runat="server"
+                                    Text="Add"
+                                    CssClass="sea-btn sea-btn--small sea-btn--green"
+                                    NavigateUrl='<%# ResolveUrl("~/Pages/Patient/AddMedicine.aspx?medicineId=" + Eval("Id").ToString()) %>' />
                             </ItemTemplate>
-
                         </asp:TemplateField>
-
                     </Columns>
-
                 </asp:GridView>
-
             </div>
-
         </div>
 
-        <!-- FOODS -->
         <div class="sea-card" id="cardFoods" runat="server">
-
             <div class="sea-card__header">
-
                 <div>
-
-                    <h2 class="sea-card__title">
-                        Foods
-                    </h2>
-
-                    <p class="sea-card__subtitle">
-                        Find foods with nutrition facts
-                    </p>
-
+                    <h2 class="sea-card__title">Foods</h2>
+                    <p class="sea-card__subtitle">Find foods with nutrition facts</p>
                 </div>
-
             </div>
 
             <div class="sea-table-wrap">
-
                 <asp:GridView ID="gvFoods"
                     runat="server"
                     CssClass="sea-grid"
@@ -265,32 +184,17 @@
                     OnPageIndexChanging="gvFoods_PageIndexChanging">
 
                     <Columns>
-
-                        <asp:BoundField DataField="Name"
-                            HeaderText="Name" />
-
-                        <asp:BoundField DataField="Calories"
-                            HeaderText="Calories" />
-
-                        <asp:BoundField DataField="Protein"
-                            HeaderText="Protein" />
-
-                        <asp:BoundField DataField="Carbs"
-                            HeaderText="Carbs" />
-
-                        <asp:BoundField DataField="Fat"
-                            HeaderText="Fat" />
-
+                        <asp:BoundField DataField="Name" HeaderText="Name" />
+                        <asp:BoundField DataField="Calories" HeaderText="Calories" />
+                        <asp:BoundField DataField="Protein" HeaderText="Protein" />
+                        <asp:BoundField DataField="Carbs" HeaderText="Carbs" />
+                        <asp:BoundField DataField="Fat" HeaderText="Fat" />
                     </Columns>
-
                 </asp:GridView>
-
             </div>
-
         </div>
 
     </div>
-
 </div>
 
 </asp:Content>
