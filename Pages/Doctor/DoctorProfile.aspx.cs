@@ -61,7 +61,7 @@ namespace MediCare.Pages.Doctor
                                 txtClinicAddress.Text = reader["ClinicAddress"] != DBNull.Value ? reader["ClinicAddress"].ToString() : "";
                                 txtCertificatePath.Text = reader["CertificatePath"].ToString();
                                 txtSpeciality.Text = reader["Speciality"] != DBNull.Value ? reader["Speciality"].ToString() : "";
-                                txtGender.Text = reader["Gender"] != DBNull.Value ? reader["Gender"].ToString() : "Not Specified";
+                                txtGender.SelectedValue = reader["Gender"] != DBNull.Value ? reader["Gender"].ToString() : "Not specified";
 
                                 // Header context updates
                                 lblHeaderName.Text = reader["FullName"].ToString();
@@ -110,7 +110,7 @@ namespace MediCare.Pages.Doctor
             string speciality = txtSpeciality.Text.Trim();
             string clinicAddress = txtClinicAddress.Text.Trim();
             string ageText = txtAge.Text.Trim();
-
+            string gender = txtGender.SelectedValue;
             // Validate backend rules explicitly matching table constraints
             if (string.IsNullOrEmpty(fullName))
             {
@@ -130,14 +130,16 @@ namespace MediCare.Pages.Doctor
                 {
                     conn.Open();
 
+                    // UPDATE SQL — add Gender to SET clause
                     string updateSql = @"
-                        UPDATE [dbo].[Doctors]
-                        SET FullName = @FullName,
-                            PhoneNumber = @PhoneNumber,
-                            Age = @Age,
-                            ClinicAddress = @ClinicAddress,
-                            Speciality = @Speciality
-                        WHERE UserId = @UserId";
+                     UPDATE [dbo].[Doctors]
+                       SET FullName = @FullName,
+                       PhoneNumber = @PhoneNumber,
+                        Age = @Age,
+                        ClinicAddress = @ClinicAddress,
+                        Speciality = @Speciality,
+                         Gender = @Gender
+                         WHERE UserId = @UserId";
 
                     using (SqlCommand cmd = new SqlCommand(updateSql, conn))
                     {
@@ -147,7 +149,7 @@ namespace MediCare.Pages.Doctor
                         cmd.Parameters.AddWithValue("@ClinicAddress", string.IsNullOrEmpty(clinicAddress) ? (object)DBNull.Value : clinicAddress);
                         cmd.Parameters.AddWithValue("@Speciality", string.IsNullOrEmpty(speciality) ? (object)DBNull.Value : speciality);
                         cmd.Parameters.AddWithValue("@UserId", userId);
-
+                        cmd.Parameters.AddWithValue("@Gender", string.IsNullOrEmpty(gender) ? (object)DBNull.Value : gender);
                         cmd.ExecuteNonQuery();
                     }
 
