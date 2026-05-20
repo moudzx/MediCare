@@ -27,6 +27,17 @@ namespace MediCare.Pages.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserId"] == null || Session["Role"] == null)
+            {
+                Response.Redirect("~/Pages/Account/Login.aspx");
+                return;
+            }
+
+            if (Session["Role"].ToString() != "Admin")
+            {
+                Response.Redirect("~/Default.aspx");
+                return;
+            }
             if (!IsPostBack)
             {
                 LoadFood();
@@ -90,7 +101,15 @@ namespace MediCare.Pages.Admin
         {
             LoadFood(txtSearchFood.Text.Trim(), ddlSortFood.SelectedValue);
         }
+        protected void gvFood_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvFood.PageIndex = e.NewPageIndex;
 
+            LoadFood(
+                txtSearchFood.Text.Trim(),
+                ddlSortFood.SelectedValue
+            );
+        }
         protected void btnOpenAddModal_Click(object sender, EventArgs e)
         {
             ClearFields();
