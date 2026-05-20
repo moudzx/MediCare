@@ -45,7 +45,7 @@
           <i class="fa-solid fa-chevron-down" style="color:var(--text-muted);font-size:0.75rem"></i>
         </div>
         <div class="mc-dropdown-menu">
-          <a href="/Pages/Account/AdminProfile.aspx"><i class="fa-solid fa-user"></i> My Profile</a>
+          <a href="/Pages/Account/Dashboard.aspx"><i class="fa-solid fa-user"></i> My Profile</a>
           <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
           <div class="mc-dropdown-divider"></div>
           <asp:LinkButton ID="lbLogout" runat="server" CssClass="mc-dropdown-logout" OnClick="lbLogout_Click">

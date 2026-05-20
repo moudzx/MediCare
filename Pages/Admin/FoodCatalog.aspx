@@ -56,7 +56,11 @@
         runat="server"
         AutoGenerateColumns="False"
         CssClass="mc-table"
-        GridLines="None">
+        GridLines="None"
+        AllowPaging="true"
+        PageSize="10"
+        OnPageIndexChanging="gvFood_PageIndexChanging">
+      <PagerStyle CssClass="mc-table-pager" />
       <Columns>
         <asp:BoundField DataField="id"            HeaderText="ID"           />
         <asp:BoundField DataField="description"   HeaderText="Description"  />
