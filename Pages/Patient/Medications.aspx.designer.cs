@@ -15,6 +15,33 @@ namespace MediCare.Pages.Patient
     {
 
         /// <summary>
+        /// lblTotalMeds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalMeds;
+
+        /// <summary>
+        /// lblActiveMeds control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblActiveMeds;
+
+        /// <summary>
+        /// lblPrescribed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPrescribed;
+
+        /// <summary>
         /// txtSearchMedication control.
         /// </summary>
         /// <remarks>
@@ -42,13 +69,22 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.Label lblMessage;
 
         /// <summary>
-        /// gvMedications control.
+        /// rptMedications control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvMedications;
+        protected global::System.Web.UI.WebControls.Repeater rptMedications;
+
+        /// <summary>
+        /// pnlEmpty control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlEmpty;
 
         /// <summary>
         /// txtMedicationName control.

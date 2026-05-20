@@ -32,19 +32,32 @@ namespace MediCare.Pages.Patient
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-            SELECT
-                pm.PatientMedicationId AS MedicationId,
-                pm.MedicineId AS MedicationName,
-                pm.Dosage,
-                pm.Frequency,
-                pm.Duration AS PillsNumber,
-                pm.StartDate,
-                pm.EndDate,
-                pm.Status
-            FROM PatientMedications pm
-            INNER JOIN Patients p
-                ON pm.PatientId = p.PatientId
-            WHERE p.UserId = @UserId";
+    SELECT
+    pm.PatientMedicationId AS MedicationId,
+
+    CASE 
+        WHEN m.name IS NOT NULL 
+            THEN m.name
+        ELSE pm.MedicineId
+    END AS MedicationName,
+
+    pm.DoctorId,
+    pm.Dosage,
+    pm.Frequency,
+    pm.Duration AS PillsNumber,
+    pm.StartDate,
+    pm.EndDate,
+    pm.Status
+
+FROM PatientMedications pm
+
+INNER JOIN Patients p
+    ON pm.PatientId = p.PatientId
+
+LEFT JOIN Medicine m
+    ON TRY_CAST(pm.MedicineId AS INT) = m.id
+
+WHERE p.UserId = @UserId";
 
                 if (!string.IsNullOrWhiteSpace(search))
                 {
@@ -63,32 +76,29 @@ namespace MediCare.Pages.Patient
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
-                da.Fill(dt);
+               
+ da.Fill(dt);
+                rptMedications.DataSource = dt;
+                rptMedications.DataBind();
+                pnlEmpty.Visible = dt.Rows.Count == 0;
 
-                gvMedications.DataSource = dt;
-                gvMedications.DataBind();
+                lblTotalMeds.Text = dt.Rows.Count.ToString();
+                lblActiveMeds.Text = dt.Select("Status = 'Active'").Length.ToString();
+                lblPrescribed.Text = dt.Select("DoctorId > 0").Length.ToString();
             }
         }
 
-        // =========================================
-        // SEARCH
-        // =========================================
         protected void btnSearchMedication_Click(object sender, EventArgs e)
         {
             string search = txtSearchMedication.Text.Trim();
-
             LoadMedications(search);
         }
 
-        // =========================================
-        // SAVE CUSTOM MEDICATION
-        // =========================================
         protected void btnSaveMedication_Click(object sender, EventArgs e)
         {
             try
             {
                 int userId = Convert.ToInt32(Session["UserId"]);
-
                 int patientId = GetPatientId(userId);
 
                 if (patientId == -1)
@@ -100,109 +110,66 @@ namespace MediCare.Pages.Patient
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
                     string query = @"
-                INSERT INTO PatientMedications
-                (
-                    PatientId,
-                    DoctorId,
-                    MedicineId,
-                    Dosage,
-                    Frequency,
-                    Duration,
-                    StartDate,
-                    EndDate,
-                    Status
-                )
-                VALUES
-                (
-                    @PatientId,
-                    @DoctorId,
-                    @MedicineId,
-                    @Dosage,
-                    @Frequency,
-                    @Duration,
-                    @StartDate,
-                    @EndDate,
-                    @Status
-                )";
+                        INSERT INTO PatientMedications
+                        (
+                            PatientId,
+                            DoctorId,
+                            MedicineId,
+                            Dosage,
+                            Frequency,
+                            Duration,
+                            StartDate,
+                            EndDate,
+                            Status
+                        )
+                        VALUES
+                        (
+                            @PatientId,
+                            @DoctorId,
+                            @MedicineId,
+                            @Dosage,
+                            @Frequency,
+                            @Duration,
+                            @StartDate,
+                            @EndDate,
+                            @Status
+                        )";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
 
                     cmd.Parameters.AddWithValue("@PatientId", patientId);
-
-                    // custom medication → no doctor
                     cmd.Parameters.AddWithValue("@DoctorId", 0);
+                    cmd.Parameters.AddWithValue("@MedicineId", txtMedicationName.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Dosage", txtDosage.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Frequency", ddlFrequency.SelectedValue);
+                    cmd.Parameters.AddWithValue("@Duration", txtPills.Text.Trim());
 
-                    // save medication name directly
-                    cmd.Parameters.AddWithValue(
-                        "@MedicineId",
-                        txtMedicationName.Text.Trim());
-
-                    cmd.Parameters.AddWithValue(
-                        "@Dosage",
-                        txtDosage.Text.Trim());
-
-                    cmd.Parameters.AddWithValue(
-                        "@Frequency",
-                        ddlFrequency.SelectedValue);
-
-                    cmd.Parameters.AddWithValue(
-                        "@Duration",
-                        txtPills.Text.Trim());
-
-                    // Start Date
                     if (!string.IsNullOrWhiteSpace(txtStartDate.Text))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@StartDate",
-                            Convert.ToDateTime(txtStartDate.Text));
-                    }
+                        cmd.Parameters.AddWithValue("@StartDate", Convert.ToDateTime(txtStartDate.Text));
                     else
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@StartDate",
-                            DBNull.Value);
-                    }
+                        cmd.Parameters.AddWithValue("@StartDate", DBNull.Value);
 
-                    // End Date
                     if (!string.IsNullOrWhiteSpace(txtEndDate.Text))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@EndDate",
-                            Convert.ToDateTime(txtEndDate.Text));
-                    }
+                        cmd.Parameters.AddWithValue("@EndDate", Convert.ToDateTime(txtEndDate.Text));
                     else
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@EndDate",
-                            DBNull.Value);
-                    }
+                        cmd.Parameters.AddWithValue("@EndDate", DBNull.Value);
 
                     cmd.Parameters.AddWithValue("@Status", "Active");
 
                     conn.Open();
-
                     cmd.ExecuteNonQuery();
                 }
 
                 ClearForm();
-
                 LoadMedications();
-
-                ShowMessage(
-                    "Medication saved successfully.",
-                    false);
+                ShowMessage("Medication saved successfully.", false);
             }
             catch (Exception ex)
             {
-                ShowMessage(
-                    "Error: " + ex.Message,
-                    true);
+                ShowMessage("Error: " + ex.Message, true);
             }
         }
 
-        // =========================================
-        // GET PATIENT ID
-        // =========================================
         private int GetPatientId(int userId)
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -213,64 +180,23 @@ namespace MediCare.Pages.Patient
                     WHERE UserId = @UserId";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-
                 cmd.Parameters.AddWithValue("@UserId", userId);
-
                 conn.Open();
 
                 object result = cmd.ExecuteScalar();
-
-                if (result != null)
-                {
-                    return Convert.ToInt32(result);
-                }
-
-                return -1;
+                return result != null ? Convert.ToInt32(result) : -1;
             }
         }
 
-        // =========================================
-        // GENERATE MEDICINE ID
-        // =========================================
-        private int GenerateMedicineId()
-        {
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                string query =
-                    "SELECT ISNULL(MAX(id), 0) + 1 FROM Medicine";
-
-                SqlCommand cmd = new SqlCommand(query, conn);
-
-                conn.Open();
-
-                return Convert.ToInt32(cmd.ExecuteScalar());
-            }
-        }
-
-        // =========================================
-        // MESSAGE
-        // =========================================
         private void ShowMessage(string message, bool isError)
         {
             lblMessage.Text = message;
-
             lblMessage.Visible = true;
-
-            if (isError)
-            {
-                lblMessage.CssClass =
-                    "med-inline-msg med-inline-msg--error";
-            }
-            else
-            {
-                lblMessage.CssClass =
-                    "med-inline-msg med-inline-msg--success";
-            }
+            lblMessage.CssClass = isError
+                ? "med-inline-msg med-inline-msg--error"
+                : "med-inline-msg med-inline-msg--success";
         }
 
-        // =========================================
-        // CLEAR FORM
-        // =========================================
         private void ClearForm()
         {
             txtMedicationName.Text = "";
