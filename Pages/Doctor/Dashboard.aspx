@@ -2,8 +2,8 @@
     Language="C#"
     MasterPageFile="~/MasterPage/DoctorSite.Master"
     AutoEventWireup="true"
-    CodeBehind="DoctorDashboard.aspx.cs"
-    Inherits="MediCare.Pages.Doctor.DoctorDashboard" %>
+    CodeBehind="Dashboard.aspx.cs"
+    Inherits="MediCare.Pages.Doctor.Dashboard" %>
 
 <asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />

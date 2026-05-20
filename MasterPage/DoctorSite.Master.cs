@@ -178,7 +178,7 @@ namespace MediCare.MasterPage
             DispNotifications();
 
             // Optional: If you want content dashboard pages inside the shell to refresh data arrays concurrently
-            if (Page is DoctorDashboard dashboardPage)
+            if (Page is Dashboard dashboardPage)
             {
                 // Requires making RefreshDashboardDataPipelines() public or calling via custom page interface
                 dashboardPage.Response.Redirect(Request.RawUrl);
