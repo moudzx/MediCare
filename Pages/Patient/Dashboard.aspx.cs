@@ -27,6 +27,7 @@ namespace MediCare.Patient
                 LoadPatientInfo();
                 LoadTodayDoses();
                 LoadDoctors();
+                LoadAppointments();
             }
         }
 
@@ -251,6 +252,35 @@ namespace MediCare.Patient
 
             // Fallback for unknown frequency
             return true;
+        }
+        private void LoadAppointments()
+        {
+            int patientId = GetPatientId();
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                string query = @"
+            SELECT 
+                a.AppointmentId,
+                d.FullName AS DoctorName,
+                a.AppointmentDate,
+                a.Status,
+                a.Reason
+            FROM Appointments a
+            INNER JOIN Doctors d ON d.DoctorId = a.DoctorId
+            WHERE a.PatientId = @PatientId
+            ORDER BY a.AppointmentDate DESC";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@PatientId", patientId);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                gvAppointments.DataSource = dt;
+                gvAppointments.DataBind();
+            }
         }
     }
 }
