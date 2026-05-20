@@ -258,6 +258,41 @@ CREATE TABLE [dbo].[CustomFoods] (
     [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE()
 );
 
+CREATE TABLE [dbo].[Conversations] (
+    [ConversationID] INT PRIMARY KEY IDENTITY(1,1),
+    [PatientID] INT NOT NULL,
+    [DoctorID] INT NOT NULL,
+    [CreatedAt] DATETIME DEFAULT GETDATE(),
+    [LastMessageAt] DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Conversations_Patient
+        FOREIGN KEY (PatientID)
+        REFERENCES Patients(PatientID),
+
+    CONSTRAINT FK_Conversations_Doctor
+        FOREIGN KEY (DoctorID)
+        REFERENCES Doctors(DoctorID)
+);
+GO
+
+CREATE TABLE [dbo].[Messages] (
+    [MessageID] INT PRIMARY KEY IDENTITY(1,1),
+    [ConversationID] INT NOT NULL,
+    [SenderUserID] INT NOT NULL,
+    [Body] NVARCHAR(MAX) NOT NULL,
+    [SentAt] DATETIME DEFAULT GETDATE(),
+    [IsRead] BIT DEFAULT 0,
+
+    CONSTRAINT FK_Messages_Conversation
+        FOREIGN KEY (ConversationID)
+        REFERENCES Conversations(ConversationID),
+
+    CONSTRAINT FK_Messages_User
+        FOREIGN KEY (SenderUserID)
+        REFERENCES Users(UserID)
+);
+GO
+
 -- Indexes:
 
 

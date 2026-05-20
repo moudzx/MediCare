@@ -1,6 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true"
-CodeBehind="PatientSite.Master.cs"
-Inherits="MediCare.MasterPage.PatientSite" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="PatientSite.Master.cs" Inherits="MediCare.MasterPage.PatientSite" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -230,11 +228,9 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 <body runat="server">
 <form id="form1" runat="server">
 
-    <!-- PATIENT NAVBAR -->
     <header class="mc-navbar" id="mcNavbar">
         <div class="mc-container mc-navbar__inner">
 
-            <!-- Logo -->
             <a href="Dashboard.aspx" class="mc-navbar__logo" aria-label="MediCare Patient Portal">
                 <div class="mc-logo-icon">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -245,7 +241,6 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                 <span class="mc-logo-text">Medi<strong>Care</strong></span>
             </a>
 
-            <!-- Desktop Nav Links -->
             <nav class="mc-navbar__nav" aria-label="Patient navigation">
                 <a href="Dashboard.aspx" class="mc-nav-link" id="navDashboard">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -286,10 +281,13 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                 </a>
             </nav>
 
-            <!-- Right side -->
             <div class="mc-navbar__actions">
 
-                <!-- Notifications -->
+                <a href="PatientChat.aspx" class="pn-chat-btn" id="btnChatInbox" aria-label="Chat Inbox Messages">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <asp:Label ID="lblChatCount" runat="server" CssClass="pn-chat-btn__badge" Text="0" Visible="false" />
+                </a>
+
                 <div class="pn-notification">
                     <button type="button"
                             class="pn-notification__btn"
@@ -326,7 +324,6 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                     </div>
                 </div>
 
-                <!-- Profile dropdown -->
                 <div class="pn-profile" id="profileDropdown">
                     <button type="button"
                             class="pn-profile__btn"
@@ -363,12 +360,10 @@ Inherits="MediCare.MasterPage.PatientSite" %>
         </div>
     </header>
 
-    <!-- PAGE CONTENT -->
     <main id="mainContent">
         <asp:ContentPlaceHolder ID="MainContent" runat="server" />
     </main>
 
-    <!-- FOOTER -->
     <footer class="pn-footer">
         <div class="mc-container pn-footer__inner">
             <div class="pn-footer__logo">
@@ -381,7 +376,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                 <span class="mc-logo-text">Medi<strong>Care</strong></span>
             </div>
 
-            <p class="pn-footer__copy">&copy; 2025 MediCare Health Platform. All rights reserved.</p>
+            <p class="pn-footer__copy">&copy; 2026 MediCare Health Platform. All rights reserved.</p>
 
             <div class="pn-footer__links">
                 <a href="#">Privacy Policy</a>
@@ -391,52 +386,187 @@ Inherits="MediCare.MasterPage.PatientSite" %>
         </div>
     </footer>
 
-    <script src="/js/default.js"></script>
-    <script>
+<script type="text/javascript">
 (function () {
 
-    /* Active nav link */
     var path = window.location.pathname.toLowerCase();
+
     var links = {
-        'dashboard': document.getElementById('navDashboard'),
-        'medications': document.getElementById('navMedications'),
-        'nutrition': document.getElementById('navNutrition'),
-        'search': document.getElementById('navSearch')
+        dashboard: document.getElementById('navDashboard'),
+        medications: document.getElementById('navMedications'),
+        nutrition: document.getElementById('navNutrition'),
+        search: document.getElementById('navSearch')
     };
 
     Object.keys(links).forEach(function (key) {
-        if (links[key] && path.indexOf(key) !== -1)
-            links[key].classList.add('mc-nav-link--active');
+        var currentTarget = links[key];
+
+        if (currentTarget && path.indexOf(key) !== -1) {
+            currentTarget.classList.add('mc-nav-link--active');
+        }
     });
 
-    /* Profile dropdown */
     var btnProfile = document.getElementById('btnProfile');
     var profileMenu = document.getElementById('profileMenu');
     var profileWrap = document.getElementById('profileDropdown');
+
     var profileOpen = false;
 
-    function openProfile() { profileOpen = true; profileMenu.classList.add('pn-profile__menu--open'); btnProfile.setAttribute('aria-expanded', 'true'); profileMenu.setAttribute('aria-hidden', 'false'); }
-    function closeProfile() { profileOpen = false; profileMenu.classList.remove('pn-profile__menu--open'); btnProfile.setAttribute('aria-expanded', 'false'); profileMenu.setAttribute('aria-hidden', 'true'); }
+    function openProfile() {
+        if (!profileMenu || !btnProfile)
+            return;
 
-    if (btnProfile && profileMenu) {
-        btnProfile.addEventListener('click', function (e) { e.stopPropagation(); profileOpen ? closeProfile() : openProfile(); });
-        document.addEventListener('click', function (e) { if (profileOpen && !profileWrap.contains(e.target)) closeProfile(); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && profileOpen) closeProfile(); });
+        profileOpen = true;
+
+        profileMenu.classList.add('pn-profile__menu--open');
+
+        btnProfile.setAttribute('aria-expanded', 'true');
+
+        profileMenu.setAttribute('aria-hidden', 'false');
     }
 
-    /* Notifications dropdown */
+    function closeProfile() {
+        if (!profileMenu || !btnProfile)
+            return;
+
+        profileOpen = false;
+
+        profileMenu.classList.remove('pn-profile__menu--open');
+
+        btnProfile.setAttribute('aria-expanded', 'false');
+
+        profileMenu.setAttribute('aria-hidden', 'true');
+    }
+
+    if (btnProfile && profileMenu && profileWrap) {
+
+        btnProfile.addEventListener('click', function (e) {
+
+            e.stopPropagation();
+
+            if (profileOpen)
+                closeProfile();
+            else
+                openProfile();
+        });
+
+        document.addEventListener('click', function (e) {
+
+            if (
+                profileOpen &&
+                profileWrap &&
+                e.target &&
+                !profileWrap.contains(e.target)
+            ) {
+                closeProfile();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+
+            if (e.key === 'Escape' && profileOpen) {
+                closeProfile();
+            }
+        });
+    }
+
     var btnNotification = document.getElementById('btnNotification');
-    var notificationMenu = document.getElementById('notificationMenu');
-    var notificationWrap = document.querySelector('.pn-notification');
+
+    var notificationMenu =
+        document.getElementById('notificationMenu');
+
+    var notificationWrap =
+        document.querySelector('.pn-notification');
+
     var notifOpen = false;
 
-    function openNotif() { notifOpen = true; notificationMenu.classList.add('pn-notification__menu--open'); btnNotification.setAttribute('aria-expanded', 'true'); notificationMenu.setAttribute('aria-hidden', 'false'); }
-    function closeNotif() { notifOpen = false; notificationMenu.classList.remove('pn-notification__menu--open'); btnNotification.setAttribute('aria-expanded', 'false'); notificationMenu.setAttribute('aria-hidden', 'true'); }
+    function openNotif() {
 
-    if (btnNotification && notificationMenu) {
-        btnNotification.addEventListener('click', function (e) { e.stopPropagation(); notifOpen ? closeNotif() : openNotif(); });
-        document.addEventListener('click', function (e) { if (notifOpen && notificationWrap && !notificationWrap.contains(e.target)) closeNotif(); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && notifOpen) closeNotif(); });
+        if (!notificationMenu || !btnNotification)
+            return;
+
+        notifOpen = true;
+
+        notificationMenu.classList.add(
+            'pn-notification__menu--open'
+        );
+
+        btnNotification.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        notificationMenu.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+    }
+
+    function closeNotif() {
+
+        if (!notificationMenu || !btnNotification)
+            return;
+
+        notifOpen = false;
+
+        notificationMenu.classList.remove(
+            'pn-notification__menu--open'
+        );
+
+        btnNotification.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        notificationMenu.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+    }
+
+    if (
+        btnNotification &&
+        notificationMenu &&
+        notificationWrap
+    ) {
+
+        btnNotification.addEventListener(
+            'click',
+            function (e) {
+
+                e.stopPropagation();
+
+                if (notifOpen)
+                    closeNotif();
+                else
+                    openNotif();
+            }
+        );
+
+        document.addEventListener(
+            'click',
+            function (e) {
+
+                if (
+                    notifOpen &&
+                    notificationWrap &&
+                    e.target &&
+                    !notificationWrap.contains(e.target)
+                ) {
+                    closeNotif();
+                }
+            }
+        );
+
+        document.addEventListener(
+            'keydown',
+            function (e) {
+
+                if (e.key === 'Escape' && notifOpen) {
+                    closeNotif();
+                }
+            }
+        );
     }
 
 })();

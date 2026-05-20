@@ -115,7 +115,7 @@ namespace MediCare.MasterPage
                                 DateTime appDate = Convert.ToDateTime(reader["AppointmentDate"]);
                                 row["Message"] = $"{name} requested a booking slot for {appDate:yyyy-MM-dd HH:mm}.";
                                 row["IconClass"] = "fa-solid fa-calendar-days text-warning";
-                                row["TimeStamp"] = appDate; // Using app booking request datetime metric
+                                row["TimeStamp"] = appDate;
                                 row["TimeAgo"] = "Pending review";
                                 displayTable.Rows.Add(row);
                             }
@@ -153,7 +153,6 @@ namespace MediCare.MasterPage
             int targetId = Convert.ToInt32(e.CommandArgument);
             string command = e.CommandName;
 
-            // Direct Context Actions routing split
             if (command == "AcceptConnection")
             {
                 UpdateConnectionStatus(targetId, "Accepted");
@@ -177,10 +176,8 @@ namespace MediCare.MasterPage
 
             DispNotifications();
 
-            // Optional: If you want content dashboard pages inside the shell to refresh data arrays concurrently
             if (Page is Dashboard dashboardPage)
             {
-                // Requires making RefreshDashboardDataPipelines() public or calling via custom page interface
                 dashboardPage.Response.Redirect(Request.RawUrl);
             }
         }

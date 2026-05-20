@@ -7,110 +7,128 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MediCare.MasterPage
+namespace MediCare.Pages.Patient
 {
 
 
-    public partial class PatientSite
+    public partial class PatientChat
     {
 
         /// <summary>
-        /// HeadContent control.
+        /// sm control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
+        protected global::System.Web.UI.ScriptManager sm;
 
         /// <summary>
-        /// form1 control.
+        /// rptConversations control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.Repeater rptConversations;
 
         /// <summary>
-        /// lblChatCount control.
+        /// pnlNoneSelected control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblChatCount;
+        protected global::System.Web.UI.WebControls.Panel pnlNoneSelected;
 
         /// <summary>
-        /// lblNotifCount control.
+        /// pnlChat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNotifCount;
+        protected global::System.Web.UI.WebControls.Panel pnlChat;
 
         /// <summary>
-        /// btnMarkAllRead control.
+        /// litDrInitials control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnMarkAllRead;
+        protected global::System.Web.UI.WebControls.Literal litDrInitials;
 
         /// <summary>
-        /// phNotifications control.
+        /// litDrName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phNotifications;
+        protected global::System.Web.UI.WebControls.Literal litDrName;
 
         /// <summary>
-        /// lblFirstName control.
+        /// litDrSpec control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFirstName;
+        protected global::System.Web.UI.WebControls.Literal litDrSpec;
 
         /// <summary>
-        /// lblFullName control.
+        /// upMessages control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFullName;
+        protected global::System.Web.UI.UpdatePanel upMessages;
 
         /// <summary>
-        /// lblEmail control.
+        /// timerRefresh control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblEmail;
+        protected global::System.Web.UI.Timer timerRefresh;
 
         /// <summary>
-        /// MainContent control.
+        /// rptMessages control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Repeater rptMessages;
 
         /// <summary>
-        /// ScriptContent control.
+        /// upInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ScriptContent;
+        protected global::System.Web.UI.UpdatePanel upInput;
+
+        /// <summary>
+        /// txtMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMessage;
+
+        /// <summary>
+        /// btnSend control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSend;
     }
 }
