@@ -195,13 +195,125 @@
             <div class="nut-card__header">
                 <h2 class="nut-card__title">Search Results</h2>
             </div>
+            <div class="nut-scroll-x">
+                <asp:GridView ID="gvSearchResults"
+                    runat="server"
+                    CssClass="nut-grid"
+                    AutoGenerateColumns="True"
+                    GridLines="None"
+                    EmptyDataText="No foods found." />
+            </div>
+        </div>
 
-            <asp:GridView ID="gvSearchResults"
-                runat="server"
-                CssClass="nut-grid"
-                AutoGenerateColumns="True"
-                GridLines="None"
-                EmptyDataText="No foods found." />
+        <!-- ADD CUSTOM FOOD FORM -->
+        <div class="nut-card">
+            <div class="nut-card__header">
+                <div class="nut-card__title-group">
+                    <div class="nut-card__icon nut-card__icon--purple" style="background-color: #e67e22; color: #fff;">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div>
+                        <h2 class="nut-card__title">Add Custom Food Item</h2>
+                        <p class="nut-card__subtitle">
+                            Incorporate custom items or home recipes directly into your index profiles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nut-custom-form">
+                <!-- ROW 1: Base Configuration -->
+                <div class="nut-form-row">
+                    <div class="nut-form-group" style="flex: 2;">
+                        <label class="nut-label">Food Name / Description *</label>
+                        <asp:TextBox ID="txtCustomDesc" runat="server" CssClass="nut-input" placeholder="e.g. Homemade Oat Bar" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Calories (kcal)</label>
+                        <asp:TextBox ID="txtCustomCalories" runat="server" CssClass="nut-input" TextMode="Number" />
+                    </div>
+                </div>
+
+                <!-- ROW 2: Core Macronutrients -->
+                <div class="nut-form-row">
+                    <div class="nut-form-group">
+                        <label class="nut-label">Protein (g)</label>
+                        <asp:TextBox ID="txtCustomProtein" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Total Fat (g)</label>
+                        <asp:TextBox ID="txtCustomFat" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Carbohydrate (g)</label>
+                        <asp:TextBox ID="txtCustomCarbs" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Sugar (g)</label>
+                        <asp:TextBox ID="txtCustomSugar" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                </div>
+
+                <!-- ROW 3: Micronutrients & Elements -->
+                <div class="nut-form-row">
+                    <div class="nut-form-group">
+                        <label class="nut-label">Calcium (mg)</label>
+                        <asp:TextBox ID="txtCustomCalcium" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Iron (mg)</label>
+                        <asp:TextBox ID="txtCustomIron" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Potassium (mg)</label>
+                        <asp:TextBox ID="txtCustomPotassium" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                </div>
+
+                <!-- ROW 4: Vitamins -->
+                <div class="nut-form-row">
+                    <div class="nut-form-group">
+                        <label class="nut-label">Vitamin C (mg)</label>
+                        <asp:TextBox ID="txtCustomVitaminC" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Vitamin E (mg)</label>
+                        <asp:TextBox ID="txtCustomVitaminE" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                    <div class="nut-form-group">
+                        <label class="nut-label">Vitamin D (mcg)</label>
+                        <asp:TextBox ID="txtCustomVitaminD" runat="server" CssClass="nut-input" Step="any" placeholder="0.0" />
+                    </div>
+                </div>
+
+                <div class="nut-form-footer">
+                    <asp:Label ID="lblCustomFoodMsg" runat="server" CssClass="nut-inline-msg" Visible="false" />
+                    <asp:Button ID="btnSaveCustomFood" runat="server" Text="Add Custom Food" CssClass="nut-btn nut-btn--primary" OnClick="btnSaveCustomFood_Click" style="background-color: #e67e22; border-color: #d35400;" />
+                </div>
+            </div>
+        </div>
+
+        <!-- DISPLAY CUSTOM FOODS LOG -->
+        <div class="nut-card">
+            <div class="nut-card__header">
+                <div class="nut-card__title-group">
+                    <div class="nut-card__icon" style="background-color: #f1c40f; color: #fff;">
+                        <i class="fa-solid fa-list-ul"></i>
+                    </div>
+                    <div>
+                        <h2 class="nut-card__title">My Custom Food Log</h2>
+                        <p class="nut-card__subtitle">History log of recipes and custom options created on this profile.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nut-scroll-x">
+                <asp:GridView ID="gvCustomFoods"
+                    runat="server"
+                    CssClass="nut-grid nut-grid--scroll"
+                    AutoGenerateColumns="True"
+                    GridLines="None"
+                    EmptyDataText="You haven't cataloged any custom food ingredients yet." />
+            </div>
         </div>
 
         <!-- NUTRITION PLAN -->

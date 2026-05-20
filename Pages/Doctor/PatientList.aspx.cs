@@ -37,15 +37,12 @@ namespace MediCare.Pages.Doctor
         {
             int userId = Convert.ToInt32(Session["UserId"]);
             string sql = "SELECT DoctorId FROM [dbo].[Doctors] WHERE UserId = @UserId";
-
             using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@UserId", userId);
                 object result = cmd.ExecuteScalar();
                 if (result != null && result != DBNull.Value)
-                {
                     return Convert.ToInt32(result);
-                }
             }
             return 0;
         }
@@ -62,7 +59,7 @@ namespace MediCare.Pages.Doctor
 
                     string sql = @"
                         SELECT 
-                            COUNT(p.PatientId) as Total,
+                            COUNT(p.PatientId)  as Total,
                             SUM(CASE WHEN c.Status = 'Accepted' THEN 1 ELSE 0 END) as Active,
                             SUM(CASE WHEN p.PhoneNumber IS NOT NULL AND p.PhoneNumber <> '' THEN 1 ELSE 0 END) as WithPhone,
                             SUM(CASE WHEN p.ChronicDisease IS NOT NULL AND p.ChronicDisease <> '' THEN 1 ELSE 0 END) as WithChronic
@@ -102,7 +99,6 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    // FIXED: Included p.BloodType and p.PhoneNumber to keep Eval parameters from blowing up!
                     string sql = @"
                         SELECT 
                             p.PatientId,
@@ -142,7 +138,6 @@ namespace MediCare.Pages.Doctor
                 }
                 catch (Exception ex)
                 {
-                    // If your DB string data differs in case (e.g. 'PENDING'), this will show up on your screen.
                     ShowToast("Pending Request Binding Fail: " + ex.Message);
                 }
             }
@@ -176,13 +171,10 @@ namespace MediCare.Pages.Doctor
                         WHERE c.DoctorId = @DoctorId AND c.Status = 'Accepted'";
 
                     if (!string.IsNullOrEmpty(search))
-                    {
                         sql += " AND (p.FullName LIKE @Search OR p.ChronicDisease LIKE @Search OR p.PhoneNumber LIKE @Search)";
-                    }
+
                     if (!string.IsNullOrEmpty(gender))
-                    {
                         sql += " AND p.Gender = @Gender";
-                    }
 
                     sql += " ORDER BY p.FullName ASC";
 
@@ -235,7 +227,7 @@ namespace MediCare.Pages.Doctor
                     if (e.CommandName == "AcceptRequest")
                     {
                         string sql = @"
-                            UPDATE [dbo].[PatientDoctorConnections] 
+                            UPDATE [dbo].[PatientDoctorConnections]
                             SET Status = 'Accepted', RespondedAt = GETDATE()
                             WHERE DoctorId = @DoctorId AND PatientId = @PatientId";
 
@@ -245,12 +237,24 @@ namespace MediCare.Pages.Doctor
                             cmd.Parameters.AddWithValue("@PatientId", targetPatientId);
                             cmd.ExecuteNonQuery();
                         }
+
+                        SendConnectionNotification(conn, targetPatientId, doctorId,
+                            type: "ConnectionAccepted",
+                            title: "Connection Request Accepted",
+                            message: "Your connection request has been accepted by the doctor.");
+
                         ShowToast("Connection request accepted.");
                     }
                     else if (e.CommandName == "RejectRequest")
                     {
+                        // Notify before deleting so we can still read the connection row if needed
+                        SendConnectionNotification(conn, targetPatientId, doctorId,
+                            type: "ConnectionRejected",
+                            title: "Connection Request Declined",
+                            message: "Your connection request has been declined by the doctor.");
+
                         string sql = @"
-                            DELETE FROM [dbo].[PatientDoctorConnections] 
+                            DELETE FROM [dbo].[PatientDoctorConnections]
                             WHERE DoctorId = @DoctorId AND PatientId = @PatientId AND Status = 'Pending'";
 
                         using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -259,6 +263,7 @@ namespace MediCare.Pages.Doctor
                             cmd.Parameters.AddWithValue("@PatientId", targetPatientId);
                             cmd.ExecuteNonQuery();
                         }
+
                         ShowToast("Connection request declined.");
                     }
 
@@ -270,6 +275,42 @@ namespace MediCare.Pages.Doctor
                 {
                     ShowToast("Action Error: " + ex.Message);
                 }
+            }
+        }
+
+        // Resolves the patient's UserId from PatientId and inserts a Notification row
+        private void SendConnectionNotification(SqlConnection conn, int patientId, int doctorId,
+            string type, string title, string message)
+        {
+            // Get doctor name for a friendlier message
+            string docName = "Your doctor";
+            using (SqlCommand cmdDoc = new SqlCommand(
+                "SELECT FullName FROM Doctors WHERE DoctorId = @DoctorId", conn))
+            {
+                cmdDoc.Parameters.AddWithValue("@DoctorId", doctorId);
+                object res = cmdDoc.ExecuteScalar();
+                if (res != null) docName = "Dr. " + res.ToString();
+            }
+
+            int patientUserId = 0;
+            using (SqlCommand cmdUser = new SqlCommand(
+                "SELECT UserId FROM Patients WHERE PatientId = @PatientId", conn))
+            {
+                cmdUser.Parameters.AddWithValue("@PatientId", patientId);
+                object res = cmdUser.ExecuteScalar();
+                if (res == null || res == DBNull.Value) return;
+                patientUserId = Convert.ToInt32(res);
+            }
+
+            using (SqlCommand cmdNotif = new SqlCommand(@"
+                INSERT INTO Notifications (UserId, Type, Title, Message, IsRead, CreatedAt)
+                VALUES (@UserId, @Type, @Title, @Message, 0, GETDATE())", conn))
+            {
+                cmdNotif.Parameters.AddWithValue("@UserId", patientUserId);
+                cmdNotif.Parameters.AddWithValue("@Type", type);
+                cmdNotif.Parameters.AddWithValue("@Title", title);
+                cmdNotif.Parameters.AddWithValue("@Message", $"{docName}: {message}");
+                cmdNotif.ExecuteNonQuery();
             }
         }
 
@@ -298,7 +339,7 @@ namespace MediCare.Pages.Doctor
                         if (doctorId == 0) return;
 
                         string sql = @"
-                            DELETE FROM [dbo].[PatientDoctorConnections] 
+                            DELETE FROM [dbo].[PatientDoctorConnections]
                             WHERE DoctorId = @DoctorId AND PatientId = @PatientId";
 
                         using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -321,21 +362,13 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        protected void txtSearch_TextChanged(object sender, EventArgs e)
-        {
-            BindPatients();
-        }
-
+        protected void txtSearch_TextChanged(object sender, EventArgs e) => BindPatients();
         protected void btnClearSearch_Click(object sender, EventArgs e)
         {
             txtSearch.Text = "";
             BindPatients();
         }
-
-        protected void ddlGender_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            BindPatients();
-        }
+        protected void ddlGender_SelectedIndexChanged(object sender, EventArgs e) => BindPatients();
 
         private void ShowToast(string msg)
         {

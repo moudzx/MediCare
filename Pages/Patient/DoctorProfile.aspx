@@ -36,10 +36,10 @@
                     </div>
                     <div class="dpro-profile-header__text">
                         <h2 class="dpro-doctor-name">
-                            <asp:Label ID="lblDoctorName" runat="server" />
+                            <asp:Label ID="lblFullName" runat="server" />
                         </h2>
                         <p class="dpro-specialization">
-                            <asp:Label ID="lblSpecialization" runat="server" />
+                            <asp:Label ID="lblSpeciality" runat="server" />
                         </p>
                         <span class="dpro-badge dpro-badge--verified">
                             <i class="fa-solid fa-circle-check"></i> Verified Doctor
@@ -53,40 +53,42 @@
                     <div class="dpro-info-item">
                         <i class="fa-solid fa-location-dot"></i>
                         <div>
-                            <span class="dpro-info-label">Location</span>
-                            <span class="dpro-info-value"><asp:Label ID="lblLocation" runat="server" /></span>
+                            <span class="dpro-info-label">Clinic Address</span>
+                            <span class="dpro-info-value"><asp:Label ID="lblClinicAddress" runat="server" /></span>
+                        </div>
+                    </div>
+
+                    <div class="dpro-info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <span class="dpro-info-label">Phone Number</span>
+                            <span class="dpro-info-value"><asp:Label ID="lblPhoneNumber" runat="server" /></span>
                         </div>
                     </div>
 
                     <div class="dpro-info-item">
                         <i class="fa-solid fa-calendar-alt"></i>
                         <div>
-                            <span class="dpro-info-label">Years of Experience</span>
-                            <span class="dpro-info-value"><asp:Label ID="lblExperience" runat="server" /></span>
+                            <span class="dpro-info-label">Age</span>
+                            <span class="dpro-info-value"><asp:Label ID="lblAge" runat="server" /></span>
                         </div>
                     </div>
 
                     <div class="dpro-info-item">
-                        <i class="fa-solid fa-language"></i>
+                        <i class="fa-solid fa-venus-mars"></i>
                         <div>
-                            <span class="dpro-info-label">Languages</span>
-                            <span class="dpro-info-value"><asp:Label ID="lblLanguages" runat="server" /></span>
-                        </div>
-                    </div>
-
-                    <div class="dpro-info-item">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <div>
-                            <span class="dpro-info-label">Qualifications</span>
-                            <span class="dpro-info-value"><asp:Label ID="lblQualifications" runat="server" /></span>
+                            <span class="dpro-info-label">Gender</span>
+                            <span class="dpro-info-value"><asp:Label ID="lblGender" runat="server" /></span>
                         </div>
                     </div>
 
                     <div class="dpro-info-item dpro-info-item--full">
-                        <i class="fa-solid fa-stethoscope"></i>
+                        <i class="fa-solid fa-file-contract"></i>
                         <div>
-                            <span class="dpro-info-label">About</span>
-                            <span class="dpro-info-value"><asp:Label ID="lblAbout" runat="server" /></span>
+                            <span class="dpro-info-label">Certificate</span>
+                            <span class="dpro-info-value">
+                                <asp:HyperLink ID="hlCertificatePath" runat="server" Target="_blank">View Certificate</asp:HyperLink>
+                            </span>
                         </div>
                     </div>
 
@@ -141,5 +143,4 @@
 
 
     </div>
-
 </asp:Content>

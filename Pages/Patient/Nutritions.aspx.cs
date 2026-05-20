@@ -26,6 +26,7 @@ namespace MediCare.Pages.Patient
             if (!IsPostBack)
             {
                 LoadNutritionPlans();
+                LoadCustomFoods();
             }
         }
 
@@ -57,8 +58,6 @@ namespace MediCare.Pages.Patient
 
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    // 1. Added TOP 100 to prevent page timeouts if all fields are left blank.
-                    // 2. Removed 'AS Name' so the GridView can find the 'description' column.
                     string sql = @"
             SELECT TOP 100 *
             FROM
@@ -73,10 +72,10 @@ namespace MediCare.Pages.Patient
                 UNION ALL
 
                 SELECT
-                    description,  -- Note: If your CustomFoods table uses 'Name' or 'FoodName', change this here.
+                    description,
                     calories, 
                     protein, 
-                    total_fat,              
+                    total_fat,             
                     carbohydrate,           
                     NULL AS sodium,         
                     NULL AS saturated_fat,  
@@ -87,7 +86,7 @@ namespace MediCare.Pages.Patient
                     potassium,              
                     vitamin_c,              
                     vitamin_e,              
-                    vitamin_d               
+                    vitamin_d                
                 FROM CustomFoods
                 WHERE PatientId = @PatientId
             ) x
@@ -152,7 +151,6 @@ namespace MediCare.Pages.Patient
             }
             catch (Exception ex)
             {
-                // 3. This will immediately display exactly what went wrong on the page.
                 lblSearchMsg.Visible = true;
                 lblSearchMsg.Text = "Database Error: " + ex.Message;
                 lblSearchMsg.ForeColor = System.Drawing.Color.Red;
@@ -239,8 +237,129 @@ namespace MediCare.Pages.Patient
                 }
             }
 
-            // Refresh the grid to show the newly saved plan
             LoadNutritionPlans();
+        }
+
+        // --- CUSTOM FOODS FUNCTIONALITY ---
+
+        private void LoadCustomFoods()
+        {
+            int patientId = GetPatientId();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string sql = @"
+                    SELECT 
+                        description AS [Food Name], 
+                        calories AS [Calories], 
+                        protein AS [Protein (g)], 
+                        total_fat AS [Total Fat (g)], 
+                        carbohydrate AS [Carbs (g)], 
+                        sugar AS [Sugar (g)], 
+                        calcium AS [Calcium], 
+                        iron AS [Iron], 
+                        potassium AS [Potassium], 
+                        vitamin_c AS [Vit C], 
+                        vitamin_e AS [Vit E], 
+                        vitamin_d AS [Vit D],
+                        CreatedAt AS [Added Date]
+                    FROM CustomFoods
+                    WHERE PatientId = @PatientId
+                    ORDER BY CreatedAt DESC";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@PatientId", patientId);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    gvCustomFoods.DataSource = dt;
+                    gvCustomFoods.DataBind();
+                }
+            }
+        }
+
+        protected void btnSaveCustomFood_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtCustomDesc.Text))
+            {
+                lblCustomFoodMsg.Visible = true;
+                lblCustomFoodMsg.Text = "Please enter a valid food name description.";
+                lblCustomFoodMsg.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
+
+            try
+            {
+                int patientId = GetPatientId();
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    string sql = @"
+                        INSERT INTO CustomFoods 
+                        (
+                            PatientId, description, calories, protein, total_fat, carbohydrate,
+                            sugar, calcium, iron, potassium, vitamin_c, vitamin_e, vitamin_d
+                        ) 
+                        VALUES 
+                        (
+                            @PatientId, @Description, @Calories, @Protein, @TotalFat, @Carbohydrate,
+                            @Sugar, @Calcium, @Iron, @Potassium, @VitaminC, @VitaminE, @VitaminD
+                        )";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@PatientId", patientId);
+                        cmd.Parameters.AddWithValue("@Description", txtCustomDesc.Text.Trim());
+
+                        // Handle integer conversion for calories safely
+                        double rawCalories = ParseDouble(txtCustomCalories.Text);
+                        cmd.Parameters.AddWithValue("@Calories", rawCalories > 0 ? (object)Convert.ToInt32(rawCalories) : DBNull.Value);
+
+                        cmd.Parameters.AddWithValue("@Protein", ParseDouble(txtCustomProtein.Text) > 0 ? (object)ParseDouble(txtCustomProtein.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TotalFat", ParseDouble(txtCustomFat.Text) > 0 ? (object)ParseDouble(txtCustomFat.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Carbohydrate", ParseDouble(txtCustomCarbs.Text) > 0 ? (object)ParseDouble(txtCustomCarbs.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Sugar", ParseDouble(txtCustomSugar.Text) > 0 ? (object)ParseDouble(txtCustomSugar.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Calcium", ParseDouble(txtCustomCalcium.Text) > 0 ? (object)ParseDouble(txtCustomCalcium.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Iron", ParseDouble(txtCustomIron.Text) > 0 ? (object)ParseDouble(txtCustomIron.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Potassium", ParseDouble(txtCustomPotassium.Text) > 0 ? (object)ParseDouble(txtCustomPotassium.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@VitaminC", ParseDouble(txtCustomVitaminC.Text) > 0 ? (object)ParseDouble(txtCustomVitaminC.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@VitaminE", ParseDouble(txtCustomVitaminE.Text) > 0 ? (object)ParseDouble(txtCustomVitaminE.Text) : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@VitaminD", ParseDouble(txtCustomVitaminD.Text) > 0 ? (object)ParseDouble(txtCustomVitaminD.Text) : DBNull.Value);
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                // UI Reset and feedback
+                txtCustomDesc.Text = "";
+                txtCustomCalories.Text = "";
+                txtCustomProtein.Text = "";
+                txtCustomFat.Text = "";
+                txtCustomCarbs.Text = "";
+                txtCustomSugar.Text = "";
+                txtCustomCalcium.Text = "";
+                txtCustomIron.Text = "";
+                txtCustomPotassium.Text = "";
+                txtCustomVitaminC.Text = "";
+                txtCustomVitaminE.Text = "";
+                txtCustomVitaminD.Text = "";
+
+                lblCustomFoodMsg.Visible = true;
+                lblCustomFoodMsg.Text = "Custom food item added successfully!";
+                lblCustomFoodMsg.ForeColor = System.Drawing.Color.Green;
+
+                // Refresh the display list
+                LoadCustomFoods();
+            }
+            catch (Exception ex)
+            {
+                lblCustomFoodMsg.Visible = true;
+                lblCustomFoodMsg.Text = "Error adding food: " + ex.Message;
+                lblCustomFoodMsg.ForeColor = System.Drawing.Color.Red;
+            }
         }
 
         private double ParseDouble(string value)

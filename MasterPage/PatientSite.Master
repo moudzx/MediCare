@@ -12,18 +12,14 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-    <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/css/default.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
         /* =========================
            NOTIFICATIONS
         ========================= */
-
         .pn-notification {
             position: relative;
         }
@@ -183,27 +179,23 @@ Inherits="MediCare.MasterPage.PatientSite" %>
         .pn-notification__footer:hover {
             background: #f9fafb;
         }
+
         /* =========================
            CHAT BUTTON
         ========================= */
-
         .pn-chat-btn {
             width: 42px;
             height: 42px;
             border-radius: 12px;
             border: 1px solid #e5e7eb;
             background: #ffffff;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             position: relative;
-
             color: #374151;
             text-decoration: none;
             font-size: 16px;
-
             transition: .2s ease;
         }
 
@@ -217,24 +209,17 @@ Inherits="MediCare.MasterPage.PatientSite" %>
             position: absolute;
             top: -4px;
             right: -4px;
-
             min-width: 18px;
             height: 18px;
-
             padding: 0 5px;
-
             border-radius: 999px;
-
             background: #16a34a;
             color: #ffffff;
-
             font-size: 10px;
             font-weight: 700;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             border: 2px solid #ffffff;
         }
     </style>
@@ -303,7 +288,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
             <!-- Right side -->
             <div class="mc-navbar__actions">
-                
+
                 <!-- Notifications -->
                 <div class="pn-notification">
                     <button type="button"
@@ -315,7 +300,12 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
                         <i class="fa-regular fa-bell"></i>
 
-                        <asp:Label ID="lblNotifCount" runat="server" CssClass="pn-notification__badge" Text="0" />
+                        <%-- Visible toggled by code-behind; hidden when count = 0 --%>
+                        <asp:Label ID="lblNotifCount"
+                                   runat="server"
+                                   CssClass="pn-notification__badge"
+                                   Text="0"
+                                   Visible="false" />
                     </button>
 
                     <div class="pn-notification__menu" id="notificationMenu" aria-hidden="true">
@@ -324,9 +314,8 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
                             <asp:LinkButton ID="btnMarkAllRead"
                                             runat="server"
-                                            CssClass="pn-notification__markall">
-                                Mark all as read
-                            </asp:LinkButton>
+                                            CssClass="pn-notification__markall"
+                                            Text="Mark all as read" />
                         </div>
 
                         <asp:PlaceHolder ID="phNotifications" runat="server" />
@@ -347,7 +336,7 @@ Inherits="MediCare.MasterPage.PatientSite" %>
                             aria-label="Patient profile menu">
 
                         <span class="pn-profile__name">
-                            <asp:Label ID="lblFirstName" runat="server" Text=""></asp:Label>
+                            <asp:Label ID="lblFirstName" runat="server" Text="" />
                         </span>
 
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -357,8 +346,8 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
                     <div class="pn-profile__menu" id="profileMenu" aria-hidden="true">
                         <div class="pn-profile__menu-header">
-                            <strong><asp:Label ID="lblFullName" runat="server" Text=""></asp:Label></strong>
-                            <small><asp:Label ID="lblEmail" runat="server" Text=""></asp:Label></small>
+                            <strong><asp:Label ID="lblFullName" runat="server" Text="" /></strong>
+                            <small><asp:Label ID="lblEmail" runat="server" Text="" /></small>
                         </div>
 
                         <div class="pn-profile__menu-divider"></div>
@@ -404,103 +393,54 @@ Inherits="MediCare.MasterPage.PatientSite" %>
 
     <script src="/js/default.js"></script>
     <script>
-        (function () {
+(function () {
 
-            /* Active nav link */
-            var path = window.location.pathname.toLowerCase();
-            var links = {
-                'dashboard': document.getElementById('navDashboard'),
-                'medications': document.getElementById('navMedications'),
-                'nutrition': document.getElementById('navNutrition'),
-                'search': document.getElementById('navSearch')
-            };
+    /* Active nav link */
+    var path = window.location.pathname.toLowerCase();
+    var links = {
+        'dashboard': document.getElementById('navDashboard'),
+        'medications': document.getElementById('navMedications'),
+        'nutrition': document.getElementById('navNutrition'),
+        'search': document.getElementById('navSearch')
+    };
 
-            Object.keys(links).forEach(function (key) {
-                if (links[key] && path.indexOf(key) !== -1) {
-                    links[key].classList.add('mc-nav-link--active');
-                }
-            });
+    Object.keys(links).forEach(function (key) {
+        if (links[key] && path.indexOf(key) !== -1)
+            links[key].classList.add('mc-nav-link--active');
+    });
 
-            /* Profile dropdown */
-            var btnProfile = document.getElementById('btnProfile');
-            var profileMenu = document.getElementById('profileMenu');
-            var profileWrap = document.getElementById('profileDropdown');
-            var profileOpen = false;
+    /* Profile dropdown */
+    var btnProfile = document.getElementById('btnProfile');
+    var profileMenu = document.getElementById('profileMenu');
+    var profileWrap = document.getElementById('profileDropdown');
+    var profileOpen = false;
 
-            function openProfile() {
-                profileOpen = true;
-                profileMenu.classList.add('pn-profile__menu--open');
-                btnProfile.setAttribute('aria-expanded', 'true');
-                profileMenu.setAttribute('aria-hidden', 'false');
-            }
+    function openProfile() { profileOpen = true; profileMenu.classList.add('pn-profile__menu--open'); btnProfile.setAttribute('aria-expanded', 'true'); profileMenu.setAttribute('aria-hidden', 'false'); }
+    function closeProfile() { profileOpen = false; profileMenu.classList.remove('pn-profile__menu--open'); btnProfile.setAttribute('aria-expanded', 'false'); profileMenu.setAttribute('aria-hidden', 'true'); }
 
-            function closeProfile() {
-                profileOpen = false;
-                profileMenu.classList.remove('pn-profile__menu--open');
-                btnProfile.setAttribute('aria-expanded', 'false');
-                profileMenu.setAttribute('aria-hidden', 'true');
-            }
+    if (btnProfile && profileMenu) {
+        btnProfile.addEventListener('click', function (e) { e.stopPropagation(); profileOpen ? closeProfile() : openProfile(); });
+        document.addEventListener('click', function (e) { if (profileOpen && !profileWrap.contains(e.target)) closeProfile(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && profileOpen) closeProfile(); });
+    }
 
-            if (btnProfile && profileMenu) {
-                btnProfile.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    profileOpen ? closeProfile() : openProfile();
-                });
+    /* Notifications dropdown */
+    var btnNotification = document.getElementById('btnNotification');
+    var notificationMenu = document.getElementById('notificationMenu');
+    var notificationWrap = document.querySelector('.pn-notification');
+    var notifOpen = false;
 
-                document.addEventListener('click', function (e) {
-                    if (profileOpen && !profileWrap.contains(e.target)) {
-                        closeProfile();
-                    }
-                });
+    function openNotif() { notifOpen = true; notificationMenu.classList.add('pn-notification__menu--open'); btnNotification.setAttribute('aria-expanded', 'true'); notificationMenu.setAttribute('aria-hidden', 'false'); }
+    function closeNotif() { notifOpen = false; notificationMenu.classList.remove('pn-notification__menu--open'); btnNotification.setAttribute('aria-expanded', 'false'); notificationMenu.setAttribute('aria-hidden', 'true'); }
 
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && profileOpen) {
-                        closeProfile();
-                    }
-                });
-            }
+    if (btnNotification && notificationMenu) {
+        btnNotification.addEventListener('click', function (e) { e.stopPropagation(); notifOpen ? closeNotif() : openNotif(); });
+        document.addEventListener('click', function (e) { if (notifOpen && notificationWrap && !notificationWrap.contains(e.target)) closeNotif(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && notifOpen) closeNotif(); });
+    }
 
-            /* Notifications dropdown */
-            var btnNotification = document.getElementById('btnNotification');
-            var notificationMenu = document.getElementById('notificationMenu');
-            var notificationWrap = document.querySelector('.pn-notification');
-            var notifOpen = false;
-
-            function openNotif() {
-                notifOpen = true;
-                notificationMenu.classList.add('pn-notification__menu--open');
-                btnNotification.setAttribute('aria-expanded', 'true');
-                notificationMenu.setAttribute('aria-hidden', 'false');
-            }
-
-            function closeNotif() {
-                notifOpen = false;
-                notificationMenu.classList.remove('pn-notification__menu--open');
-                btnNotification.setAttribute('aria-expanded', 'false');
-                notificationMenu.setAttribute('aria-hidden', 'true');
-            }
-
-            if (btnNotification && notificationMenu) {
-                btnNotification.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    notifOpen ? closeNotif() : openNotif();
-                });
-
-                document.addEventListener('click', function (e) {
-                    if (notifOpen && notificationWrap && !notificationWrap.contains(e.target)) {
-                        closeNotif();
-                    }
-                });
-
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && notifOpen) {
-                        closeNotif();
-                    }
-                });
-            }
-
-        })();
-    </script>
+})();
+</script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />
 
