@@ -387,102 +387,188 @@
     </footer>
 
 <script type="text/javascript">
-interface NavLinksMap {
-    [key: string]: HTMLElement | null;
-}
+(function () {
 
-(function (): void {
-    /* Active nav links layout engine */
-    var path: string = window.location.pathname.toLowerCase();
-    var links: NavLinksMap = {
-        'dashboard': document.getElementById('navDashboard'),
-        'medications': document.getElementById('navMedications'),
-        'nutrition': document.getElementById('navNutrition'),
-        'search': document.getElementById('navSearch')
+    var path = window.location.pathname.toLowerCase();
+
+    var links = {
+        dashboard: document.getElementById('navDashboard'),
+        medications: document.getElementById('navMedications'),
+        nutrition: document.getElementById('navNutrition'),
+        search: document.getElementById('navSearch')
     };
 
-    Object.keys(links).forEach(function (key: string): void {
+    Object.keys(links).forEach(function (key) {
         var currentTarget = links[key];
+
         if (currentTarget && path.indexOf(key) !== -1) {
             currentTarget.classList.add('mc-nav-link--active');
         }
     });
 
-    /* Profile dropdown element mapping controls */
-    var btnProfile = document.getElementById('btnProfile') as HTMLButtonElement | null;
-    var profileMenu = document.getElementById('profileMenu') as HTMLDivElement | null;
-    var profileWrap = document.getElementById('profileDropdown') as HTMLDivElement | null;
-    var profileOpen: boolean = false;
+    var btnProfile = document.getElementById('btnProfile');
+    var profileMenu = document.getElementById('profileMenu');
+    var profileWrap = document.getElementById('profileDropdown');
 
-    function openProfile(): void {
-        if (!profileMenu || !btnProfile) return;
+    var profileOpen = false;
+
+    function openProfile() {
+        if (!profileMenu || !btnProfile)
+            return;
+
         profileOpen = true;
+
         profileMenu.classList.add('pn-profile__menu--open');
+
         btnProfile.setAttribute('aria-expanded', 'true');
+
         profileMenu.setAttribute('aria-hidden', 'false');
     }
 
-    function closeProfile(): void {
-        if (!profileMenu || !btnProfile) return;
+    function closeProfile() {
+        if (!profileMenu || !btnProfile)
+            return;
+
         profileOpen = false;
+
         profileMenu.classList.remove('pn-profile__menu--open');
+
         btnProfile.setAttribute('aria-expanded', 'false');
+
         profileMenu.setAttribute('aria-hidden', 'true');
     }
 
     if (btnProfile && profileMenu && profileWrap) {
-        btnProfile.addEventListener('click', function (e: MouseEvent): void {
+
+        btnProfile.addEventListener('click', function (e) {
+
             e.stopPropagation();
-            profileOpen ? closeProfile() : openProfile();
+
+            if (profileOpen)
+                closeProfile();
+            else
+                openProfile();
         });
-        document.addEventListener('click', function (e: MouseEvent): void {
-            // Checking profileWrap and e.target inside the closure eliminates the "Object is possibly null" warning
-            if (profileOpen && profileWrap && e.target && !profileWrap.contains(e.target as Node)) {
+
+        document.addEventListener('click', function (e) {
+
+            if (
+                profileOpen &&
+                profileWrap &&
+                e.target &&
+                !profileWrap.contains(e.target)
+            ) {
                 closeProfile();
             }
         });
-        document.addEventListener('keydown', function (e: KeyboardEvent): void {
-            if (e.key === 'Escape' && profileOpen) closeProfile();
-        });
-    }
 
-    /* Notifications dropdown container controller */
-    var btnNotification = document.getElementById('btnNotification') as HTMLButtonElement | null;
-    var notificationMenu = document.getElementById('notificationMenu') as HTMLDivElement | null;
-    var notificationWrap = document.querySelector('.pn-notification') as HTMLDivElement | null;
-    var notifOpen: boolean = false;
+        document.addEventListener('keydown', function (e) {
 
-    function openNotif(): void {
-        if (!notificationMenu || !btnNotification) return;
-        notifOpen = true;
-        notificationMenu.classList.add('pn-notification__menu--open');
-        btnNotification.setAttribute('aria-expanded', 'true');
-        notificationMenu.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeNotif(): void {
-        if (!notificationMenu || !btnNotification) return;
-        notifOpen = false;
-        notificationMenu.classList.remove('pn-notification__menu--open');
-        btnNotification.setAttribute('aria-expanded', 'false');
-        notificationMenu.setAttribute('aria-hidden', 'true');
-    }
-
-    if (btnNotification && notificationMenu && notificationWrap) {
-        btnNotification.addEventListener('click', function (e: MouseEvent): void {
-            e.stopPropagation();
-            notifOpen ? closeNotif() : openNotif();
-        });
-        document.addEventListener('click', function (e: MouseEvent): void {
-            // Checking notificationWrap and e.target inside the closure satisfies local strict null types
-            if (notifOpen && notificationWrap && e.target && !notificationWrap.contains(e.target as Node)) {
-                closeNotif();
+            if (e.key === 'Escape' && profileOpen) {
+                closeProfile();
             }
         });
-        document.addEventListener('keydown', function (e: KeyboardEvent): void {
-            if (e.key === 'Escape' && notifOpen) closeNotif();
-        });
     }
+
+    var btnNotification = document.getElementById('btnNotification');
+
+    var notificationMenu =
+        document.getElementById('notificationMenu');
+
+    var notificationWrap =
+        document.querySelector('.pn-notification');
+
+    var notifOpen = false;
+
+    function openNotif() {
+
+        if (!notificationMenu || !btnNotification)
+            return;
+
+        notifOpen = true;
+
+        notificationMenu.classList.add(
+            'pn-notification__menu--open'
+        );
+
+        btnNotification.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        notificationMenu.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+    }
+
+    function closeNotif() {
+
+        if (!notificationMenu || !btnNotification)
+            return;
+
+        notifOpen = false;
+
+        notificationMenu.classList.remove(
+            'pn-notification__menu--open'
+        );
+
+        btnNotification.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        notificationMenu.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+    }
+
+    if (
+        btnNotification &&
+        notificationMenu &&
+        notificationWrap
+    ) {
+
+        btnNotification.addEventListener(
+            'click',
+            function (e) {
+
+                e.stopPropagation();
+
+                if (notifOpen)
+                    closeNotif();
+                else
+                    openNotif();
+            }
+        );
+
+        document.addEventListener(
+            'click',
+            function (e) {
+
+                if (
+                    notifOpen &&
+                    notificationWrap &&
+                    e.target &&
+                    !notificationWrap.contains(e.target)
+                ) {
+                    closeNotif();
+                }
+            }
+        );
+
+        document.addEventListener(
+            'keydown',
+            function (e) {
+
+                if (e.key === 'Escape' && notifOpen) {
+                    closeNotif();
+                }
+            }
+        );
+    }
+
 })();
 </script>
 

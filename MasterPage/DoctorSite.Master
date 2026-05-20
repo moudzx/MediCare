@@ -292,82 +292,137 @@
             </div>
         </div>
     </form>
-    <script type="text/javascript">
-// 1. Extend the Window interface to fix TS2339 global property errors
-interface Window {
-    toggleNotifications: (e: Event) => void;
-    toggleProfileDropdown: (e: Event) => void;
-    toggleSidebar: () => void;
-}
+<script type="text/javascript">
 
 document.addEventListener("DOMContentLoaded", function () {
-    var currentPath = window.location.pathname.toLowerCase();
-    var navLinks = document.querySelectorAll("#sidebarNav .ds-nav-link");
+
+    var currentPath =
+        window.location.pathname.toLowerCase();
+
+    var navLinks =
+        document.querySelectorAll("#sidebarNav .ds-nav-link");
 
     if (navLinks.length > 0) {
+
         navLinks.forEach(function (link) {
-            var hrefAttr = link.getAttribute("href");
+
+            var hrefAttr =
+                link.getAttribute("href");
+
             if (hrefAttr) {
-                var linkPath = hrefAttr.toLowerCase();
-                if (currentPath === linkPath || currentPath.endsWith(linkPath)) {
-                    link.classList.add("ds-nav-link--active");
-                } else {
-                    link.classList.remove("ds-nav-link--active");
+
+                var linkPath =
+                    hrefAttr.toLowerCase();
+
+                if (
+                    currentPath === linkPath ||
+                    currentPath.indexOf(linkPath) !== -1
+                ) {
+                    link.classList.add(
+                        "ds-nav-link--active"
+                    );
+                }
+                else {
+                    link.classList.remove(
+                        "ds-nav-link--active"
+                    );
                 }
             }
         });
     }
 });
 
-// 2. Added explicit 'Event' type to parameter 'e' to fix TS7006
-window.toggleNotifications = function (e: Event) {
-    if (e) e.stopPropagation();
-    var menu = document.getElementById('notifMenu');
+function toggleNotifications(e) {
+
+    if (e)
+        e.stopPropagation();
+
+    var menu =
+        document.getElementById("notifMenu");
+
     if (menu) {
-        menu.classList.toggle('ds-notif-dropdown--open');
+        menu.classList.toggle(
+            "ds-notif-dropdown--open"
+        );
     }
-};
+}
 
-// 3. Added explicit 'Event' type to parameter 'e' to fix TS7006
-window.toggleProfileDropdown = function (e: Event) {
-    if (e) e.stopPropagation();
-    var menu = document.getElementById('profileMenu');
+function toggleProfileDropdown(e) {
+
+    if (e)
+        e.stopPropagation();
+
+    var menu =
+        document.getElementById("profileMenu");
+
     if (menu) {
-        menu.classList.toggle('ds-profile-dropdown--open');
+        menu.classList.toggle(
+            "ds-profile-dropdown--open"
+        );
     }
-};
+}
 
-// 4. Added explicit 'MouseEvent' type and safely cast e.target as HTMLElement to fix TS2339 '.closest' error
-document.addEventListener('click', function (e: MouseEvent) {
-    var target = e.target as HTMLElement;
-    if (!target) return;
+document.addEventListener("click", function (e) {
 
-    var notifMenu = document.getElementById('notifMenu');
-    if (notifMenu && !target.closest('.ds-notification')) {
-        notifMenu.classList.remove('ds-notif-dropdown--open');
+    var target = e.target;
+
+    var notifMenu =
+        document.getElementById("notifMenu");
+
+    if (
+        notifMenu &&
+        !target.closest(".ds-notification")
+    ) {
+        notifMenu.classList.remove(
+            "ds-notif-dropdown--open"
+        );
     }
 
-    var profileMenu = document.getElementById('profileMenu');
-    if (profileMenu && !target.closest('.ds-topbar__profile')) {
-        profileMenu.classList.remove('ds-profile-dropdown--open');
+    var profileMenu =
+        document.getElementById("profileMenu");
+
+    if (
+        profileMenu &&
+        !target.closest(".ds-topbar__profile")
+    ) {
+        profileMenu.classList.remove(
+            "ds-profile-dropdown--open"
+        );
     }
 });
 
-window.toggleSidebar = function () {
-    var shell = document.getElementById('appShell');
-    var icon = document.getElementById('toggleIcon');
+function toggleSidebar() {
+
+    var shell =
+        document.getElementById("appShell");
+
+    var icon =
+        document.getElementById("toggleIcon");
 
     if (shell) {
-        shell.classList.toggle('ds-shell--collapsed');
+
+        shell.classList.toggle(
+            "ds-shell--collapsed"
+        );
+
         if (icon) {
-            if (shell.classList.contains('ds-shell--collapsed')) {
-                icon.className = 'fa-solid fa-chevron-right';
-            } else {
-                icon.className = 'fa-solid fa-chevron-left';
+
+            if (
+                shell.classList.contains(
+                    "ds-shell--collapsed"
+                )
+            ) {
+                icon.className =
+                    "fa-solid fa-chevron-right";
+            }
+            else {
+                icon.className =
+                    "fa-solid fa-chevron-left";
             }
         }
     }
-};
+}
+
 </script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />

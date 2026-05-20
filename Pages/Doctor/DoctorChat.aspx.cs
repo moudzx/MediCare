@@ -20,41 +20,18 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        protected int SelectedConvID
+        public int SelectedConvID
         {
             get
             {
-                object obj = ViewState["SelectedConvID"];
-
-                if (obj == null)
-                    return 0;
-
-                return Convert.ToInt32(obj);
+                return ViewState["SelectedConvID"] != null
+                    ? Convert.ToInt32(ViewState["SelectedConvID"])
+                    : 0;
             }
             set
             {
                 ViewState["SelectedConvID"] = value;
             }
-        }
-
-        protected string GetInitials(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                return "?";
-
-            string[] parts = name.Trim().Split(' ');
-
-            if (parts.Length >= 2)
-            {
-                return (
-                    parts[0][0].ToString() +
-                    parts[parts.Length - 1][0].ToString()
-                ).ToUpper();
-            }
-
-            return name
-                .Substring(0, Math.Min(2, name.Length))
-                .ToUpper();
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -69,34 +46,81 @@ namespace MediCare.Pages.Doctor
 
             if (!IsPostBack)
             {
+                EnsureConversationsExist();
                 LoadConversations();
-
-                pnlNoChat.Visible = true;
-                pnlChat.Visible = false;
             }
         }
 
         private int CurrentDoctorID()
         {
-            int userID = Convert.ToInt32(Session["UserId"]);
+            using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(
+                "SELECT DoctorId FROM Doctors WHERE UserId=@uid", conn))
+            {
+                cmd.Parameters.AddWithValue(
+                    "@uid",
+                    Convert.ToInt32(Session["UserId"])
+                );
+
+                conn.Open();
+
+                object result = cmd.ExecuteScalar();
+
+                return result != null
+                    ? Convert.ToInt32(result)
+                    : 0;
+            }
+        }
+
+        private void EnsureConversationsExist()
+        {
+            int doctorID = CurrentDoctorID();
+
+            string sql = @"
+INSERT INTO Conversations (PatientID, DoctorID)
+SELECT
+    pdc.PatientId,
+    pdc.DoctorId
+FROM PatientDoctorConnections pdc
+WHERE pdc.DoctorId = @did
+AND pdc.Status = 'Accepted'
+AND NOT EXISTS
+(
+    SELECT 1
+    FROM Conversations c
+    WHERE c.PatientID = pdc.PatientId
+    AND c.DoctorID = pdc.DoctorId
+)";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(
-                    "SELECT DoctorId FROM Doctors WHERE UserId=@uid",
-                    conn))
-                {
-                    cmd.Parameters.AddWithValue("@uid", userID);
+                cmd.Parameters.AddWithValue("@did", doctorID);
 
-                    conn.Open();
-
-                    object result = cmd.ExecuteScalar();
-
-                    return result != null
-                        ? Convert.ToInt32(result)
-                        : 0;
-                }
+                conn.Open();
+                cmd.ExecuteNonQuery();
             }
+        }
+
+        public string GetInitials(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return "?";
+
+            string[] parts = name.Trim().Split(' ');
+
+            if (parts.Length >= 2)
+            {
+                return (
+                    parts[0][0].ToString() +
+                    parts[parts.Length - 1][0].ToString()
+                ).ToUpper();
+            }
+
+            return name.Substring(
+                0,
+                Math.Min(2, name.Length)
+            ).ToUpper();
         }
 
         private void LoadConversations()
@@ -104,59 +128,60 @@ namespace MediCare.Pages.Doctor
             int doctorID = CurrentDoctorID();
 
             string sql = @"
-                SELECT
-                    c.ConversationID,
-                    p.FullName AS PatientName,
+SELECT
+    c.ConversationID,
+    p.FullName AS PatientName,
 
-                    ISNULL(
-                    (
-                        SELECT TOP 1 Body
-                        FROM Messages
-                        WHERE ConversationID = c.ConversationID
-                        ORDER BY SentAt DESC
-                    ), '') AS LastSnippet,
+    ISNULL
+    (
+        (
+            SELECT TOP 1 Body
+            FROM Messages
+            WHERE ConversationID = c.ConversationID
+            ORDER BY SentAt DESC
+        ),
+        'No messages yet'
+    ) AS LastSnippet,
 
-                    (
-                        SELECT COUNT(*)
-                        FROM Messages
-                        WHERE ConversationID = c.ConversationID
-                        AND SenderUserID <> @uid
-                        AND IsRead = 0
-                    ) AS UnreadCount
+    (
+        SELECT COUNT(*)
+        FROM Messages
+        WHERE ConversationID = c.ConversationID
+        AND SenderUserID <> @uid
+        AND IsRead = 0
+    ) AS UnreadCount
 
-                FROM Conversations c
+FROM Conversations c
 
-                JOIN Patients p
-                    ON p.PatientId = c.PatientID
+INNER JOIN Patients p
+ON p.PatientId = c.PatientID
 
-                WHERE c.DoctorID = @doctorID
+WHERE c.DoctorID = @doctorID
 
-                ORDER BY c.LastMessageAt DESC";
+ORDER BY c.LastMessageAt DESC";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue(
-                        "@doctorID",
-                        doctorID
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@doctorID",
+                    doctorID
+                );
 
-                    cmd.Parameters.AddWithValue(
-                        "@uid",
-                        Convert.ToInt32(Session["UserId"])
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@uid",
+                    Convert.ToInt32(Session["UserId"])
+                );
 
-                    DataTable dt = new DataTable();
+                DataTable dt = new DataTable();
 
-                    SqlDataAdapter da =
-                        new SqlDataAdapter(cmd);
+                SqlDataAdapter da =
+                    new SqlDataAdapter(cmd);
 
-                    da.Fill(dt);
+                da.Fill(dt);
 
-                    rptConversations.DataSource = dt;
-                    rptConversations.DataBind();
-                }
+                rptConversations.DataSource = dt;
+                rptConversations.DataBind();
             }
         }
 
@@ -188,146 +213,135 @@ namespace MediCare.Pages.Doctor
         private void LoadHeader(int conversationID)
         {
             string sql = @"
-                SELECT
-                    p.FullName AS PatientName
-
-                FROM Conversations c
-
-                JOIN Patients p
-                    ON p.PatientId = c.PatientID
-
-                WHERE c.ConversationID = @cid";
+SELECT
+    p.FullName AS PatientName
+FROM Conversations c
+INNER JOIN Patients p
+ON p.PatientId = c.PatientID
+WHERE c.ConversationID = @cid";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                cmd.Parameters.AddWithValue("@cid", conversationID);
+
+                conn.Open();
+
+                SqlDataReader rdr =
+                    cmd.ExecuteReader();
+
+                if (rdr.Read())
                 {
-                    cmd.Parameters.AddWithValue(
-                        "@cid",
-                        conversationID
-                    );
+                    string patientName =
+                        rdr["PatientName"].ToString();
 
-                    conn.Open();
+                    litPatientName.Text =
+                        patientName;
 
-                    SqlDataReader rdr =
-                        cmd.ExecuteReader();
-
-                    if (rdr.Read())
-                    {
-                        string patientName =
-                            rdr["PatientName"].ToString();
-
-                        litPatientName.Text =
-                            patientName;
-
-                        litPatientInitials.Text =
-                            GetInitials(patientName);
-                    }
+                    litPatientInitials.Text =
+                        GetInitials(patientName);
                 }
             }
         }
-
         private void LoadMessages(int conversationID)
         {
             int myUserID =
                 Convert.ToInt32(Session["UserId"]);
 
             string sql = @"
-                SELECT
-                    SenderUserID,
-                    Body,
-                    SentAt
-                FROM Messages
-                WHERE ConversationID = @cid
-                ORDER BY SentAt";
+SELECT
+    SenderUserID,
+    Body,
+    SentAt
+FROM Messages
+WHERE ConversationID = @cid
+ORDER BY SentAt";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                cmd.Parameters.AddWithValue(
+                    "@cid",
+                    conversationID
+                );
+
+                DataTable dt = new DataTable();
+
+                SqlDataAdapter da =
+                    new SqlDataAdapter(cmd);
+
+                da.Fill(dt);
+
+                List<MessageRow> rows =
+                    new List<MessageRow>();
+
+                DateTime? lastDate = null;
+
+                foreach (DataRow r in dt.Rows)
                 {
-                    cmd.Parameters.AddWithValue(
-                        "@cid",
-                        conversationID
-                    );
+                    DateTime sentAt =
+                        Convert.ToDateTime(r["SentAt"]);
 
-                    DataTable dt = new DataTable();
+                    bool divider =
+                        lastDate == null ||
+                        lastDate.Value.Date != sentAt.Date;
 
-                    SqlDataAdapter da =
-                        new SqlDataAdapter(cmd);
-
-                    da.Fill(dt);
-
-                    List<MessageRow> rows =
-                        new List<MessageRow>();
-
-                    DateTime? lastDate = null;
-
-                    foreach (DataRow r in dt.Rows)
+                    rows.Add(new MessageRow
                     {
-                        DateTime sentAt =
-                            Convert.ToDateTime(r["SentAt"]);
+                        Body =
+                            r["Body"].ToString(),
 
-                        bool divider =
-                            lastDate == null ||
-                            lastDate.Value.Date != sentAt.Date;
+                        SentAt =
+                            sentAt,
 
-                        rows.Add(new MessageRow
-                        {
-                            Body = r["Body"].ToString(),
+                        IsMe =
+                            Convert.ToInt32(
+                                r["SenderUserID"]
+                            ) == myUserID,
 
-                            SentAt = sentAt,
+                        ShowDivider =
+                            divider,
 
-                            IsMe =
-                                Convert.ToInt32(
-                                    r["SenderUserID"]
-                                ) == myUserID,
+                        DayLabel =
+                            sentAt.Date == DateTime.Today
+                                ? "Today"
+                                : sentAt.Date == DateTime.Today.AddDays(-1)
+                                    ? "Yesterday"
+                                    : sentAt.ToString("MMMM d, yyyy")
+                    });
 
-                            ShowDivider = divider,
-
-                            DayLabel =
-                                sentAt.Date == DateTime.Today
-                                    ? "Today"
-                                    : sentAt.Date == DateTime.Today.AddDays(-1)
-                                        ? "Yesterday"
-                                        : sentAt.ToString("MMMM d, yyyy")
-                        });
-
-                        lastDate = sentAt.Date;
-                    }
-
-                    rptMessages.DataSource = rows;
-                    rptMessages.DataBind();
+                    lastDate = sentAt.Date;
                 }
+
+                rptMessages.DataSource = rows;
+                rptMessages.DataBind();
             }
         }
 
         private void MarkMessagesRead(int conversationID)
         {
             string sql = @"
-                UPDATE Messages
-                SET IsRead = 1
-                WHERE ConversationID = @cid
-                AND SenderUserID <> @uid
-                AND IsRead = 0";
+UPDATE Messages
+SET IsRead = 1
+WHERE ConversationID = @cid
+AND SenderUserID <> @uid
+AND IsRead = 0";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue(
-                        "@cid",
-                        conversationID
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@cid",
+                    conversationID
+                );
 
-                    cmd.Parameters.AddWithValue(
-                        "@uid",
-                        Convert.ToInt32(Session["UserId"])
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@uid",
+                    Convert.ToInt32(Session["UserId"])
+                );
 
-                    conn.Open();
-
-                    cmd.ExecuteNonQuery();
-                }
+                conn.Open();
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -344,50 +358,47 @@ namespace MediCare.Pages.Doctor
                 return;
 
             string sql = @"
-                INSERT INTO Messages
-                (
-                    ConversationID,
-                    SenderUserID,
-                    Body,
-                    SentAt,
-                    IsRead
-                )
-                VALUES
-                (
-                    @cid,
-                    @uid,
-                    @body,
-                    GETDATE(),
-                    0
-                );
+INSERT INTO Messages
+(
+    ConversationID,
+    SenderUserID,
+    Body,
+    SentAt,
+    IsRead
+)
+VALUES
+(
+    @cid,
+    @uid,
+    @body,
+    GETDATE(),
+    0
+)
 
-                UPDATE Conversations
-                SET LastMessageAt = GETDATE()
-                WHERE ConversationID = @cid";
+UPDATE Conversations
+SET LastMessageAt = GETDATE()
+WHERE ConversationID = @cid";
 
             using (SqlConnection conn = new SqlConnection(ConnStr))
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue(
-                        "@cid",
-                        SelectedConvID
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@cid",
+                    SelectedConvID
+                );
 
-                    cmd.Parameters.AddWithValue(
-                        "@uid",
-                        Convert.ToInt32(Session["UserId"])
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@uid",
+                    Convert.ToInt32(Session["UserId"])
+                );
 
-                    cmd.Parameters.AddWithValue(
-                        "@body",
-                        body
-                    );
+                cmd.Parameters.AddWithValue(
+                    "@body",
+                    body
+                );
 
-                    conn.Open();
-
-                    cmd.ExecuteNonQuery();
-                }
+                conn.Open();
+                cmd.ExecuteNonQuery();
             }
 
             txtMsg.Value = "";
@@ -406,7 +417,6 @@ namespace MediCare.Pages.Doctor
                 LoadConversations();
             }
         }
-
         public class MessageRow
         {
             public string Body { get; set; }

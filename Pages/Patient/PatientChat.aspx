@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Messages – MediCare"
+﻿<%@ Page Title="Messages – MediCare" 
     Language="C#"
     MasterPageFile="~/MasterPage/PatientSite.Master"
     AutoEventWireup="true"
@@ -372,13 +372,12 @@
                         <ContentTemplate>
 
                             <div class="input-bar">
-
-                                <textarea id="txtMsgProxy"
-                                    class="msg-input"
-                                    rows="1"></textarea>
-
-                                <asp:HiddenField ID="hfMessageBody"
-                                    runat="server" />
+                                <asp:TextBox ID="txtMessage" 
+                                    runat="server" 
+                                    TextMode="MultiLine" 
+                                    CssClass="msg-input" 
+                                    Rows="1" 
+                                    placeholder="Type your message..."></asp:TextBox>
 
                                 <asp:Button ID="btnSend"
                                     runat="server"
@@ -399,5 +398,32 @@
         </div>
 
     </div>
+<script type="text/javascript">
+(function () {
+    var containerObj: { aspSys: any } = { aspSys: null };
 
+    try {
+        containerObj.aspSys = eval('typeof Sys !== "undefined" ? Sys : null');
+    } catch (e) {
+        containerObj.aspSys = null;
+    }
+
+    function runScroll() {
+        var container = document.querySelector('.messages-wrap') || document.getElementById('msgWrap');
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    window.addEventListener('load', function () {
+        var scriptEngine = containerObj.aspSys;
+
+        if (scriptEngine && scriptEngine.WebForms && scriptEngine.WebForms.PageRequestManager) {
+            var prm = scriptEngine.WebForms.PageRequestManager.getInstance();
+            prm.add_endRequest(runScroll);
+        }
+        runScroll();
+    });
+})();
+</script>
 </asp:Content>
