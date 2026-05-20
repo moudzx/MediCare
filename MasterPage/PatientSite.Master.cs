@@ -10,8 +10,7 @@ namespace MediCare.MasterPage
 {
     public partial class PatientSite : System.Web.UI.MasterPage
     {
-        private readonly string connStr =
-            ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly string connStr = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -21,6 +20,7 @@ namespace MediCare.MasterPage
             {
                 LoadUserInfo();
                 LoadNotifications();
+                LoadUnreadChatCount(); // Calculates unopened live conversations
             }
 
             btnMarkAllRead.Click += BtnMarkAllRead_Click;
@@ -56,12 +56,51 @@ namespace MediCare.MasterPage
             }
         }
 
+        // ── ADDED: Unopened/Unread Chat Counter Logic ────────────────────────
+        private void LoadUnreadChatCount()
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                // This checks unread chat messages that were sent to this user by a partner
+                string query = @"
+                    SELECT COUNT(*) 
+                    FROM ChatMessages m
+                    INNER JOIN Conversations c ON m.ConversationId = c.ConversationId
+                    WHERE (c.ParticipantA = @UserId OR c.ParticipantB = @UserId)
+                      AND m.SenderId != @UserId 
+                      AND ISNULL(m.IsRead, 0) = 0";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@UserId", UserId);
+
+                try
+                {
+                    conn.Open();
+                    int unreadCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (unreadCount > 0)
+                    {
+                        lblChatCount.Text = unreadCount > 99 ? "99+" : unreadCount.ToString();
+                        lblChatCount.Visible = true;
+                    }
+                    else
+                    {
+                        lblChatCount.Visible = false;
+                    }
+                }
+                catch
+                {
+                    // Fallback to prevent app crash if column 'IsRead' hasn't migrated yet
+                    lblChatCount.Visible = false;
+                }
+            }
+        }
+
         // ── Notifications ─────────────────────────────────────────────────────
         private void LoadNotifications()
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                // Fetch latest 10 notifications for this user
                 string query = @"
                     SELECT TOP 10
                         NotificationId, Type, Title, Message, IsRead, CreatedAt
@@ -99,19 +138,15 @@ namespace MediCare.MasterPage
                         string timeAgo = TimeAgo(Convert.ToDateTime(row["CreatedAt"]));
                         int notifId = Convert.ToInt32(row["NotificationId"]);
 
-                        // Outer anchor — clicking marks it read (postback)
                         var item = new HtmlAnchor();
                         item.HRef = "#";
-                        item.Attributes["class"] = "pn-notification__item"
-                            + (isRead ? "" : " pn-notification__item--unread");
+                        item.Attributes["class"] = "pn-notification__item" + (isRead ? "" : " pn-notification__item--unread");
                         item.Attributes["data-notif-id"] = notifId.ToString();
 
-                        // Icon div
                         var iconDiv = new HtmlGenericControl("div");
                         iconDiv.Attributes["class"] = "pn-notification__icon";
                         iconDiv.InnerHtml = $"<i class=\"{GetIcon(type)}\"></i>";
 
-                        // Content div
                         var contentDiv = new HtmlGenericControl("div");
                         contentDiv.Attributes["class"] = "pn-notification__content";
                         contentDiv.InnerHtml =
@@ -125,7 +160,6 @@ namespace MediCare.MasterPage
                     }
                 }
 
-                // Badge: show count or hide if zero
                 if (unread > 0)
                 {
                     lblNotifCount.Text = unread > 99 ? "99+" : unread.ToString();

@@ -29,7 +29,7 @@
                     <i class="fa-solid fa-chevron-left" id="toggleIcon"></i>
                 </button>
 
-                <div class="ds-sidebar__logo">
+                <a href="/Pages/Doctor/Dashboard.aspx" class="ds-sidebar__logo" style="text-decoration: none; display: flex;">
                     <div class="ds-logo-icon">
                         <svg viewBox="0 0 24 24"
                              fill="none"
@@ -46,7 +46,7 @@
                     </span>
 
                     <span class="ds-logo-badge">DOCTOR</span>
-                </div>
+                </a>
                 
 
                 <nav class="ds-sidebar__nav" id="sidebarNav">
@@ -65,10 +65,8 @@
                         Patients
                     </a>
 
-                    <div class="ds-nav-section-label">MANAGEMENT</div>
-
-                    <a href="/Pages/Doctor/PatientList.aspx" class="ds-nav-link">
-                        Requests
+                    <a href="/Pages/Doctor/DoctorChat.aspx" class="ds-nav-link">
+                        Chat
                     </a>
 
                     <div class="ds-nav-section-label">SETTINGS</div>
@@ -294,9 +292,14 @@
             </div>
         </div>
     </form>
+    <script type="text/javascript">
+// 1. Extend the Window interface to fix TS2339 global property errors
+interface Window {
+    toggleNotifications: (e: Event) => void;
+    toggleProfileDropdown: (e: Event) => void;
+    toggleSidebar: () => void;
+}
 
-    <script>
-// 1. Dynamic Menu Highlighter (Error-Resistant Pattern)
 document.addEventListener("DOMContentLoaded", function () {
     var currentPath = window.location.pathname.toLowerCase();
     var navLinks = document.querySelectorAll("#sidebarNav .ds-nav-link");
@@ -306,8 +309,6 @@ document.addEventListener("DOMContentLoaded", function () {
             var hrefAttr = link.getAttribute("href");
             if (hrefAttr) {
                 var linkPath = hrefAttr.toLowerCase();
-
-                // Highlights perfectly matching page or matching aliases (like Patients + Requests link)
                 if (currentPath === linkPath || currentPath.endsWith(linkPath)) {
                     link.classList.add("ds-nav-link--active");
                 } else {
@@ -318,39 +319,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// 2. Toggle Notification Dropdown Box
-function toggleNotifications(e) {
+// 2. Added explicit 'Event' type to parameter 'e' to fix TS7006
+window.toggleNotifications = function (e: Event) {
     if (e) e.stopPropagation();
     var menu = document.getElementById('notifMenu');
     if (menu) {
         menu.classList.toggle('ds-notif-dropdown--open');
     }
-}
+};
 
-// 3. Toggle Profile Settings Menu
-function toggleProfileDropdown(e) {
+// 3. Added explicit 'Event' type to parameter 'e' to fix TS7006
+window.toggleProfileDropdown = function (e: Event) {
     if (e) e.stopPropagation();
     var menu = document.getElementById('profileMenu');
     if (menu) {
         menu.classList.toggle('ds-profile-dropdown--open');
     }
-}
+};
 
-// 4. Global Dropdown Outside-Click Closer
-document.addEventListener('click', function (e) {
+// 4. Added explicit 'MouseEvent' type and safely cast e.target as HTMLElement to fix TS2339 '.closest' error
+document.addEventListener('click', function (e: MouseEvent) {
+    var target = e.target as HTMLElement;
+    if (!target) return;
+
     var notifMenu = document.getElementById('notifMenu');
-    if (notifMenu && !e.target.closest('.ds-notification')) {
+    if (notifMenu && !target.closest('.ds-notification')) {
         notifMenu.classList.remove('ds-notif-dropdown--open');
     }
 
     var profileMenu = document.getElementById('profileMenu');
-    if (profileMenu && !e.target.closest('.ds-topbar__profile')) {
+    if (profileMenu && !target.closest('.ds-topbar__profile')) {
         profileMenu.classList.remove('ds-profile-dropdown--open');
     }
 });
 
-// 5. Sidebar Layout Collapse Trigger
-function toggleSidebar() {
+window.toggleSidebar = function () {
     var shell = document.getElementById('appShell');
     var icon = document.getElementById('toggleIcon');
 
@@ -364,7 +367,7 @@ function toggleSidebar() {
             }
         }
     }
-}
+};
 </script>
 
     <asp:ContentPlaceHolder ID="ScriptContent" runat="server" />

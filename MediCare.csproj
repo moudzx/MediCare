@@ -65,12 +65,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\Models\ConsultationRequest.cs" />
-    <Compile Include="App_Code\Models\FoodItem.cs" />
-    <Compile Include="App_Code\Models\Medicine.cs" />
-    <Compile Include="App_Code\Models\NutritionPlan.cs" />
-    <Compile Include="App_Code\Models\PatientMedication.cs" />
-    <Compile Include="App_Code\Models\User.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -109,6 +103,13 @@
     </Compile>
     <Compile Include="MasterPage\AdminSite.Master.designer.cs">
       <DependentUpon>AdminSite.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Doctor\DoctorChat.aspx.cs">
+      <DependentUpon>DoctorChat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Doctor\DoctorChat.aspx.designer.cs">
+      <DependentUpon>DoctorChat.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Doctor\DoctorProfile.aspx.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
@@ -172,6 +173,13 @@
     </Compile>
     <Compile Include="Pages\Patient\DoctorProfile.aspx.designer.cs">
       <DependentUpon>DoctorProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Patient\PatientChat.aspx.cs">
+      <DependentUpon>PatientChat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Patient\PatientChat.aspx.designer.cs">
+      <DependentUpon>PatientChat.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Patient\PatientProfile.aspx.cs">
       <DependentUpon>PatientProfile.aspx</DependentUpon>
@@ -296,6 +304,7 @@
     <Content Include="js\profile.js" />
     <Content Include="MasterPage\PatientSite.Master" />
     <Content Include="MasterPage\Site.Master" />
+    <Content Include="Pages\Doctor\DoctorChat.aspx" />
     <Content Include="Pages\Doctor\DoctorProfile.aspx" />
     <Content Include="Pages\Account\ForgotPassword.aspx" />
     <Content Include="Pages\Account\Login.aspx" />
@@ -315,6 +324,7 @@
     <Content Include="Pages\Patient\DoctorProfile.aspx" />
     <Content Include="Pages\Patient\Medications.aspx" />
     <Content Include="Pages\Patient\Nutritions.aspx" />
+    <Content Include="Pages\Patient\PatientChat.aspx" />
     <Content Include="Pages\Patient\PatientProfile.aspx" />
     <Content Include="Pages\Patient\Search.aspx" />
   </ItemGroup>
@@ -331,10 +341,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

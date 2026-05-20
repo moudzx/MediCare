@@ -258,6 +258,23 @@ CREATE TABLE [dbo].[CustomFoods] (
     [CreatedAt] DATETIME NOT NULL DEFAULT GETDATE()
 );
 
+CREATE TABLE Conversations (
+    ConversationID INT PRIMARY KEY IDENTITY(1,1),
+    PatientID      INT NOT NULL REFERENCES Patients(PatientID),
+    DoctorID       INT NOT NULL REFERENCES Doctors(DoctorID),
+    CreatedAt      DATETIME DEFAULT GETDATE(),
+    LastMessageAt  DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE Messages (
+    MessageID      INT PRIMARY KEY IDENTITY(1,1),
+    ConversationID INT NOT NULL REFERENCES Conversations(ConversationID),
+    SenderUserID   INT NOT NULL REFERENCES Users(UserID),
+    Body           NVARCHAR(MAX) NOT NULL,
+    SentAt         DATETIME DEFAULT GETDATE(),
+    IsRead         BIT DEFAULT 0
+);
+
 -- Indexes:
 
 
