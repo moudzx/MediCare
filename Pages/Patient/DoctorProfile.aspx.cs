@@ -48,10 +48,9 @@ namespace MediCare.Pages.Patient
         {
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                // Note: Adjust the exact column names (FullName, Specialization, etc.) 
-                // to match your actual [dbo].[Doctors] / [dbo].[Users] schema.
+                // Updated to match the existing [dbo].[Doctors] schema
                 string sql = @"
-                    SELECT FullName, Specialization, Location, Experience, Languages, Qualifications, About 
+                    SELECT FullName, Speciality, ClinicAddress, PhoneNumber, Age, Gender, CertificatePath 
                     FROM [dbo].[Doctors] 
                     WHERE DoctorId = @DoctorId";
 
@@ -66,15 +65,26 @@ namespace MediCare.Pages.Patient
                             if (reader.Read())
                             {
                                 string name = reader["FullName"].ToString();
-                                lblDoctorName.Text = "Dr. " + name;
+                                lblFullName.Text = "Dr. " + name;
                                 lblAvatarInitials.Text = GetInitials(name);
 
-                                lblSpecialization.Text = reader["Specialization"].ToString();
-                                lblLocation.Text = reader["Location"].ToString();
-                                lblExperience.Text = reader["Experience"].ToString() + " Years";
-                                lblLanguages.Text = reader["Languages"].ToString();
-                                lblQualifications.Text = reader["Qualifications"].ToString();
-                                lblAbout.Text = reader["About"].ToString();
+                                lblSpeciality.Text = reader["Speciality"].ToString();
+                                lblClinicAddress.Text = reader["ClinicAddress"].ToString();
+                                lblPhoneNumber.Text = reader["PhoneNumber"].ToString();
+                                lblAge.Text = reader["Age"].ToString();
+                                lblGender.Text = reader["Gender"].ToString();
+
+                                // Bind to the HyperLink control for the certificate
+                                string certPath = reader["CertificatePath"].ToString();
+                                if (!string.IsNullOrEmpty(certPath))
+                                {
+                                    hlCertificatePath.NavigateUrl = certPath;
+                                    hlCertificatePath.Text = "View Certificate";
+                                }
+                                else
+                                {
+                                    hlCertificatePath.Visible = false;
+                                }
                             }
                             else
                             {
@@ -241,7 +251,7 @@ namespace MediCare.Pages.Patient
                             cmdInsert.ExecuteNonQuery();
                         }
 
-                        // 4. Notify Doctor (Optional but aligns with your pipeline design)
+                        // 4. Notify Doctor
                         int doctorUserId = 0;
                         using (SqlCommand cmdDoc = new SqlCommand("SELECT UserId FROM [dbo].[Doctors] WHERE DoctorId = @DoctorId", conn))
                         {

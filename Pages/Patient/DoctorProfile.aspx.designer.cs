@@ -24,67 +24,67 @@ namespace MediCare.Pages.Patient
         protected global::System.Web.UI.WebControls.Label lblAvatarInitials;
 
         /// <summary>
-        /// lblDoctorName control.
+        /// lblFullName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDoctorName;
+        protected global::System.Web.UI.WebControls.Label lblFullName;
 
         /// <summary>
-        /// lblSpecialization control.
+        /// lblSpeciality control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSpecialization;
+        protected global::System.Web.UI.WebControls.Label lblSpeciality;
 
         /// <summary>
-        /// lblLocation control.
+        /// lblClinicAddress control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblLocation;
+        protected global::System.Web.UI.WebControls.Label lblClinicAddress;
 
         /// <summary>
-        /// lblExperience control.
+        /// lblPhoneNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblExperience;
+        protected global::System.Web.UI.WebControls.Label lblPhoneNumber;
 
         /// <summary>
-        /// lblLanguages control.
+        /// lblAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblLanguages;
+        protected global::System.Web.UI.WebControls.Label lblAge;
 
         /// <summary>
-        /// lblQualifications control.
+        /// lblGender control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblQualifications;
+        protected global::System.Web.UI.WebControls.Label lblGender;
 
         /// <summary>
-        /// lblAbout control.
+        /// hlCertificatePath control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAbout;
+        protected global::System.Web.UI.WebControls.HyperLink hlCertificatePath;
 
         /// <summary>
         /// calAppointments control.

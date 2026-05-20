@@ -36,20 +36,6 @@ namespace MediCare.Pages.Doctor
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Auth guards
-            //if (Session["UserId"] == null || Session["Role"] == null)
-            //{
-            //    Response.Redirect("~/Pages/Account/Login.aspx");
-            //    return;
-            //}
-
-            //if (Session["Role"].ToString() != "Doctor")
-            //{
-            //    Response.Redirect("~/Default.aspx");
-            //    return;
-            //}
-
-            // Read PatientId from QueryString
             if (!int.TryParse(Request.QueryString["PatientId"], out int patientId))
             {
                 Response.Redirect("~/Pages/Doctor/PatientList.aspx");
@@ -59,17 +45,9 @@ namespace MediCare.Pages.Doctor
             PatientId = patientId;
             DoctorId = Convert.ToInt32(Session["UserId"]);
 
-            // ── CRITICAL: always runs on every postback ──────────────
-            // Because pnlAddModal is always rendered (no Visible=false),
-            // ddlMedicine is always in the page and must always be bound.
-            // Without this, the dropdown is empty every postback.
-           
-
             if (!IsPostBack)
             {
-                // Modal starts hidden via CSS class (not Visible=false)
                 pnlAddModal.CssClass = "mm-modal-overlay";
-
                 LoadPatientInfo();
                 LoadMedicationStatistics();
                 LoadMedications();
@@ -77,9 +55,6 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // LOAD PATIENT INFO
-        // ─────────────────────────────────────────────────────────────
         private void LoadPatientInfo()
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -90,7 +65,6 @@ namespace MediCare.Pages.Doctor
             {
                 cmd.Parameters.AddWithValue("@PatientId", PatientId);
                 conn.Open();
-
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.Read())
@@ -105,26 +79,14 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // LOAD STATS
-        // ─────────────────────────────────────────────────────────────
         private void LoadMedicationStatistics()
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                lblTotalMeds.Text = ExecuteScalar(conn,
-                    "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p",
-                    PatientId);
-
-                lblActiveMeds.Text = ExecuteScalar(conn,
-                    "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p AND Status = 'Active'",
-                    PatientId);
-
-                lblCompletedMeds.Text = ExecuteScalar(conn,
-                    "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p AND Status = 'Completed'",
-                    PatientId);
+                lblTotalMeds.Text = ExecuteScalar(conn, "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p", PatientId);
+                lblActiveMeds.Text = ExecuteScalar(conn, "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p AND Status = 'Active'", PatientId);
+                lblCompletedMeds.Text = ExecuteScalar(conn, "SELECT COUNT(*) FROM PatientMedications WHERE PatientId = @p AND Status = 'Completed'", PatientId);
             }
         }
 
@@ -137,9 +99,6 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // LOAD MEDICATIONS
-        // ─────────────────────────────────────────────────────────────
         private void LoadMedications(string search = "", string status = "")
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -159,17 +118,11 @@ namespace MediCare.Pages.Doctor
                         m.form,
                         m.price
                     FROM  PatientMedications pm
-                    LEFT JOIN Medicine m
-                        ON m.id = TRY_CAST(pm.MedicineId AS INT)
+                    LEFT JOIN Medicine m ON m.id = TRY_CAST(pm.MedicineId AS INT)
                     WHERE pm.PatientId = @PatientId";
 
                 if (!string.IsNullOrWhiteSpace(search))
-                    query += @"
-                        AND (
-                            m.name         LIKE @Search
-                            OR pm.Dosage    LIKE @Search
-                            OR pm.Frequency LIKE @Search
-                        )";
+                    query += " AND (m.name LIKE @Search OR pm.Dosage LIKE @Search OR pm.Frequency LIKE @Search)";
 
                 if (!string.IsNullOrWhiteSpace(status))
                     query += " AND pm.Status = @Status";
@@ -179,21 +132,15 @@ namespace MediCare.Pages.Doctor
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@PatientId", PatientId);
-
-                    if (!string.IsNullOrWhiteSpace(search))
-                        cmd.Parameters.AddWithValue("@Search", "%" + search + "%");
-
-                    if (!string.IsNullOrWhiteSpace(status))
-                        cmd.Parameters.AddWithValue("@Status", status);
+                    if (!string.IsNullOrWhiteSpace(search)) cmd.Parameters.AddWithValue("@Search", "%" + search + "%");
+                    if (!string.IsNullOrWhiteSpace(status)) cmd.Parameters.AddWithValue("@Status", status);
 
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         da.Fill(dt);
-
                         rptMedications.DataSource = dt;
                         rptMedications.DataBind();
-
                         pnlEmpty.Visible = dt.Rows.Count == 0;
                         lblMedicationCount.Text = dt.Rows.Count + " medication(s)";
                     }
@@ -201,38 +148,26 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // LOAD MEDICINE DROPDOWN
-        // ─────────────────────────────────────────────────────────────
         private void LoadMedicineDropdown()
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(@"
-                SELECT id, name
-                FROM   Medicine
-                WHERE  name IS NOT NULL
-                ORDER  BY name", conn))
+                SELECT id, name FROM Medicine WHERE name IS NOT NULL ORDER BY name", conn))
             {
                 conn.Open();
-
                 using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                 {
                     DataTable dt = new DataTable();
                     da.Fill(dt);
-
                     ddlMedicine.DataSource = dt;
                     ddlMedicine.DataTextField = "name";
                     ddlMedicine.DataValueField = "id";
                     ddlMedicine.DataBind();
                 }
-
                 ddlMedicine.Items.Insert(0, new ListItem("Select Medication...", ""));
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // SEARCH / FILTER / CLEAR
-        // ─────────────────────────────────────────────────────────────
         protected void txtSearch_TextChanged(object sender, EventArgs e)
             => LoadMedications(txtSearch.Text.Trim(), ddlStatus.SelectedValue);
 
@@ -246,13 +181,8 @@ namespace MediCare.Pages.Doctor
             LoadMedications();
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // MODAL OPEN / CLOSE  ← CSS class, NOT Visible
-        // ─────────────────────────────────────────────────────────────
         protected void btnOpenAddModal_Click(object sender, EventArgs e)
-        {
-            pnlAddModal.CssClass = "mm-modal-overlay mm-modal-overlay--open";
-        }
+            => pnlAddModal.CssClass = "mm-modal-overlay mm-modal-overlay--open";
 
         protected void btnCloseModal_Click(object sender, EventArgs e)
         {
@@ -260,9 +190,6 @@ namespace MediCare.Pages.Doctor
             ClearMedicationForm();
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // SAVE MEDICATION
-        // ─────────────────────────────────────────────────────────────
         protected void btnSaveMedication_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(ddlMedicine.SelectedValue))
@@ -276,40 +203,96 @@ namespace MediCare.Pages.Doctor
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand(@"
-                    INSERT INTO PatientMedications
-                        (PatientId, DoctorId, MedicineId,
-                         Dosage, Frequency, Duration,
-                         StartDate, EndDate, Status)
-                    VALUES
-                        (@PatientId, @DoctorId, @MedicineId,
-                         @Dosage, @Frequency, @Duration,
-                         @StartDate, @EndDate, @Status)", conn))
                 {
-                    cmd.Parameters.AddWithValue("@PatientId", PatientId);
-                    cmd.Parameters.AddWithValue("@DoctorId", DoctorId);
-                    cmd.Parameters.AddWithValue("@MedicineId", ddlMedicine.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Dosage", txtDosage.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Frequency", ddlFrequency.SelectedValue);
-                    cmd.Parameters.AddWithValue("@Duration", txtDuration.Text.Trim());
-
-                    cmd.Parameters.AddWithValue("@StartDate",
-                        string.IsNullOrWhiteSpace(txtStartDate.Text)
-                            ? (object)DBNull.Value
-                            : DateTime.Parse(txtStartDate.Text));
-
-                    cmd.Parameters.AddWithValue("@EndDate",
-                        string.IsNullOrWhiteSpace(txtEndDate.Text)
-                            ? (object)DBNull.Value
-                            : DateTime.Parse(txtEndDate.Text));
-
-                    cmd.Parameters.AddWithValue("@Status", ddlMedicationStatus.SelectedValue);
-
                     conn.Open();
-                    cmd.ExecuteNonQuery();
+
+                    // 1. Resolve actual DoctorId from session UserId
+                    int doctorId = 0;
+                    using (SqlCommand cmdDoc = new SqlCommand(
+                        "SELECT DoctorId FROM Doctors WHERE UserId = @UserId", conn))
+                    {
+                        cmdDoc.Parameters.AddWithValue("@UserId", DoctorId);
+                        object res = cmdDoc.ExecuteScalar();
+                        if (res != null && res != DBNull.Value)
+                            doctorId = Convert.ToInt32(res);
+                    }
+
+                    // 2. Insert medication
+                    using (SqlCommand cmd = new SqlCommand(@"
+                        INSERT INTO PatientMedications
+                            (PatientId, DoctorId, MedicineId,
+                             Dosage, Frequency, Duration,
+                             StartDate, EndDate, Status)
+                        VALUES
+                            (@PatientId, @DoctorId, @MedicineId,
+                             @Dosage, @Frequency, @Duration,
+                             @StartDate, @EndDate, @Status)", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@PatientId", PatientId);
+                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+                        cmd.Parameters.AddWithValue("@MedicineId", ddlMedicine.SelectedValue);
+                        cmd.Parameters.AddWithValue("@Dosage", txtDosage.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Frequency", ddlFrequency.SelectedValue);
+                        cmd.Parameters.AddWithValue("@Duration", txtDuration.Text.Trim());
+
+                        cmd.Parameters.AddWithValue("@StartDate",
+                            string.IsNullOrWhiteSpace(txtStartDate.Text)
+                                ? (object)DBNull.Value
+                                : DateTime.Parse(txtStartDate.Text));
+
+                        cmd.Parameters.AddWithValue("@EndDate",
+                            string.IsNullOrWhiteSpace(txtEndDate.Text)
+                                ? (object)DBNull.Value
+                                : DateTime.Parse(txtEndDate.Text));
+
+                        cmd.Parameters.AddWithValue("@Status", ddlMedicationStatus.SelectedValue);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    // 3. Resolve patient's UserId for the notification
+                    int patientUserId = 0;
+                    using (SqlCommand cmdUser = new SqlCommand(
+                        "SELECT UserId FROM Patients WHERE PatientId = @PatientId", conn))
+                    {
+                        cmdUser.Parameters.AddWithValue("@PatientId", PatientId);
+                        object res = cmdUser.ExecuteScalar();
+                        if (res != null && res != DBNull.Value)
+                            patientUserId = Convert.ToInt32(res);
+                    }
+
+                    // 4. Send MedicationAdded notification to the patient
+                    if (patientUserId > 0)
+                    {
+                        string medicineName = ddlMedicine.SelectedItem.Text;
+                        string dosage = txtDosage.Text.Trim();
+                        string frequency = ddlFrequency.SelectedValue;
+
+                        string docName = "Your doctor";
+                        if (doctorId > 0)
+                        {
+                            using (SqlCommand cmdDocName = new SqlCommand(
+                                "SELECT FullName FROM Doctors WHERE DoctorId = @DoctorId", conn))
+                            {
+                                cmdDocName.Parameters.AddWithValue("@DoctorId", doctorId);
+                                object res = cmdDocName.ExecuteScalar();
+                                if (res != null) docName = "Dr. " + res.ToString();
+                            }
+                        }
+
+                        using (SqlCommand cmdNotif = new SqlCommand(@"
+                            INSERT INTO Notifications
+                                (UserId, Type, Title, Message, IsRead, CreatedAt)
+                            VALUES
+                                (@UserId, 'MedicationAdded', 'New Medication Prescribed', @Message, 0, GETDATE())", conn))
+                        {
+                            cmdNotif.Parameters.AddWithValue("@UserId", patientUserId);
+                            cmdNotif.Parameters.AddWithValue("@Message",
+                                $"{docName} prescribed {medicineName} — {dosage}, {frequency}.");
+                            cmdNotif.ExecuteNonQuery();
+                        }
+                    }
                 }
 
-                // Success — close modal
                 pnlAddModal.CssClass = "mm-modal-overlay";
                 ClearMedicationForm();
                 LoadMedicationStatistics();
@@ -323,13 +306,9 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // REPEATER COMMANDS
-        // ─────────────────────────────────────────────────────────────
         protected void rptMedications_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             int id = Convert.ToInt32(e.CommandArgument);
-
             switch (e.CommandName)
             {
                 case "DeleteMedication": DeleteMedication(id); break;
@@ -348,7 +327,6 @@ namespace MediCare.Pages.Doctor
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
-
             LoadMedicationStatistics();
             LoadMedications(txtSearch.Text.Trim(), ddlStatus.SelectedValue);
         }
@@ -357,23 +335,17 @@ namespace MediCare.Pages.Doctor
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(@"
-                UPDATE PatientMedications
-                SET    Status = @Status
-                WHERE  PatientMedicationId = @Id", conn))
+                UPDATE PatientMedications SET Status = @Status WHERE PatientMedicationId = @Id", conn))
             {
                 cmd.Parameters.AddWithValue("@Status", status);
                 cmd.Parameters.AddWithValue("@Id", id);
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
-
             LoadMedicationStatistics();
             LoadMedications(txtSearch.Text.Trim(), ddlStatus.SelectedValue);
         }
 
-        // ─────────────────────────────────────────────────────────────
-        // CLEAR FORM
-        // ─────────────────────────────────────────────────────────────
         private void ClearMedicationForm()
         {
             ddlMedicine.SelectedIndex = 0;

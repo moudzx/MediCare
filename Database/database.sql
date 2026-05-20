@@ -127,6 +127,7 @@ CREATE TABLE [dbo].[Appointments] (
 
 
 
+
 CREATE TABLE [dbo].[DoctorAvailability] (
     [AvailabilityId] INT IDENTITY(1,1) NOT NULL,
     [DoctorId] INT NOT NULL,
@@ -166,7 +167,24 @@ CREATE TABLE [dbo].[Notifications] (
         ))
 );
 
+-- 1. Drop the existing constraint
+ALTER TABLE [dbo].[Notifications] 
+DROP CONSTRAINT CK_Notifications_Type;
+GO
 
+-- 2. Add the updated constraint including 'AppointmentCancelled'
+ALTER TABLE [dbo].[Notifications] 
+ADD CONSTRAINT CK_Notifications_Type 
+CHECK ([Type]='AppointmentRejected' 
+    OR [Type]='AppointmentAccepted' 
+    OR [Type]='AppointmentRequested' 
+    OR [Type]='AppointmentCancelled' -- <-- The new value you needed!
+    OR [Type]='NutritionPlanAdded' 
+    OR [Type]='MedicationAdded' 
+    OR [Type]='ConnectionRejected' 
+    OR [Type]='ConnectionAccepted' 
+    OR [Type]='ConnectionRequest');
+GO
 
 CREATE TABLE [dbo].[NutritionPlans] (
     [PlanId] INT IDENTITY(1,1) NOT NULL,

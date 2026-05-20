@@ -8,8 +8,27 @@
 <asp:Content ID="HeadExtra" ContentPlaceHolderID="HeadContent" runat="server">
     <link rel="stylesheet" href="/css/default.css" />
     <link rel="stylesheet" href="/css/dashboard.css" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <style>
+        /* Modern Appointment Styles */
+        .pd-appointment-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .pd-appointment-row:last-child { border-bottom: none; }
+        .pd-appointment-info { display: flex; flex-direction: column; gap: 5px; }
+        .pd-appointment-doctor { font-weight: 600; font-size: 1.1rem; color: #2c3e50; }
+        .pd-appointment-date { color: #6c757d; font-size: 0.9rem; }
+        .pd-appointment-date i { margin-right: 5px; color: #007bff; }
+        .pd-appointment-reason { color: #888; font-size: 0.85rem; font-style: italic; }
+        .pd-appointment-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        
+        .pd-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: capitalize; }
+        .pd-status-accepted { background-color: #e6f4ea; color: #1e8e3e; }
+        .pd-status-pending { background-color: #fff3cd; color: #856404; }
+        .pd-status-rejected, .pd-status-cancelled { background-color: #fce8e6; color: #d93025; }
+        
+        .pd-btn-cancel { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .pd-btn-cancel:hover { background-color: #c82333; color: white; }
+    </style>
 </asp:Content>
 
 <asp:Content ID="PageContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -92,8 +111,62 @@
                     <asp:Label ID="lblHealthMessage" runat="server" CssClass="pd-success-msg" Visible="false" />
                 </div>
             </div>
-                        <!-- MY APPOINTMENTS -->
             
+            <!-- MY APPOINTMENTS -->
+            <div class="pd-card pd-card--appointments">
+                <div class="pd-card__header">
+                    <h2 class="pd-card__title">My Appointments</h2>
+                    <p class="pd-card__subtitle">Upcoming and past bookings</p>
+                </div>
+
+                <div class="pd-table-wrap">
+                    <asp:GridView ID="gvAppointments"
+                        runat="server"
+                        AutoGenerateColumns="False"
+                        GridLines="None"
+                        ShowHeader="False"
+                        EmptyDataText="No appointments found."
+                        CssClass="pd-dose-grid"
+                        DataKeyNames="AppointmentId"
+                        OnRowCommand="gvAppointments_RowCommand"
+                        OnRowDataBound="gvAppointments_RowDataBound">
+
+                        <Columns>
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <div class="pd-appointment-row">
+                                        <div class="pd-appointment-info">
+                                            <div class="pd-appointment-doctor">
+                                                <i class="fa-solid fa-user-doctor"></i> <%# Eval("DoctorName") %>
+                                            </div>
+                                            <div class="pd-appointment-date">
+                                                <i class="fa-regular fa-calendar-check"></i> 
+                                                <%# Eval("AppointmentDate", "{0:MMM dd, yyyy - hh:mm tt}") %>
+                                            </div>
+                                            <div class="pd-appointment-reason">
+                                                Reason: <%# Eval("Reason") %>
+                                            </div>
+                                        </div>
+                                        <div class="pd-appointment-actions">
+                                            <asp:Label ID="lblApptStatus" runat="server" 
+                                                Text='<%# Eval("Status") %>' CssClass="pd-badge"></asp:Label>
+                                            
+                                            <asp:LinkButton ID="btnCancel" runat="server" 
+                                                CommandName="CancelAppointment" 
+                                                CommandArgument='<%# Eval("AppointmentId") %>'
+                                                CssClass="pd-btn-cancel"
+                                                OnClientClick="return confirm('Are you sure you want to cancel this appointment?');"
+                                                Visible='<%# Eval("Status").ToString() == "Pending" || Eval("Status").ToString() == "Accepted" %>'>
+                                                <i class="fa-solid fa-trash-can"></i> Cancel
+                                            </asp:LinkButton>
+                                        </div>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
+                </div>
+            </div>
         </div>
 
         <!-- RIGHT -->
@@ -124,34 +197,28 @@
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <div class="pd-dose-row">
-
                                         <div class="pd-dose-left">
                                             <div class="pd-dose-icon">
                                                 <i class="fa-solid fa-pills"></i>
                                             </div>
-
                                             <div class="pd-dose-main">
                                                 <div class="pd-dose-name">
                                                     <%# Eval("MedicineName") %>
                                                 </div>
-
                                                 <div class="pd-dose-meta">
                                                     <span class="pd-dose-badge">
                                                         <%# Eval("Dosage") %>
                                                     </span>
-
                                                     <span class="pd-dose-badge pd-dose-badge--green">
                                                         <%# Eval("Instructions") %>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="pd-dose-time">
                                             <i class="fa-regular fa-clock"></i>
                                             <span><%# Eval("Time") %></span>
                                         </div>
-
                                     </div>
                                 </ItemTemplate>
                             </asp:TemplateField>
@@ -202,64 +269,34 @@
                 </div>
             </div>
         </div>
-
     </div>
-    <div class="pd-card pd-card--appointments">
-    <div class="pd-card__header">
-        <h2 class="pd-card__title">My Appointments</h2>
-        <p class="pd-card__subtitle">Upcoming and past bookings</p>
-    </div>
-
-    <div class="pd-table-wrap">
-
-        <asp:GridView ID="gvAppointments"
-            runat="server"
-            AutoGenerateColumns="False"
-            GridLines="None"
-            ShowHeader="True"
-            EmptyDataText="No appointments found."
-            CssClass="pd-dose-grid">
-
-            <Columns>
-
-                <asp:BoundField DataField="DoctorName" HeaderText="Doctor" />
-                <asp:BoundField DataField="AppointmentDate" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
-                <asp:BoundField DataField="Status" HeaderText="Status" />
-                <asp:BoundField DataField="Reason" HeaderText="Reason" />
-
-            </Columns>
-
-        </asp:GridView>
-
-    </div>
-</div>
 </div>
 
 <script>
-    (function () {
-        if (!('IntersectionObserver' in window)) return;
-        const cards = document.querySelectorAll('.pd-card');
-        cards.forEach(function (card, i) {
-            var el = card;
-            if (!(el instanceof HTMLElement)) return;
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity .45s ease, transform .45s ease';
-            el.style.transitionDelay = (i * 80) + 'ms';
+(function () {
+    if (!('IntersectionObserver' in window)) return;
+    const cards = document.querySelectorAll('.pd-card');
+    cards.forEach(function (card, i) {
+        var el = card;
+        if (!(el instanceof HTMLElement)) return;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity .45s ease, transform .45s ease';
+        el.style.transitionDelay = (i * 80) + 'ms';
+    });
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                var target = entry.target;
+                if (!(target instanceof HTMLElement)) return;
+                target.style.opacity = '1';
+                target.style.transform = 'translateY(0)';
+                observer.unobserve(target);
+            }
         });
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    var target = entry.target;
-                    if (!(target instanceof HTMLElement)) return;
-                    target.style.opacity = '1';
-                    target.style.transform = 'translateY(0)';
-                    observer.unobserve(target);
-                }
-            });
-        }, { threshold: 0.12 });
-        cards.forEach(function (card) { observer.observe(card); });
-    })();
+    }, { threshold: 0.12 });
+    cards.forEach(function (card) { observer.observe(card); });
+})();
 </script>
 
 </asp:Content>
