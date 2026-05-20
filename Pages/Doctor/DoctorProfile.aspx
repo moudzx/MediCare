@@ -89,10 +89,14 @@
                     <label class="prof-label">Account Email (Username)</label>
                     <asp:TextBox ID="txtEmail" runat="server" CssClass="prof-input prof-input--readonly" ReadOnly="true" />
                 </div>
-                <div class="prof-group">
-                    <label class="prof-label">Gender Role Context</label>
-                    <asp:TextBox ID="txtGender" runat="server" CssClass="prof-input prof-input--readonly" ReadOnly="true" />
-                </div>
+<div class="prof-group">
+    <label class="prof-label">Gender</label>
+    <asp:DropDownList ID="txtGender" runat="server" CssClass="prof-input">
+         <asp:ListItem Value="Not specified">Not specified</asp:ListItem>
+        <asp:ListItem Value="Male">Male</asp:ListItem>
+        <asp:ListItem Value="Female">Female</asp:ListItem>
+    </asp:DropDownList>
+</div>
             </div>
 
             <div class="prof-section-title">
