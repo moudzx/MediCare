@@ -60,12 +60,13 @@ namespace MediCare.MasterPage
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 string query = @"
-                    SELECT COUNT(*) 
-                    FROM ChatMessages m
-                    INNER JOIN Conversations c ON m.ConversationId = c.ConversationId
-                    WHERE (c.ParticipantA = @UserId OR c.ParticipantB = @UserId)
-                      AND m.SenderId != @UserId 
-                      AND ISNULL(m.IsRead, 0) = 0";
+            SELECT COUNT(*) 
+            FROM Messages m
+            INNER JOIN Conversations c 
+                ON m.ConversationID = c.ConversationID
+            WHERE (c.PatientID = @UserId OR c.DoctorID = @UserId)
+              AND m.SenderUserID != @UserId
+              AND ISNULL(m.IsRead, 0) = 0";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@UserId", UserId);
@@ -73,11 +74,15 @@ namespace MediCare.MasterPage
                 try
                 {
                     conn.Open();
+
                     int unreadCount = Convert.ToInt32(cmd.ExecuteScalar());
 
                     if (unreadCount > 0)
                     {
-                        lblChatCount.Text = unreadCount > 99 ? "99+" : unreadCount.ToString();
+                        lblChatCount.Text = unreadCount > 99
+                            ? "99+"
+                            : unreadCount.ToString();
+
                         lblChatCount.Visible = true;
                     }
                     else

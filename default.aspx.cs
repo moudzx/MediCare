@@ -42,7 +42,6 @@ namespace MediCare
                 {
                     try
                     {
-                        // 1. Insert into Users
                         int userId;
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
@@ -58,7 +57,6 @@ namespace MediCare
                             userId = Convert.ToInt32(cmd.ExecuteScalar());
                         }
 
-                        // 2. Insert into Patients
                         int patientId;
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
@@ -103,7 +101,6 @@ namespace MediCare
 
                         tx.Commit();
 
-                        // Store session and redirect to patient profile
                         Session["UserId"] = userId;
                         Session["PatientId"] = patientId;
                         Session["Role"] = "Patient";
@@ -114,7 +111,6 @@ namespace MediCare
                     }
                     catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
                     {
-                        // Unique constraint violation (duplicate email)
                         tx.Rollback();
                         lblPatientMessage.Text = "This email is already registered. Please sign in or use another email.";
                         lblPatientMessage.CssClass = "mc-form__message mc-form__message--error";
@@ -151,7 +147,6 @@ namespace MediCare
                 {
                     try
                     {
-                        // 1. Insert into Users
                         int userId;
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
@@ -167,7 +162,6 @@ namespace MediCare
                             userId = Convert.ToInt32(cmd.ExecuteScalar());
                         }
 
-                        // 2. Insert into Doctors
                         int doctorId;
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
@@ -201,7 +195,6 @@ namespace MediCare
 
                         tx.Commit();
 
-                        // Store session and redirect to doctor profile
                         Session["UserId"] = userId;
                         Session["DoctorId"] = doctorId;
                         Session["Role"] = "Doctor";
@@ -299,7 +292,7 @@ namespace MediCare
 
             return true;
         }
-
+        
         private bool ValidateDoctor(out string errorMessage, out string certificatePath)
         {
             errorMessage = null;
