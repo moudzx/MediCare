@@ -247,7 +247,7 @@ namespace MediCare.Pages.Doctor
                     }
                     else if (e.CommandName == "RejectRequest")
                     {
-                        // Notify before deleting so we can still read the connection row if needed
+
                         SendConnectionNotification(conn, targetPatientId, doctorId,
                             type: "ConnectionRejected",
                             title: "Connection Request Declined",
@@ -278,11 +278,11 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // Resolves the patient's UserId from PatientId and inserts a Notification row
+
         private void SendConnectionNotification(SqlConnection conn, int patientId, int doctorId,
             string type, string title, string message)
         {
-            // Get doctor name for a friendlier message
+
             string docName = "Your doctor";
             using (SqlCommand cmdDoc = new SqlCommand(
                 "SELECT FullName FROM Doctors WHERE DoctorId = @DoctorId", conn))

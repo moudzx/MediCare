@@ -352,7 +352,6 @@ AND IsRead = 0";
             if (SelectedConvID == 0)
                 return;
 
-            // Updated to read directly from the new ASP.NET Textbox
             string body = txtMessage.Text;
 
             if (string.IsNullOrWhiteSpace(body))
@@ -402,7 +401,6 @@ WHERE ConversationID = @cid";
                 cmd.ExecuteNonQuery();
             }
 
-            // Clear the textbox after a successful send so the user can type a new message
             txtMessage.Text = string.Empty;
 
             LoadMessages(SelectedConvID);

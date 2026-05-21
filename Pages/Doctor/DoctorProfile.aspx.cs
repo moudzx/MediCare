@@ -11,7 +11,7 @@ namespace MediCare.Pages.Doctor
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Session Role Gate Check
+
             if (Session["UserId"] == null || Session["Role"] == null || Session["Role"].ToString() != "Doctor")
             {
                 Response.Redirect("~/Pages/Account/Login.aspx");
@@ -34,7 +34,7 @@ namespace MediCare.Pages.Doctor
                 {
                     conn.Open();
 
-                    // 1. Fetch Core Profile Data mapping User context and Doctor properties
+
                     string docSql = @"
                         SELECT d.DoctorId, d.FullName, d.PhoneNumber, d.Age, d.ClinicAddress, 
                                d.CertificatePath, d.Speciality, d.Gender, u.Email
@@ -53,7 +53,7 @@ namespace MediCare.Pages.Doctor
                             {
                                 currentDoctorId = Convert.ToInt32(reader["DoctorId"]);
 
-                                // Map string values securely
+
                                 txtEmail.Text = reader["Email"].ToString();
                                 txtFullName.Text = reader["FullName"].ToString();
                                 txtPhone.Text = reader["PhoneNumber"] != DBNull.Value ? reader["PhoneNumber"].ToString() : "";
@@ -63,7 +63,7 @@ namespace MediCare.Pages.Doctor
                                 txtSpeciality.Text = reader["Speciality"] != DBNull.Value ? reader["Speciality"].ToString() : "";
                                 txtGender.SelectedValue = reader["Gender"] != DBNull.Value ? reader["Gender"].ToString() : "Not specified";
 
-                                // Header context updates
+
                                 lblHeaderName.Text = reader["FullName"].ToString();
                                 lblHeaderSpeciality.Text = reader["Speciality"] != DBNull.Value && !string.IsNullOrEmpty(reader["Speciality"].ToString())
                                     ? reader["Speciality"].ToString()
@@ -73,10 +73,10 @@ namespace MediCare.Pages.Doctor
                         }
                     }
 
-                    // 2. Compute Dashboard Statistics Context safely if a valid Doctor ID was found
+
                     if (currentDoctorId > 0)
                     {
-                        // Count Accepted Connections
+
                         string connSql = "SELECT COUNT(*) FROM [dbo].[PatientDoctorConnections] WHERE DoctorId = @DoctorId AND [Status] = 'Accepted'";
                         using (SqlCommand cmdConn = new SqlCommand(connSql, conn))
                         {
@@ -84,7 +84,7 @@ namespace MediCare.Pages.Doctor
                             lblStatPatients.Text = cmdConn.ExecuteScalar().ToString();
                         }
 
-                        // Count Total Scheduled Appointments
+
                         string appSql = "SELECT COUNT(*) FROM [dbo].[Appointments] WHERE DoctorId = @DoctorId";
                         using (SqlCommand cmdApp = new SqlCommand(appSql, conn))
                         {
@@ -104,14 +104,14 @@ namespace MediCare.Pages.Doctor
         {
             int userId = Convert.ToInt32(Session["UserId"]);
 
-            // Collect and scrub form configurations
+
             string fullName = txtFullName.Text.Trim();
             string phone = txtPhone.Text.Trim();
             string speciality = txtSpeciality.Text.Trim();
             string clinicAddress = txtClinicAddress.Text.Trim();
             string ageText = txtAge.Text.Trim();
             string gender = txtGender.SelectedValue;
-            // Validate backend rules explicitly matching table constraints
+
             if (string.IsNullOrEmpty(fullName))
             {
                 DisplayAlert("Full Name is a mandatory operational field.", true);
@@ -130,7 +130,7 @@ namespace MediCare.Pages.Doctor
                 {
                     conn.Open();
 
-                    // UPDATE SQL — add Gender to SET clause
+
                     string updateSql = @"
                      UPDATE [dbo].[Doctors]
                        SET FullName = @FullName,
@@ -153,7 +153,7 @@ namespace MediCare.Pages.Doctor
                         cmd.ExecuteNonQuery();
                     }
 
-                    // Sync changes and throw success banner
+
                     LoadDoctorProfileData();
                     DisplayAlert("Your professional profile matrix configurations have been successfully saved.", false);
                 }

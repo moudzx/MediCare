@@ -13,7 +13,6 @@ namespace MediCare.Pages.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Optional admin protection
             if (Session["UserId"] == null || Session["Role"] == null)
             {
                 Response.Redirect("~/Pages/Account/Login.aspx");
@@ -39,25 +38,21 @@ namespace MediCare.Pages.Admin
             {
                 conn.Open();
 
-                // Doctors count
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Doctors", conn))
                 {
                     lblDoctors.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // Patients count
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Patients", conn))
                 {
                     lblPatients.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // Foods count
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Food", conn))
                 {
                     lblFoods.Text = cmd.ExecuteScalar().ToString();
                 }
 
-                // Medicines count
                 using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Medicine", conn))
                 {
                     lblMedicines.Text = cmd.ExecuteScalar().ToString();
@@ -83,7 +78,6 @@ namespace MediCare.Pages.Admin
 
                     da.Fill(dt);
 
-                    // Add initials column manually
                     dt.Columns.Add("Initials");
 
                     foreach (DataRow row in dt.Rows)

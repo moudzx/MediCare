@@ -218,7 +218,7 @@ CREATE TABLE [dbo].[NutritionPlans] (
 CREATE TABLE [dbo].[PatientMedications] (
     [PatientMedicationId] INT IDENTITY(1,1) NOT NULL,
     [PatientId] INT NOT NULL,
-    [DoctorId] INT,
+    [DoctorId] INT NULL,
     [MedicineId] NVARCHAR(20) NOT NULL,
 
     [Dosage] NVARCHAR(100) NOT NULL,

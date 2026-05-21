@@ -45,7 +45,7 @@ namespace MediCare.MasterPage
 
             DataTable displayTable = new DataTable();
             displayTable.Columns.Add("SourceId", typeof(int));
-            displayTable.Columns.Add("ItemType", typeof(string)); // "Connection" or "Appointment"
+            displayTable.Columns.Add("ItemType", typeof(string));
             displayTable.Columns.Add("FullName", typeof(string));
             displayTable.Columns.Add("Initials", typeof(string));
             displayTable.Columns.Add("Title", typeof(string));
@@ -60,7 +60,6 @@ namespace MediCare.MasterPage
                 {
                     conn.Open();
 
-                    // Pipeline 1: Fetch Pending Connection Requests
                     string connectionSql = @"
                         SELECT c.ConnectionId, p.FullName, c.RequestedAt
                         FROM PatientDoctorConnections c
@@ -91,7 +90,6 @@ namespace MediCare.MasterPage
                         }
                     }
 
-                    // Pipeline 2: Fetch Pending Appointment Bookings
                     string appointmentSql = @"
                         SELECT a.AppointmentId, p.FullName, a.AppointmentDate
                         FROM Appointments a
@@ -124,11 +122,9 @@ namespace MediCare.MasterPage
                 }
                 catch (Exception)
                 {
-                    // Handle query errors cleanly without crashing UI shells
                 }
             }
 
-            // Sort data chronologically to align merged items cleanly
             DataView view = displayTable.DefaultView;
             view.Sort = "TimeStamp DESC";
             DataTable sortedTable = view.ToTable();

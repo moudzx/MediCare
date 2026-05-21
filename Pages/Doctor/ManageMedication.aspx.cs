@@ -206,7 +206,7 @@ namespace MediCare.Pages.Doctor
                 {
                     conn.Open();
 
-                    // 1. Resolve actual DoctorId from session UserId
+
                     int doctorId = 0;
                     using (SqlCommand cmdDoc = new SqlCommand(
                         "SELECT DoctorId FROM Doctors WHERE UserId = @UserId", conn))
@@ -217,7 +217,7 @@ namespace MediCare.Pages.Doctor
                             doctorId = Convert.ToInt32(res);
                     }
 
-                    // 2. Insert medication
+
                     using (SqlCommand cmd = new SqlCommand(@"
                         INSERT INTO PatientMedications
                             (PatientId, DoctorId, MedicineId,
@@ -249,7 +249,7 @@ namespace MediCare.Pages.Doctor
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 3. Resolve patient's UserId for the notification
+
                     int patientUserId = 0;
                     using (SqlCommand cmdUser = new SqlCommand(
                         "SELECT UserId FROM Patients WHERE PatientId = @PatientId", conn))
@@ -260,7 +260,7 @@ namespace MediCare.Pages.Doctor
                             patientUserId = Convert.ToInt32(res);
                     }
 
-                    // 4. Send MedicationAdded notification to the patient
+
                     if (patientUserId > 0)
                     {
                         string medicineName = ddlMedicine.SelectedItem.Text;

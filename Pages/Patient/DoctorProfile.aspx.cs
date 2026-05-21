@@ -11,7 +11,6 @@ namespace MediCare.Pages.Patient
     {
         private readonly string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-        // Simple class to map available slots to the GridView
         public class TimeSlot
         {
             public string SlotText { get; set; }
@@ -20,14 +19,12 @@ namespace MediCare.Pages.Patient
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // 1. Verify Patient Authentication
             if (Session["UserId"] == null || Session["Role"] == null || Session["Role"].ToString() != "Patient")
             {
                 Response.Redirect("~/Pages/Account/Login.aspx");
                 return;
             }
 
-            // 2. Load Initial Data
             if (!IsPostBack)
             {
                 if (int.TryParse(Request.QueryString["id"], out int doctorId))
@@ -38,7 +35,6 @@ namespace MediCare.Pages.Patient
                 }
                 else
                 {
-                    // No doctor ID provided, redirect back to search/directory
                     Response.Redirect("~/Pages/Patient/SearchDoctors.aspx");
                 }
             }
@@ -48,7 +44,6 @@ namespace MediCare.Pages.Patient
         {
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                // Updated to match the existing [dbo].[Doctors] schema
                 string sql = @"
                     SELECT FullName, Speciality, ClinicAddress, PhoneNumber, Age, Gender, CertificatePath 
                     FROM [dbo].[Doctors] 
@@ -74,7 +69,6 @@ namespace MediCare.Pages.Patient
                                 lblAge.Text = reader["Age"].ToString();
                                 lblGender.Text = reader["Gender"].ToString();
 
-                                // Bind to the HyperLink control for the certificate
                                 string certPath = reader["CertificatePath"].ToString();
                                 if (!string.IsNullOrEmpty(certPath))
                                 {
@@ -100,8 +94,6 @@ namespace MediCare.Pages.Patient
                 }
             }
         }
-
-        // Prevent users from clicking past dates on the calendar
         protected void calAppointments_DayRender(object sender, DayRenderEventArgs e)
         {
             if (e.Day.Date < DateTime.Today)
@@ -113,7 +105,7 @@ namespace MediCare.Pages.Patient
 
         protected void calAppointments_SelectionChanged(object sender, EventArgs e)
         {
-            lblMessage.Text = ""; // Clear previous messages
+            lblMessage.Text = "";
             if (int.TryParse(Request.QueryString["id"], out int doctorId))
             {
                 LoadAvailableSlots(calAppointments.SelectedDate, doctorId);
@@ -126,7 +118,6 @@ namespace MediCare.Pages.Patient
 
             using (SqlConnection conn = new SqlConnection(connString))
             {
-                // Fetch slots for this doctor on this specific day that DO NOT have an active appointment
                 string sql = @"
                         SELECT da.StartTime, da.EndTime
                         FROM [dbo].[DoctorAvailability] da
@@ -164,7 +155,6 @@ namespace MediCare.Pages.Patient
                             }
                         }
 
-                        // Bind to UI
                         if (availableSlots.Count > 0)
                         {
                             gvSlots.DataSource = availableSlots;
@@ -202,7 +192,6 @@ namespace MediCare.Pages.Patient
                     {
                         conn.Open();
 
-                        // 1. Resolve PatientId from UserId
                         int patientId = 0;
 
                         using (SqlCommand cmdPatient = new SqlCommand(
@@ -216,7 +205,6 @@ namespace MediCare.Pages.Patient
 
                         if (patientId == 0) throw new Exception("Patient profile not found.");
 
-                        // 2. Double check the slot is still free (Concurrency Check)
                         string checkSql = @"
                                     SELECT COUNT(*) 
                                     FROM [dbo].[Appointments] 
@@ -238,7 +226,6 @@ namespace MediCare.Pages.Patient
                             }
                         }
 
-                        // 3. Insert Appointment Request
                         string insertAppSql = @"
                             INSERT INTO [dbo].[Appointments] (DoctorId, PatientId, AppointmentDate, Status, Reason) 
                             VALUES (@DoctorId, @PatientId, @AppointmentDate, 'Pending', 'General Checkup / Consultation')";
@@ -251,7 +238,6 @@ namespace MediCare.Pages.Patient
                             cmdInsert.ExecuteNonQuery();
                         }
 
-                        // 4. Notify Doctor
                         int doctorUserId = 0;
                         using (SqlCommand cmdDoc = new SqlCommand("SELECT UserId FROM [dbo].[Doctors] WHERE DoctorId = @DoctorId", conn))
                         {
@@ -273,11 +259,9 @@ namespace MediCare.Pages.Patient
                             }
                         }
 
-                        // Success UI Updates
                         lblMessage.Text = $"Success! Your request for {appointmentTime.ToString("f")} has been sent to the doctor for approval.";
                         lblMessage.ForeColor = System.Drawing.Color.Green;
 
-                        // Refresh the UI to remove the booked slot
                         LoadAvailableSlots(calAppointments.SelectedDate, doctorId);
                     }
                     catch (Exception ex)
@@ -289,7 +273,6 @@ namespace MediCare.Pages.Patient
             }
         }
 
-        // Helper to grab initials for the Avatar circle (e.g. "John Doe" -> "JD")
         private string GetInitials(string fullName)
         {
             if (string.IsNullOrWhiteSpace(fullName)) return "MD";

@@ -240,8 +240,6 @@ namespace MediCare.Pages.Patient
             LoadNutritionPlans();
         }
 
-        // --- CUSTOM FOODS FUNCTIONALITY ---
-
         private void LoadCustomFoods()
         {
             int patientId = GetPatientId();
@@ -313,7 +311,6 @@ namespace MediCare.Pages.Patient
                         cmd.Parameters.AddWithValue("@PatientId", patientId);
                         cmd.Parameters.AddWithValue("@Description", txtCustomDesc.Text.Trim());
 
-                        // Handle integer conversion for calories safely
                         double rawCalories = ParseDouble(txtCustomCalories.Text);
                         cmd.Parameters.AddWithValue("@Calories", rawCalories > 0 ? (object)Convert.ToInt32(rawCalories) : DBNull.Value);
 
@@ -333,7 +330,6 @@ namespace MediCare.Pages.Patient
                     }
                 }
 
-                // UI Reset and feedback
                 txtCustomDesc.Text = "";
                 txtCustomCalories.Text = "";
                 txtCustomProtein.Text = "";
@@ -351,7 +347,6 @@ namespace MediCare.Pages.Patient
                 lblCustomFoodMsg.Text = "Custom food item added successfully!";
                 lblCustomFoodMsg.ForeColor = System.Drawing.Color.Green;
 
-                // Refresh the display list
                 LoadCustomFoods();
             }
             catch (Exception ex)

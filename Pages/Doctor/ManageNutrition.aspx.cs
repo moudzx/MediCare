@@ -67,7 +67,7 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return false;
 
-                    // Validates relational parameters via PatientDoctorConnections mapping
+
                     string sql = @"
                         SELECT p.FullName 
                         FROM [dbo].[PatientDoctorConnections] c
@@ -171,7 +171,6 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    // 1. Commit New Nutrition Profile
                     string insertSql = @"
                         INSERT INTO [dbo].[NutritionPlans]
                         (PatientId, DoctorId, calories, protein, total_fat, carbohydrate, sodium, 
@@ -207,7 +206,7 @@ namespace MediCare.Pages.Doctor
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 2. Resolve target Patient's explicit UserId to push notification correctly
+
                     int patientUserId = 0;
                     using (SqlCommand cmdUser = new SqlCommand("SELECT UserId FROM [dbo].[Patients] WHERE PatientId = @PatientId", conn))
                     {
@@ -216,7 +215,7 @@ namespace MediCare.Pages.Doctor
                         if (userRes != null) patientUserId = Convert.ToInt32(userRes);
                     }
 
-                    // 3. Dispatch Notification according to exact structural constraints
+
                     if (patientUserId > 0)
                     {
                         string docName = "Your doctor";
