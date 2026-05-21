@@ -11,10 +11,6 @@ namespace MediCare.Pages.Admin
         {
         }
 
-        /// <summary>
-        /// Returns "mc-nav-active" when the current page filename matches <paramref name="pageName"/>.
-        /// Used in the navbar to highlight the active link.
-        /// </summary>
         public string ActiveLink(string pageName)
         {
             string current = Path.GetFileNameWithoutExtension(Request.PhysicalPath);
@@ -28,7 +24,6 @@ namespace MediCare.Pages.Admin
             Session.Clear();
             Session.Abandon();
 
-            // Clear auth cookie if FormsAuthentication is used
             if (HttpContext.Current.Response.Cookies["ASP.NET_SessionId"] != null)
             {
                 HttpContext.Current.Response.Cookies["ASP.NET_SessionId"].Expires = DateTime.Now.AddDays(-1);

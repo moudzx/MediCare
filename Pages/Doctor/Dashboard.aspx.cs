@@ -48,7 +48,6 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    // 1. Fetch Incoming Pending Allocation Requests
                     string sqlPending = @"
                         SELECT a.AppointmentId, a.AppointmentDate, a.Reason, p.FullName as PatientName
                         FROM [dbo].[Appointments] a
@@ -69,7 +68,6 @@ namespace MediCare.Pages.Doctor
                         }
                     }
 
-                    // 2. Fetch Active Confirmed Bookings
                     string sqlReserved = @"
                         SELECT a.AppointmentId, a.AppointmentDate, a.Status, p.FullName as PatientName
                         FROM [dbo].[Appointments] a
@@ -90,7 +88,6 @@ namespace MediCare.Pages.Doctor
                         }
                     }
 
-                    // 3. Fetch All Published Availabilities
                     string sqlOpen = @"
                         SELECT AvailabilityId, StartTime, EndTime 
                         FROM [dbo].[DoctorAvailability]
@@ -196,7 +193,6 @@ namespace MediCare.Pages.Doctor
                     conn.Open();
                     int doctorId = GetDoctorId(conn);
 
-                    // Fetch appointment details for notifications first
                     int patientUserId = 0;
                     DateTime appTime = DateTime.Now;
                     string contextSql = "SELECT p.UserId, a.AppointmentDate FROM [dbo].[Appointments] a INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId WHERE a.AppointmentId = @Id AND a.DoctorId = @DocId";
@@ -215,7 +211,6 @@ namespace MediCare.Pages.Doctor
                         }
                     }
 
-                    // Cancel appointment entry
                     string cancelSql = "UPDATE [dbo].[Appointments] SET Status = 'Cancelled' WHERE AppointmentId = @AppointmentId AND DoctorId = @DoctorId";
                     using (SqlCommand cmd = new SqlCommand(cancelSql, conn))
                     {
@@ -224,7 +219,6 @@ namespace MediCare.Pages.Doctor
                         cmd.ExecuteNonQuery();
                     }
 
-                    // Alert the user instantly
                     if (patientUserId > 0)
                     {
                         string msg = $"CRITICAL UPDATE: Your scheduled booking on {appTime:yyyy-MM-dd HH:mm} has been cancelled by the physician due to direct schedule adjustments.";
@@ -321,7 +315,6 @@ namespace MediCare.Pages.Doctor
             }
         }
 
-        // SURGICAL CANCELLATION PROCESSOR: Drops specific target hours & pushes patient notification alerts
         protected void btnCancelSpecificHour_Click(object sender, EventArgs e)
         {
             pnlGlobalAlert.Visible = false;
@@ -335,7 +328,7 @@ namespace MediCare.Pages.Doctor
                 return;
             }
 
-            // Construct exact 1-hour range targets matching data structure entries
+
             DateTime blockStart = parsedDate.Date.Add(parsedHour);
             DateTime blockEnd = blockStart.AddHours(1);
 
@@ -347,7 +340,6 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    // 1. Delete matching row item inside open entries table
                     string deleteAvailabilitySql = @"
                         DELETE FROM [dbo].[DoctorAvailability] 
                         WHERE DoctorId = @DoctorId AND StartTime = @Start AND EndTime = @End";
@@ -360,7 +352,6 @@ namespace MediCare.Pages.Doctor
                         cmdDelAvail.ExecuteNonQuery();
                     }
 
-                    // 2. Scan for active patient bookings within this exact hour block
                     string findBookingSql = @"
                         SELECT AppointmentId 
                         FROM [dbo].[Appointments] 
@@ -381,7 +372,7 @@ namespace MediCare.Pages.Doctor
                     }
 
                     bool appointmentWasCancelled = false;
-                    // 3. If a patient is booked during this slot, trigger the cancellation and notification pipeline
+
                     if (conflictingAppointmentId > 0)
                     {
                         CancelAndNotifyIndividualAppointment(conflictingAppointmentId);

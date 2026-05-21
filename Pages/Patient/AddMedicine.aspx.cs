@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace MediCare.Pages.Patient
 {
@@ -64,8 +65,6 @@ namespace MediCare.Pages.Patient
             }
 
             string medicineId = ViewState["MedicineId"].ToString();
-
-            int userId = Convert.ToInt32(Session["UserId"]);
             int patientId = GetPatientId();
 
             if (patientId == 0)
@@ -78,9 +77,7 @@ namespace MediCare.Pages.Patient
 
             string frequencyText = ddlFrequency.SelectedItem.Text;
             string pillsCount = txtPillsCount.Text;
-            string time = txtTime.Text;
             string mealRelation = ddlMealRelation.SelectedValue;
-            bool reminder = chkReminder.Checked;
 
             DateTime startDate = Convert.ToDateTime(txtStartDate.Text);
             DateTime endDate = Convert.ToDateTime(txtEndDate.Text);
@@ -104,7 +101,7 @@ namespace MediCare.Pages.Patient
                             VALUES
                             (
                                 @PatientId,
-                                NULL,
+                                @DoctorId,
                                 @MedicineId,
                                 @Dosage,
                                 @Frequency,
@@ -117,6 +114,7 @@ namespace MediCare.Pages.Patient
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@PatientId", patientId);
+                    cmd.Parameters.AddWithValue("@DoctorId", DBNull.Value);
                     cmd.Parameters.AddWithValue("@MedicineId", medicineId);
                     cmd.Parameters.AddWithValue("@Dosage", pillsCount ?? "");
                     cmd.Parameters.AddWithValue("@Frequency", frequencyText);
@@ -151,11 +149,9 @@ namespace MediCare.Pages.Patient
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
-
                     conn.Open();
 
                     object result = cmd.ExecuteScalar();
-
                     if (result != null)
                     {
                         medicineName = result.ToString();
@@ -165,6 +161,7 @@ namespace MediCare.Pages.Patient
 
             return medicineName;
         }
+
         private int GetPatientId()
         {
             if (Session["UserId"] == null)
@@ -183,11 +180,9 @@ namespace MediCare.Pages.Patient
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserId", userId);
-
                     conn.Open();
 
                     object result = cmd.ExecuteScalar();
-
                     if (result != null && result != DBNull.Value)
                         return Convert.ToInt32(result);
                 }

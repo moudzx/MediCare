@@ -75,7 +75,6 @@ namespace MediCare.Pages.Patient
             cardFoods.Visible = false;
         }
 
-        // Helper Method to dynamically extract PatientId from the authenticated UserId
         private int GetPatientId(SqlConnection conn)
         {
             int userId = Convert.ToInt32(Session["UserId"]);
@@ -100,7 +99,6 @@ namespace MediCare.Pages.Patient
                 try
                 {
                     conn.Open();
-                    // FIXED: Dynamic PatientId translation lookup
                     int patientId = GetPatientId(conn);
 
                     if (patientId == 0) return;
@@ -231,7 +229,6 @@ namespace MediCare.Pages.Patient
                 try
                 {
                     conn.Open();
-                    // FIXED: Lookup authentic profile assignment mapping sequence
                     int patientId = GetPatientId(conn);
 
                     if (patientId == 0)

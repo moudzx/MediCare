@@ -20,7 +20,7 @@ namespace MediCare.MasterPage
             {
                 LoadUserInfo();
                 LoadNotifications();
-                LoadUnreadChatCount(); // Calculates unopened live conversations
+                LoadUnreadChatCount();
             }
 
             btnMarkAllRead.Click += BtnMarkAllRead_Click;
@@ -28,7 +28,6 @@ namespace MediCare.MasterPage
 
         private int UserId => Convert.ToInt32(Session["UserId"]);
 
-        // ── User info for navbar ──────────────────────────────────────────────
         private void LoadUserInfo()
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -56,12 +55,10 @@ namespace MediCare.MasterPage
             }
         }
 
-        // ── ADDED: Unopened/Unread Chat Counter Logic ────────────────────────
         private void LoadUnreadChatCount()
         {
             using (SqlConnection conn = new SqlConnection(connStr))
             {
-                // This checks unread chat messages that were sent to this user by a partner
                 string query = @"
                     SELECT COUNT(*) 
                     FROM ChatMessages m
@@ -90,13 +87,11 @@ namespace MediCare.MasterPage
                 }
                 catch
                 {
-                    // Fallback to prevent app crash if column 'IsRead' hasn't migrated yet
                     lblChatCount.Visible = false;
                 }
             }
         }
 
-        // ── Notifications ─────────────────────────────────────────────────────
         private void LoadNotifications()
         {
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -190,7 +185,6 @@ namespace MediCare.MasterPage
             LoadNotifications();
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────
         private static string GetIcon(string type)
         {
             switch (type)

@@ -211,8 +211,7 @@ namespace MediCare.Patient
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
-                    // Update status to Cancelled, then notify the doctor.
-                    // Notifications table uses CreatedAt (not Date).
+
                     string query = @"
                         DECLARE @DoctorId INT;
                         SELECT @DoctorId = DoctorId
