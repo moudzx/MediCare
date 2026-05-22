@@ -220,7 +220,6 @@
 
         .send-btn:hover { background: #15803d; }
 
-        /* ── Empty state ─────────────────────────────────────── */
         .no-chat-selected {
             flex: 1;
             display: flex;
