@@ -9,7 +9,7 @@ namespace MediCare.Pages.Doctor
 {
     public partial class Dashboard : System.Web.UI.Page
     {
-        private readonly string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly string _conn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -20,27 +20,24 @@ namespace MediCare.Pages.Doctor
             }
 
             if (!IsPostBack)
-            {
-                RefreshDashboardDataPipelines();
-            }
+                BindAll();
         }
 
         private int GetDoctorId(SqlConnection conn)
         {
             int userId = Convert.ToInt32(Session["UserId"]);
-            string sql = "SELECT DoctorId FROM [dbo].[Doctors] WHERE UserId = @UserId";
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            using (var cmd = new SqlCommand(
+                "SELECT DoctorId FROM [dbo].[Doctors] WHERE UserId = @uid", conn))
             {
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value) return Convert.ToInt32(result);
+                cmd.Parameters.AddWithValue("@uid", userId);
+                var r = cmd.ExecuteScalar();
+                return (r != null && r != DBNull.Value) ? Convert.ToInt32(r) : 0;
             }
-            return 0;
         }
 
-        private void RefreshDashboardDataPipelines()
+        private void BindAll()
         {
-            using (SqlConnection conn = new SqlConnection(connString))
+            using (var conn = new SqlConnection(_conn))
             {
                 try
                 {
@@ -48,219 +45,198 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    string sqlPending = @"
-                        SELECT a.AppointmentId, a.AppointmentDate, a.Reason, p.FullName as PatientName
-                        FROM [dbo].[Appointments] a
-                        INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId
-                        WHERE a.DoctorId = @DoctorId AND a.Status = 'Pending'
-                        ORDER BY a.AppointmentDate ASC";
-
-                    using (SqlCommand cmd = new SqlCommand(sqlPending, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            da.Fill(dt);
-                            rptIncomingRequests.DataSource = dt;
-                            rptIncomingRequests.DataBind();
-                            pnlNoRequests.Visible = (dt.Rows.Count == 0);
-                        }
-                    }
-
-                    string sqlReserved = @"
-                        SELECT a.AppointmentId, a.AppointmentDate, a.Status, p.FullName as PatientName
-                        FROM [dbo].[Appointments] a
-                        INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId
-                        WHERE a.DoctorId = @DoctorId AND a.Status = 'Accepted'
-                        ORDER BY a.AppointmentDate ASC";
-
-                    using (SqlCommand cmd = new SqlCommand(sqlReserved, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            da.Fill(dt);
-                            rptReservedAppointments.DataSource = dt;
-                            rptReservedAppointments.DataBind();
-                            pnlNoReserved.Visible = (dt.Rows.Count == 0);
-                        }
-                    }
-
-                    string sqlOpen = @"
-                        SELECT AvailabilityId, StartTime, EndTime 
-                        FROM [dbo].[DoctorAvailability]
-                        WHERE DoctorId = @DoctorId 
-                        ORDER BY StartTime ASC";
-
-                    using (SqlCommand cmd = new SqlCommand(sqlOpen, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            da.Fill(dt);
-                            rptAvailabilityBlocks.DataSource = dt;
-                            rptAvailabilityBlocks.DataBind();
-                            pnlNoAvailability.Visible = (dt.Rows.Count == 0);
-                        }
-                    }
+                    BindPending(conn, doctorId);
+                    BindAccepted(conn, doctorId);
+                    BindSlots(conn, doctorId);
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Fault loading dashboard pipelines: " + ex.Message, true);
+                    ShowAlert("Error loading dashboard: " + ex.Message, true);
                 }
             }
         }
 
-        protected void rptIncomingRequests_ItemCommand(object source, RepeaterCommandEventArgs e)
+        private void BindPending(SqlConnection conn, int doctorId)
+        {
+            const string sql = @"
+                SELECT a.AppointmentId, a.AppointmentDate, a.Reason, p.FullName AS PatientName
+                FROM [dbo].[Appointments] a
+                INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId
+                WHERE a.DoctorId = @did AND a.Status = 'Pending'
+                ORDER BY a.AppointmentDate ASC";
+
+            var dt = FillTable(conn, sql, ("@did", doctorId));
+            rptPending.DataSource = dt;
+            rptPending.DataBind();
+            pnlNoPending.Visible = (dt.Rows.Count == 0);
+        }
+
+        private void BindAccepted(SqlConnection conn, int doctorId)
+        {
+            const string sql = @"
+                SELECT a.AppointmentId, a.AppointmentDate, a.Status, p.FullName AS PatientName
+                FROM [dbo].[Appointments] a
+                INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId
+                WHERE a.DoctorId = @did AND a.Status = 'Accepted'
+                ORDER BY a.AppointmentDate ASC";
+
+            var dt = FillTable(conn, sql, ("@did", doctorId));
+            rptAccepted.DataSource = dt;
+            rptAccepted.DataBind();
+            pnlNoAccepted.Visible = (dt.Rows.Count == 0);
+        }
+
+        private void BindSlots(SqlConnection conn, int doctorId)
+        {
+            const string sql = @"
+                SELECT AvailabilityId, StartTime, EndTime
+                FROM [dbo].[DoctorAvailability]
+                WHERE DoctorId = @did
+                ORDER BY StartTime ASC";
+
+            var dt = FillTable(conn, sql, ("@did", doctorId));
+            rptSlots.DataSource = dt;
+            rptSlots.DataBind();
+            pnlNoSlots.Visible = (dt.Rows.Count == 0);
+        }
+
+        private static DataTable FillTable(SqlConnection conn, string sql,
+            params (string name, object value)[] parms)
+        {
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                foreach (var (name, value) in parms)
+                    cmd.Parameters.AddWithValue(name, value);
+
+                using (var da = new SqlDataAdapter(cmd))
+                {
+                    var dt = new DataTable();
+                    da.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        protected void rptPending_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             int appointmentId = Convert.ToInt32(e.CommandArgument);
-            string targetStatus = (e.CommandName == "AcceptRequest") ? "Accepted" : "Rejected";
-            string notificationType = (e.CommandName == "AcceptRequest") ? "AppointmentAccepted" : "AppointmentRejected";
+            bool accept = (e.CommandName == "Accept");
+            string newStatus = accept ? "Accepted" : "Rejected";
+            string notifType = accept ? "AppointmentAccepted" : "AppointmentRejected";
 
-            using (SqlConnection conn = new SqlConnection(connString))
+            using (var conn = new SqlConnection(_conn))
             {
                 try
                 {
                     conn.Open();
                     int doctorId = GetDoctorId(conn);
 
-                    string updateSql = "UPDATE [dbo].[Appointments] SET Status = @Status WHERE AppointmentId = @AppointmentId AND DoctorId = @DoctorId";
-                    using (SqlCommand cmd = new SqlCommand(updateSql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Status", targetStatus);
-                        cmd.Parameters.AddWithValue("@AppointmentId", appointmentId);
-                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                        cmd.ExecuteNonQuery();
-                    }
+                    Execute(conn,
+                        "UPDATE [dbo].[Appointments] SET Status = @s WHERE AppointmentId = @aid AND DoctorId = @did",
+                        ("@s", newStatus), ("@aid", appointmentId), ("@did", doctorId));
 
-                    int patientUserId = 0;
-                    DateTime appointmentTime = DateTime.Now;
-                    using (SqlCommand cmdContext = new SqlCommand("SELECT p.UserId, a.AppointmentDate FROM [dbo].[Appointments] a INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId WHERE a.AppointmentId = @Id", conn))
+                    if (accept)
                     {
-                        cmdContext.Parameters.AddWithValue("@Id", appointmentId);
-                        using (SqlDataReader r = cmdContext.ExecuteReader())
+                        DateTime appDate = GetAppointmentDate(conn, appointmentId);
+                        if (appDate != DateTime.MinValue)
                         {
-                            if (r.Read())
-                            {
-                                patientUserId = Convert.ToInt32(r["UserId"]);
-                                appointmentTime = Convert.ToDateTime(r["AppointmentDate"]);
-                            }
+                            Execute(conn,
+                                @"DELETE FROM [dbo].[DoctorAvailability]
+                                  WHERE DoctorId = @did AND StartTime = @start AND EndTime = @end",
+                                ("@did", doctorId),
+                                ("@start", appDate),
+                                ("@end", appDate.AddHours(1)));
                         }
                     }
 
-                    if (patientUserId > 0)
+                    var (patUserId, appTime) = GetAppointmentContext(conn, appointmentId);
+                    if (patUserId > 0)
                     {
-                        string msg = $"Your scheduled appointment for {appointmentTime:yyyy-MM-dd HH:mm} has been {targetStatus.ToLower()} by your doctor.";
-                        string alertSql = "INSERT INTO [dbo].[Notifications] (UserId, Type, Title, Message, IsRead, CreatedAt) VALUES (@UserId, @Type, @Title, @Message, 0, GETDATE())";
-                        using (SqlCommand cmdAlert = new SqlCommand(alertSql, conn))
-                        {
-                            cmdAlert.Parameters.AddWithValue("@UserId", patientUserId);
-                            cmdAlert.Parameters.AddWithValue("@Type", notificationType);
-                            cmdAlert.Parameters.AddWithValue("@Title", $"Appointment Request {targetStatus}");
-                            cmdAlert.Parameters.AddWithValue("@Message", msg);
-                            cmdAlert.ExecuteNonQuery();
-                        }
+                        string msg = $"Your appointment for {appTime:yyyy-MM-dd HH:mm} has been {newStatus.ToLower()} by your doctor.";
+                        InsertNotification(conn, patUserId, notifType,
+                            $"Appointment {newStatus}", msg);
                     }
 
-                    RefreshDashboardDataPipelines();
-                    DisplayAlert($"Appointment request successfully updated to: {targetStatus}.", false);
+                    BindAll();
+                    ShowAlert($"Appointment {newStatus.ToLower()} successfully.", false);
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Pipeline Transaction Fault: " + ex.Message, true);
+                    ShowAlert("Error processing request: " + ex.Message, true);
                 }
             }
         }
 
-        protected void rptReservedAppointments_ItemCommand(object source, RepeaterCommandEventArgs e)
+        protected void rptAccepted_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            if (e.CommandName == "CancelBooking")
-            {
-                int appointmentId = Convert.ToInt32(e.CommandArgument);
-                CancelAndNotifyIndividualAppointment(appointmentId);
-            }
+            if (e.CommandName == "Cancel")
+                CancelAppointment(Convert.ToInt32(e.CommandArgument));
         }
 
-        private void CancelAndNotifyIndividualAppointment(int appointmentId)
+        private void CancelAppointment(int appointmentId)
         {
-            using (SqlConnection conn = new SqlConnection(connString))
+            using (var conn = new SqlConnection(_conn))
             {
                 try
                 {
                     conn.Open();
                     int doctorId = GetDoctorId(conn);
 
-                    int patientUserId = 0;
-                    DateTime appTime = DateTime.Now;
-                    string contextSql = "SELECT p.UserId, a.AppointmentDate FROM [dbo].[Appointments] a INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId WHERE a.AppointmentId = @Id AND a.DoctorId = @DocId";
+                    var (patUserId, appTime) = GetAppointmentContext(conn, appointmentId);
 
-                    using (SqlCommand cmdCtx = new SqlCommand(contextSql, conn))
+                    Execute(conn,
+                        "UPDATE [dbo].[Appointments] SET Status = 'Cancelled' WHERE AppointmentId = @aid AND DoctorId = @did",
+                        ("@aid", appointmentId), ("@did", doctorId));
+
+                    if (patUserId > 0)
                     {
-                        cmdCtx.Parameters.AddWithValue("@Id", appointmentId);
-                        cmdCtx.Parameters.AddWithValue("@DocId", doctorId);
-                        using (SqlDataReader r = cmdCtx.ExecuteReader())
-                        {
-                            if (r.Read())
-                            {
-                                patientUserId = Convert.ToInt32(r["UserId"]);
-                                appTime = Convert.ToDateTime(r["AppointmentDate"]);
-                            }
-                        }
+                        string msg = $"Your appointment on {appTime:yyyy-MM-dd HH:mm} has been cancelled by your doctor.";
+                        InsertNotification(conn, patUserId, "AppointmentCancelled",
+                            "Appointment Cancelled", msg);
                     }
 
-                    string cancelSql = "UPDATE [dbo].[Appointments] SET Status = 'Cancelled' WHERE AppointmentId = @AppointmentId AND DoctorId = @DoctorId";
-                    using (SqlCommand cmd = new SqlCommand(cancelSql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@AppointmentId", appointmentId);
-                        cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    if (patientUserId > 0)
-                    {
-                        string msg = $"CRITICAL UPDATE: Your scheduled booking on {appTime:yyyy-MM-dd HH:mm} has been cancelled by the physician due to direct schedule adjustments.";
-                        string notifySql = "INSERT INTO [dbo].[Notifications] (UserId, Type, Title, Message, IsRead, CreatedAt) VALUES (@UserId, 'AppointmentCancelled', 'Booking Cancelled By Doctor', @Message, 0, GETDATE())";
-                        using (SqlCommand cmdNotify = new SqlCommand(notifySql, conn))
-                        {
-                            cmdNotify.Parameters.AddWithValue("@UserId", patientUserId);
-                            cmdNotify.Parameters.AddWithValue("@Message", msg);
-                            cmdNotify.ExecuteNonQuery();
-                        }
-                    }
-
-                    RefreshDashboardDataPipelines();
-                    DisplayAlert("Appointment successfully dropped and patient alerted.", false);
+                    BindAll();
+                    ShowAlert("Appointment cancelled and patient notified.", false);
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Error executing cancellation chain: " + ex.Message, true);
+                    ShowAlert("Error cancelling appointment: " + ex.Message, true);
                 }
             }
         }
 
-        protected void btnGenerateRecurring_Click(object sender, EventArgs e)
+
+        protected void btnGenerateRange_Click(object sender, EventArgs e)
         {
-            pnlGlobalAlert.Visible = false;
+            string fromText = txtRangeFromDate.Text.Trim();
+            string toText = txtRangeToDate.Text.Trim();
+            string startText = txtRangeStartTime.Text.Trim();
+            string endText = txtRangeEndTime.Text.Trim();
 
-            if (string.IsNullOrEmpty(txtStartTime.Text) || string.IsNullOrEmpty(txtEndTime.Text))
+            if (!DateTime.TryParse(fromText, out DateTime fromDate) ||
+                !DateTime.TryParse(toText, out DateTime toDate) ||
+                !TimeSpan.TryParse(startText, out TimeSpan startTs) ||
+                !TimeSpan.TryParse(endText, out TimeSpan endTs))
             {
-                DisplayAlert("Please define both Start and End parameters for availability generation.", true);
+                ShowAlert("Please fill in all four fields with valid date and time values.", true);
                 return;
             }
 
-            TimeSpan rawStart = TimeSpan.Parse(txtStartTime.Text);
-            TimeSpan rawEnd = TimeSpan.Parse(txtEndTime.Text);
-
-            if (rawStart >= rawEnd)
+            if (fromDate > toDate)
             {
-                DisplayAlert("Shift Start Time must precede its corresponding End Time parameter.", true);
+                ShowAlert("'From Date' must be before or equal to 'To Date'.", true);
                 return;
             }
 
-            using (SqlConnection conn = new SqlConnection(connString))
+            if (startTs >= endTs)
+            {
+                ShowAlert("Start time must be before end time.", true);
+                return;
+            }
+
+            bool includeWeekends = chkIncludeWeekends.Checked;
+
+            using (var conn = new SqlConnection(_conn))
             {
                 try
                 {
@@ -268,71 +244,56 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    int totalSlotsAdded = 0;
-                    DateTime horizonBase = DateTime.Today;
+                    int added = 0;
 
-                    for (int dayOffset = 0; dayOffset < 30; dayOffset++)
+                    for (DateTime day = fromDate.Date; day <= toDate.Date; day = day.AddDays(1))
                     {
-                        DateTime processingDate = horizonBase.AddDays(dayOffset);
-
-                        if (processingDate.DayOfWeek == DayOfWeek.Saturday || processingDate.DayOfWeek == DayOfWeek.Sunday)
-                        {
+                        if (!includeWeekends &&
+                            (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday))
                             continue;
-                        }
 
-                        DateTime shiftCursor = processingDate.Add(rawStart);
-                        DateTime shiftTerminator = processingDate.Add(rawEnd);
+                        DateTime cursor = day.Add(startTs);
+                        DateTime dayEnd = day.Add(endTs);
 
-                        while (shiftCursor.AddHours(1) <= shiftTerminator)
+                        while (cursor.AddHours(1) <= dayEnd)
                         {
-                            DateTime blockStart = shiftCursor;
-                            DateTime blockEnd = shiftCursor.AddHours(1);
+                            DateTime blockEnd = cursor.AddHours(1);
 
-                            string insertSql = @"
-                                INSERT INTO [dbo].[DoctorAvailability] (DoctorId, StartTime, EndTime) 
-                                VALUES (@DoctorId, @StartTime, @EndTime)";
-
-                            using (SqlCommand cmd = new SqlCommand(insertSql, conn))
+                            if (!SlotExists(conn, doctorId, cursor))
                             {
-                                cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                                cmd.Parameters.AddWithValue("@StartTime", blockStart);
-                                cmd.Parameters.AddWithValue("@EndTime", blockEnd);
-                                cmd.ExecuteNonQuery();
+                                Execute(conn,
+                                    "INSERT INTO [dbo].[DoctorAvailability] (DoctorId, StartTime, EndTime) VALUES (@did, @s, @e)",
+                                    ("@did", doctorId), ("@s", cursor), ("@e", blockEnd));
+                                added++;
                             }
 
-                            totalSlotsAdded++;
-                            shiftCursor = shiftCursor.AddHours(1);
+                            cursor = blockEnd;
                         }
                     }
 
-                    RefreshDashboardDataPipelines();
-                    DisplayAlert($"Successfully published {totalSlotsAdded} hourly open slots across all weekdays for the next 30 days.", false);
+                    BindAll();
+                    ShowAlert($"{added} slot(s) generated successfully.", false);
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Generation Pipeline Exception Error: " + ex.Message, true);
+                    ShowAlert("Error generating slots: " + ex.Message, true);
                 }
             }
         }
 
-        protected void btnCancelSpecificHour_Click(object sender, EventArgs e)
+        protected void btnAddSpecific_Click(object sender, EventArgs e)
         {
-            pnlGlobalAlert.Visible = false;
-            string dateText = txtSpecificDay.Text.Trim();
-            string hourText = txtSpecificHour.Text.Trim();
-
-            if (string.IsNullOrEmpty(dateText) || string.IsNullOrEmpty(hourText) ||
-                !DateTime.TryParse(dateText, out DateTime parsedDate) || !TimeSpan.TryParse(hourText, out TimeSpan parsedHour))
+            if (!DateTime.TryParse(txtSpecificDate.Text.Trim(), out DateTime date) ||
+                !TimeSpan.TryParse(txtSpecificHour.Text.Trim(), out TimeSpan hour))
             {
-                DisplayAlert("Please input a valid date and a structured hour timestamp to drop.", true);
+                ShowAlert("Please enter a valid date and time.", true);
                 return;
             }
 
+            DateTime slotStart = date.Date.Add(hour);
+            DateTime slotEnd = slotStart.AddHours(1);
 
-            DateTime blockStart = parsedDate.Date.Add(parsedHour);
-            DateTime blockEnd = blockStart.AddHours(1);
-
-            using (SqlConnection conn = new SqlConnection(connString))
+            using (var conn = new SqlConnection(_conn))
             {
                 try
                 {
@@ -340,103 +301,206 @@ namespace MediCare.Pages.Doctor
                     int doctorId = GetDoctorId(conn);
                     if (doctorId == 0) return;
 
-                    string deleteAvailabilitySql = @"
-                        DELETE FROM [dbo].[DoctorAvailability] 
-                        WHERE DoctorId = @DoctorId AND StartTime = @Start AND EndTime = @End";
-
-                    using (SqlCommand cmdDelAvail = new SqlCommand(deleteAvailabilitySql, conn))
+                    if (SlotExists(conn, doctorId, slotStart))
                     {
-                        cmdDelAvail.Parameters.AddWithValue("@DoctorId", doctorId);
-                        cmdDelAvail.Parameters.AddWithValue("@Start", blockStart);
-                        cmdDelAvail.Parameters.AddWithValue("@End", blockEnd);
-                        cmdDelAvail.ExecuteNonQuery();
+                        ShowAlert($"A slot already exists for {slotStart:yyyy-MM-dd HH:mm}.", true);
+                        return;
                     }
 
-                    string findBookingSql = @"
-                        SELECT AppointmentId 
-                        FROM [dbo].[Appointments] 
-                        WHERE DoctorId = @DoctorId 
-                          AND AppointmentDate = @Start 
-                          AND Status IN ('Pending', 'Accepted')";
+                    Execute(conn,
+                        "INSERT INTO [dbo].[DoctorAvailability] (DoctorId, StartTime, EndTime) VALUES (@did, @s, @e)",
+                        ("@did", doctorId), ("@s", slotStart), ("@e", slotEnd));
 
-                    int conflictingAppointmentId = 0;
-                    using (SqlCommand cmdFind = new SqlCommand(findBookingSql, conn))
-                    {
-                        cmdFind.Parameters.AddWithValue("@DoctorId", doctorId);
-                        cmdFind.Parameters.AddWithValue("@Start", blockStart);
-                        object res = cmdFind.ExecuteScalar();
-                        if (res != null && res != DBNull.Value)
-                        {
-                            conflictingAppointmentId = Convert.ToInt32(res);
-                        }
-                    }
-
-                    bool appointmentWasCancelled = false;
-
-                    if (conflictingAppointmentId > 0)
-                    {
-                        CancelAndNotifyIndividualAppointment(conflictingAppointmentId);
-                        appointmentWasCancelled = true;
-                    }
-
-                    txtSpecificDay.Text = "";
+                    txtSpecificDate.Text = "";
                     txtSpecificHour.Text = "";
-                    RefreshDashboardDataPipelines();
-
-                    if (appointmentWasCancelled)
-                    {
-                        DisplayAlert($"Surgical adjustment completed: The open slot was withdrawn, and the active booking for {blockStart:yyyy-MM-dd HH:mm} was canceled and the patient was notified.", false);
-                    }
-                    else
-                    {
-                        DisplayAlert($"Surgical adjustment completed: The unreserved open window for {blockStart:yyyy-MM-dd HH:mm} was successfully removed.", false);
-                    }
+                    BindAll();
+                    ShowAlert($"Slot added: {slotStart:ddd, MMM dd yyyy HH:mm} – {slotEnd:HH:mm}.", false);
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Surgical operation pipeline faulted: " + ex.Message, true);
+                    ShowAlert("Error adding slot: " + ex.Message, true);
                 }
             }
         }
 
-        protected void rptAvailabilityBlocks_ItemCommand(object source, RepeaterCommandEventArgs e)
+        protected void btnDropSlot_Click(object sender, EventArgs e)
         {
-            if (e.CommandName == "DeleteBlock")
+            if (!DateTime.TryParse(txtDropDate.Text.Trim(), out DateTime date) ||
+                !TimeSpan.TryParse(txtDropHour.Text.Trim(), out TimeSpan hour))
             {
-                int availabilityId = Convert.ToInt32(e.CommandArgument);
+                ShowAlert("Please enter a valid date and time to remove.", true);
+                return;
+            }
 
-                using (SqlConnection conn = new SqlConnection(connString))
+            DateTime slotStart = date.Date.Add(hour);
+            DateTime slotEnd = slotStart.AddHours(1);
+
+            using (var conn = new SqlConnection(_conn))
+            {
+                try
                 {
-                    try
-                    {
-                        conn.Open();
-                        int doctorId = GetDoctorId(conn);
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+                    if (doctorId == 0) return;
 
-                        string deleteSql = "DELETE FROM [dbo].[DoctorAvailability] WHERE AvailabilityId = @AvailabilityId AND DoctorId = @DoctorId";
-                        using (SqlCommand cmd = new SqlCommand(deleteSql, conn))
+                    // Delete availability slot
+                    Execute(conn,
+                        "DELETE FROM [dbo].[DoctorAvailability] WHERE DoctorId = @did AND StartTime = @s AND EndTime = @e",
+                        ("@did", doctorId), ("@s", slotStart), ("@e", slotEnd));
+
+                    // Cancel any active booking in this slot
+                    int bookedId = GetConflictingAppointment(conn, doctorId, slotStart);
+                    bool hadBooking = bookedId > 0;
+
+                    if (hadBooking)
+                    {
+                        var (patUserId, appTime) = GetAppointmentContext(conn, bookedId);
+
+                        Execute(conn,
+                            "UPDATE [dbo].[Appointments] SET Status = 'Cancelled' WHERE AppointmentId = @aid",
+                            ("@aid", bookedId));
+
+                        if (patUserId > 0)
                         {
-                            cmd.Parameters.AddWithValue("@AvailabilityId", availabilityId);
-                            cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                            cmd.ExecuteNonQuery();
+                            string msg = $"Your appointment on {appTime:yyyy-MM-dd HH:mm} has been cancelled because the doctor removed that time slot.";
+                            InsertNotification(conn, patUserId, "AppointmentCancelled",
+                                "Appointment Cancelled", msg);
                         }
+                    }
 
-                        RefreshDashboardDataPipelines();
-                        DisplayAlert("Availability block matrix entry safely revoked.", false);
-                    }
-                    catch (Exception ex)
-                    {
-                        DisplayAlert("Error deleting block element: " + ex.Message, true);
-                    }
+                    txtDropDate.Text = "";
+                    txtDropHour.Text = "";
+                    BindAll();
+
+                    ShowAlert(
+                        hadBooking
+                            ? $"Slot removed and existing booking for {slotStart:yyyy-MM-dd HH:mm} was cancelled. Patient notified."
+                            : $"Open slot for {slotStart:yyyy-MM-dd HH:mm} removed.",
+                        false);
+                }
+                catch (Exception ex)
+                {
+                    ShowAlert("Error removing slot: " + ex.Message, true);
                 }
             }
         }
 
-        private void DisplayAlert(string message, bool isError)
+
+        protected void rptSlots_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            pnlGlobalAlert.Visible = true;
-            pnlGlobalAlert.CssClass = isError ? "db-alert db-alert--error" : "db-alert db-alert--success";
-            alertIcon.Attributes["class"] = isError ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-circle-check";
-            lblAlertMessage.Text = message;
+            if (e.CommandName != "Delete") return;
+
+            int availabilityId = Convert.ToInt32(e.CommandArgument);
+
+            using (var conn = new SqlConnection(_conn))
+            {
+                try
+                {
+                    conn.Open();
+                    int doctorId = GetDoctorId(conn);
+
+                    Execute(conn,
+                        "DELETE FROM [dbo].[DoctorAvailability] WHERE AvailabilityId = @aid AND DoctorId = @did",
+                        ("@aid", availabilityId), ("@did", doctorId));
+
+                    BindAll();
+                    ShowAlert("Availability slot removed.", false);
+                }
+                catch (Exception ex)
+                {
+                    ShowAlert("Error removing slot: " + ex.Message, true);
+                }
+            }
+        }
+
+        private bool SlotExists(SqlConnection conn, int doctorId, DateTime slotStart)
+        {
+            using (var cmd = new SqlCommand(
+                "SELECT COUNT(1) FROM [dbo].[DoctorAvailability] WHERE DoctorId = @did AND StartTime = @s",
+                conn))
+            {
+                cmd.Parameters.AddWithValue("@did", doctorId);
+                cmd.Parameters.AddWithValue("@s", slotStart);
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+
+        private int GetConflictingAppointment(SqlConnection conn, int doctorId, DateTime slotStart)
+        {
+            using (var cmd = new SqlCommand(
+                @"SELECT TOP 1 AppointmentId FROM [dbo].[Appointments]
+                  WHERE DoctorId = @did AND AppointmentDate = @s
+                    AND Status IN ('Pending','Accepted')",
+                conn))
+            {
+                cmd.Parameters.AddWithValue("@did", doctorId);
+                cmd.Parameters.AddWithValue("@s", slotStart);
+                var r = cmd.ExecuteScalar();
+                return (r != null && r != DBNull.Value) ? Convert.ToInt32(r) : 0;
+            }
+        }
+
+        private DateTime GetAppointmentDate(SqlConnection conn, int appointmentId)
+        {
+            using (var cmd = new SqlCommand(
+                "SELECT AppointmentDate FROM [dbo].[Appointments] WHERE AppointmentId = @aid",
+                conn))
+            {
+                cmd.Parameters.AddWithValue("@aid", appointmentId);
+                var r = cmd.ExecuteScalar();
+                return (r != null && r != DBNull.Value) ? Convert.ToDateTime(r) : DateTime.MinValue;
+            }
+        }
+
+        private (int patUserId, DateTime appTime) GetAppointmentContext(SqlConnection conn, int appointmentId)
+        {
+            using (var cmd = new SqlCommand(
+                @"SELECT p.UserId, a.AppointmentDate
+                  FROM [dbo].[Appointments] a
+                  INNER JOIN [dbo].[Patients] p ON a.PatientId = p.PatientId
+                  WHERE a.AppointmentId = @aid",
+                conn))
+            {
+                cmd.Parameters.AddWithValue("@aid", appointmentId);
+                using (var r = cmd.ExecuteReader())
+                {
+                    if (r.Read())
+                        return (Convert.ToInt32(r["UserId"]), Convert.ToDateTime(r["AppointmentDate"]));
+                }
+            }
+
+            return (0, DateTime.MinValue);
+        }
+
+        private static void InsertNotification(SqlConnection conn, int userId,
+            string type, string title, string message)
+        {
+            Execute(conn,
+                @"INSERT INTO [dbo].[Notifications] (UserId, Type, Title, Message, IsRead, CreatedAt)
+                  VALUES (@uid, @type, @title, @msg, 0, GETDATE())",
+                ("@uid", userId), ("@type", type), ("@title", title), ("@msg", message));
+        }
+
+        private static void Execute(SqlConnection conn, string sql,
+            params (string name, object value)[] parms)
+        {
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                foreach (var (name, value) in parms)
+                    cmd.Parameters.AddWithValue(name, value);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+        private void ShowAlert(string message, bool isError)
+        {
+            pnlAlert.Visible = true;
+            pnlAlert.CssClass = isError ? "alert alert-error" : "alert alert-success";
+            alertIcon.Attributes["class"] = isError
+                ? "fa-solid fa-triangle-exclamation"
+                : "fa-solid fa-circle-check";
+            lblAlert.Text = message;
         }
     }
 }

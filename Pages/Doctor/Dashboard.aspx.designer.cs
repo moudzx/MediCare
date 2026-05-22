@@ -15,13 +15,13 @@ namespace MediCare.Pages.Doctor
     {
 
         /// <summary>
-        /// pnlGlobalAlert control.
+        /// pnlAlert control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlGlobalAlert;
+        protected global::System.Web.UI.WebControls.Panel pnlAlert;
 
         /// <summary>
         /// alertIcon control.
@@ -33,85 +33,112 @@ namespace MediCare.Pages.Doctor
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl alertIcon;
 
         /// <summary>
-        /// lblAlertMessage control.
+        /// lblAlert control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAlertMessage;
+        protected global::System.Web.UI.WebControls.Label lblAlert;
 
         /// <summary>
-        /// rptIncomingRequests control.
+        /// rptPending control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptIncomingRequests;
+        protected global::System.Web.UI.WebControls.Repeater rptPending;
 
         /// <summary>
-        /// pnlNoRequests control.
+        /// pnlNoPending control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNoRequests;
+        protected global::System.Web.UI.WebControls.Panel pnlNoPending;
 
         /// <summary>
-        /// rptReservedAppointments control.
+        /// rptAccepted control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptReservedAppointments;
+        protected global::System.Web.UI.WebControls.Repeater rptAccepted;
 
         /// <summary>
-        /// pnlNoReserved control.
+        /// pnlNoAccepted control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNoReserved;
+        protected global::System.Web.UI.WebControls.Panel pnlNoAccepted;
 
         /// <summary>
-        /// txtStartTime control.
+        /// txtRangeFromDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStartTime;
+        protected global::System.Web.UI.WebControls.TextBox txtRangeFromDate;
 
         /// <summary>
-        /// txtEndTime control.
+        /// txtRangeToDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEndTime;
+        protected global::System.Web.UI.WebControls.TextBox txtRangeToDate;
 
         /// <summary>
-        /// btnGenerateRecurring control.
+        /// txtRangeStartTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGenerateRecurring;
+        protected global::System.Web.UI.WebControls.TextBox txtRangeStartTime;
 
         /// <summary>
-        /// txtSpecificDay control.
+        /// txtRangeEndTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSpecificDay;
+        protected global::System.Web.UI.WebControls.TextBox txtRangeEndTime;
+
+        /// <summary>
+        /// chkIncludeWeekends control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkIncludeWeekends;
+
+        /// <summary>
+        /// btnGenerateRange control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGenerateRange;
+
+        /// <summary>
+        /// txtSpecificDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSpecificDate;
 
         /// <summary>
         /// txtSpecificHour control.
@@ -123,30 +150,57 @@ namespace MediCare.Pages.Doctor
         protected global::System.Web.UI.WebControls.TextBox txtSpecificHour;
 
         /// <summary>
-        /// btnCancelSpecificHour control.
+        /// btnAddSpecific control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancelSpecificHour;
+        protected global::System.Web.UI.WebControls.Button btnAddSpecific;
 
         /// <summary>
-        /// rptAvailabilityBlocks control.
+        /// txtDropDate control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptAvailabilityBlocks;
+        protected global::System.Web.UI.WebControls.TextBox txtDropDate;
 
         /// <summary>
-        /// pnlNoAvailability control.
+        /// txtDropHour control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNoAvailability;
+        protected global::System.Web.UI.WebControls.TextBox txtDropHour;
+
+        /// <summary>
+        /// btnDropSlot control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDropSlot;
+
+        /// <summary>
+        /// rptSlots control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptSlots;
+
+        /// <summary>
+        /// pnlNoSlots control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlNoSlots;
     }
 }
