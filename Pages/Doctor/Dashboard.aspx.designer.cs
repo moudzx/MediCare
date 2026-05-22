@@ -159,33 +159,6 @@ namespace MediCare.Pages.Doctor
         protected global::System.Web.UI.WebControls.Button btnAddSpecific;
 
         /// <summary>
-        /// txtDropDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDropDate;
-
-        /// <summary>
-        /// txtDropHour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDropHour;
-
-        /// <summary>
-        /// btnDropSlot control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDropSlot;
-
-        /// <summary>
         /// rptSlots control.
         /// </summary>
         /// <remarks>
