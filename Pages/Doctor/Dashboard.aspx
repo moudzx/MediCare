@@ -439,32 +439,6 @@
                 </div>
             </div>
 
-            <%-- ── Delete Specific Slot ── --%>
-            <div class="card">
-                <div class="card-head">
-                    <h2 class="card-title">
-                        <i class="fa-solid fa-scissors" style="color:#e11d48;"></i>
-                        Remove Specific Slot
-                    </h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-stack">
-                        <p class="form-hint">Deletes the open slot at this date &amp; hour. If a patient is booked, they will be automatically notified.</p>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Date</label>
-                                <asp:TextBox ID="txtDropDate" runat="server" TextMode="Date" CssClass="form-ctrl" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Hour Start</label>
-                                <asp:TextBox ID="txtDropHour" runat="server" TextMode="Time" CssClass="form-ctrl" />
-                            </div>
-                        </div>
-                        <asp:Button ID="btnDropSlot" runat="server" OnClick="btnDropSlot_Click" CssClass="btn btn-danger btn-full" Text="Remove Slot" OnClientClick="return confirm('Remove this slot? Any existing booking will be cancelled and the patient notified.');" />
-                    </div>
-                </div>
-            </div>
-
             <%-- ── Open Slots List ── --%>
             <div class="card">
                 <div class="card-head">
