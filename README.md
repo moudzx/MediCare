@@ -60,7 +60,7 @@ The goal of MediCare is to provide a centralized healthcare platform that simpli
 - Clone the repository:
 
 ```
-git clone https://github.com/YOUR_USERNAME/MediCare.git
+git clone https://github.com/moudzx/MediCare.git
 ```
 
 - Open the project in Visual Studio
@@ -70,4 +70,5 @@ git clone https://github.com/YOUR_USERNAME/MediCare.git
 
 ## Contributors
 
-Developed as a collaborative academic software engineering project.
+Developed as a collaborative academic software engineering project
+w/ Nadine Maksoud & Halim Kouuchaji
