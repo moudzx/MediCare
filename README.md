@@ -1,8 +1,6 @@
 # MediCare
 
-MediCare is a full-stack healthcare management system developed using ASP.NET Web Forms, C#, ADO.NET, and SQL Server. The platform is designed to improve communication and workflow between patients and doctors through an integrated web-based medical system, providing a centralized healthcare platform that simplifies medical management, improves doctor-patient communication, and helps patients better track their healthcare activities and medications.
-
-The application includes secure authentication and role-based access control for patients, doctors, and administrators, allowing each user type to access features specific to their responsibilities.
+MediCare is a full-stack healthcare management system built using the .NET framework. The platform is designed to bridge the communication gap and optimize workflows between patients, doctors, and medical administrators. By providing a centralized, integrated web-based system, MediCare simplifies medical data management, enhances patient care tracking, and streamlines daily healthcare operations.
 
 ## Technical Details
 
